@@ -1,0 +1,13 @@
+{
+  "name": "School Property Job Management",
+  "short_name": "Brians Jobs",
+  "icons": [{
+        "src": "launch.png",
+        "sizes": "64x64",
+        "type": "image/webp"
+      }],
+ 
+  "start_url": "index.html",
+  "display": "fullscreen",
+  "orientation": "portrait"
+}
