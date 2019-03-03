@@ -42,6 +42,7 @@
  <script>alert("here at js");</script>
 <script type="text/coffeescript" >
 $ ->
+  alert = require 'alert-node'
   alert "here"
   previousSensor=0
   co=[]
