@@ -39,43 +39,43 @@
 <script  src="jquery.mobile.js"></script>
 
 <script src="astromath.js"></script>
- <script>alert("here at js ES6 1");</script>
+
   <script>
-  alert("here at js 1");
- function  makeObjectFromCSVFile(url) {
-  return "jjjj";
- }
    
-   alert(makeObjectFromCSVFile("thisurl"));
-   /*
-    $.ajax
-        url: url+"?"+Math.round(Math.random()*100000)
-        dataType: "text"
-        type: "get"
-        error: (jqXHR, textStatus, errorThrown) ->
+   console.log astromath.raRadians(3,40);
+ /*
+ const makeObjectFromCSVFile = (url) =>
+    $.ajax({
+        url: url+"?"+Math.round(Math.random()*100000) //to stop caching,
+        dataType: "text",
+        type: "get",
+        error: function(jqXHR, textStatus, errorThrown) {
            alert  "AJAX Error at download: #{textStatus}"
-        success: (data, textStatus, jqXHR) ->
-           allTextLines = data.split(/\r\n|\n/)
-           headers = allTextLines[0].split(',')
-           values=(textLine.split(",") for textLine in allTextLines[1..])
-           rows=[]
-           for row,ri in allTextLines[1..]
+    },
+        success: function(data, textStatus, jqXHR) {
+           allTextLines = data.split(/\r\n|\n/);
+           headers = allTextLines[0].split(',');
+           values=(textLine.split(",") for textLine in allTextLines[1..]);
+           rows=[];
+           for row,ri in allTextLines[1..] {
              obj={}
              for header,i in headers 
                obj[header]=values[ri][i]
              rows.push(obj)
-           makeObjectFromCSVFileSuccess(rows)
+       
+           makeObjectFromCSVFileSuccess(rows);
+    }
                
-  makeObjectFromCSVFileSuccess=(rows)->
+  makeObjectFromCSVFileSuccess = (rows) =>
     co=rows
     
-    for c in co
+    for c of co {
       c.name= c.name.replace(/M(\d+)/,"Messier $1")
       c.galLongitude=galacticLongitude(astromath.raRadians(c.raHours, c.raMinutes),astromath.decRadians(c.decDegrees, c.decMinutes))
       c.galLatitude=galacticLatitude(astromath.raRadians(c.raHours, c.raMinutes),astromath.decRadians(c.decDegrees, c.decMinutes))
       c.visible=if (getAltitude(astromath.raRadians(c.raHours, c.raMinutes),astromath.decRadians(c.decDegrees, c.decMinutes))>15*2*Math.PI/360) then true else false
-    showData()
- 
+    //showData()
+    }
   makeObjectFromCSVFile("CelestialObjects.csv")
  
   co=co.sort (f,g) ->
