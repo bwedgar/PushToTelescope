@@ -40,6 +40,47 @@
 
 <script src="astromath.js"></script>
  <script>alert("here at js ES6");</script>
+  <script>
+  alert("here at js");
+ /*  makeObjectFromCSVFile = (url) ->
+    $.ajax
+        url: url+"?"+Math.round(Math.random()*100000)
+        dataType: "text"
+        type: "get"
+        error: (jqXHR, textStatus, errorThrown) ->
+           alert  "AJAX Error at download: #{textStatus}"
+        success: (data, textStatus, jqXHR) ->
+           allTextLines = data.split(/\r\n|\n/)
+           headers = allTextLines[0].split(',')
+           values=(textLine.split(",") for textLine in allTextLines[1..])
+           rows=[]
+           for row,ri in allTextLines[1..]
+             obj={}
+             for header,i in headers 
+               obj[header]=values[ri][i]
+             rows.push(obj)
+           makeObjectFromCSVFileSuccess(rows)
+               
+  makeObjectFromCSVFileSuccess=(rows)->
+    co=rows
+    
+    for c in co
+      c.name= c.name.replace(/M(\d+)/,"Messier $1")
+      c.galLongitude=galacticLongitude(astromath.raRadians(c.raHours, c.raMinutes),astromath.decRadians(c.decDegrees, c.decMinutes))
+      c.galLatitude=galacticLatitude(astromath.raRadians(c.raHours, c.raMinutes),astromath.decRadians(c.decDegrees, c.decMinutes))
+      c.visible=if (getAltitude(astromath.raRadians(c.raHours, c.raMinutes),astromath.decRadians(c.decDegrees, c.decMinutes))>15*2*Math.PI/360) then true else false
+    showData()
+ 
+  makeObjectFromCSVFile("CelestialObjects.csv")
+ 
+  co=co.sort (f,g) ->
+    if f.raHours>g.raHours then return -1 else return 1
+  alert co
+ 
+ 
+ */
+ 
+ </script>
 <script type="text/coffeescript" >
 $ ->
   alert = require 'alert-node'
