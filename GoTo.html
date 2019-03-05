@@ -10,77 +10,103 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
- 
-<link rel="stylesheet" href="jquery.mobile.css" type="text/css" />   
+
+<link rel="stylesheet" href="jquery.mobile.css" type="text/css" />
   <link rel="stylesheet" href="GoTo.css" type="text/css" />
   <link rel="stylesheet" href="jquery.mobile.icons.min.css" type="text/css" />
-<link rel="stylesheet" href="https://code.jquery.com/mobile/1.4.5/jquery.mobile.structure-1.4.5.min.css"  type="text/css" /> 
+<link rel="stylesheet" href="https://code.jquery.com/mobile/1.4.5/jquery.mobile.structure-1.4.5.min.css"  type="text/css" />
 <style>
     body {
         background-color: black;
     }
-    
+
 .normal {
     color: red;
     font-family: verdana;
     font-size: 120%;
 }
 .ui-btn-inner{
-    text-overflow: initial; 
-    padding-left: 5px; 
+    text-overflow: initial;
+    padding-left: 5px;
 }
 .ui-btn-text {
-    font-size: 30px; 
+    font-size: 30px;
 }
 
 .buttonSelector {font-size: 200%;}
 </style>
 <script  src="jquery.js"></script>
 <script  src="jquery.mobile.js"></script>
-
 <script src="astromath.js"></script>
+
+
  <script>
-  alert("here at js");
- /*  makeObjectFromCSVFile = (url) ->
-    $.ajax
+
+ //PushToTelescope/CelestialObjects.csv
+ //fetch("https://github.com/bwedgar/PushToTelescope/CelestialObjects.csv", {mode: 'no-cors'})
+ fetch("https://github.com/bwedgar/PushToTelescope/blob/master/test.txt", {mode: 'no-cors'})
+
+.then(response => response.text())
+.then(data => {console.log(data)
+ // Here's a list of repos!
+ //console.log(data.toString())
+})
+     //let allTextLines = data1.split(/\r\n|\n/);
+     //let headers = allTextLines[0].split(',');
+     //(headers[0]);
+     // Here you get the data to modify as you please
+
+   .catch(function(error) {
+    console.log(`could not fetch ${error}` ) // If there is any error you will catch them here
+   });
+
+
+
+
+
+
+/*makeObjectFromCSVFile = (url) ->
+    $.ajax {
         url: url+"?"+Math.round(Math.random()*100000)
         dataType: "text"
         type: "get"
-        error: (jqXHR, textStatus, errorThrown) ->
+        error: function(jqXHR, textStatus, errorThrown) {
            alert  "AJAX Error at download: #{textStatus}"
-        success: (data, textStatus, jqXHR) ->
+         }
+        success: function(data, textStatus, jqXHR) {
            allTextLines = data.split(/\r\n|\n/)
            headers = allTextLines[0].split(',')
            values=(textLine.split(",") for textLine in allTextLines[1..])
            rows=[]
            for row,ri in allTextLines[1..]
              obj={}
-             for header,i in headers 
+             for header,i in headers
                obj[header]=values[ri][i]
              rows.push(obj)
            makeObjectFromCSVFileSuccess(rows)
-               
+         }
+}
 
   makeObjectFromCSVFileSuccess=(rows)->
     co=rows
-    
+
     for c in co
       c.name= c.name.replace(/M(\d+)/,"Messier $1")
       c.galLongitude=galacticLongitude(astromath.raRadians(c.raHours, c.raMinutes),astromath.decRadians(c.decDegrees, c.decMinutes))
       c.galLatitude=galacticLatitude(astromath.raRadians(c.raHours, c.raMinutes),astromath.decRadians(c.decDegrees, c.decMinutes))
       c.visible=if (getAltitude(astromath.raRadians(c.raHours, c.raMinutes),astromath.decRadians(c.decDegrees, c.decMinutes))>15*2*Math.PI/360) then true else false
     showData()
- 
+
   makeObjectFromCSVFile("CelestialObjects.csv")
- 
+
 
   co=co.sort (f,g) ->
     if f.raHours>g.raHours then return -1 else return 1
   alert co
- 
- 
+
+
  */
- 
+
  </script>
 <!--
 <script type="text/coffeescript" >
@@ -89,7 +115,7 @@ $ ->
   alert "here"
   previousSensor=0
   co=[]
-  a=45 
+  a=45
   b=6
   sensor=0
   adjSensor=0
@@ -117,7 +143,7 @@ $ ->
   ###
 
   showMap=(position) ->
-   
+
     latitude = position.coords.latitude
     longitude = position.coords.longitude
     alert latitude
@@ -131,16 +157,16 @@ $ ->
 
 
   getLocation()
-  
+
 
   ###
-  
-    
+
+
   trim = (s) ->
     s.replace /^\s*|\s*$/g, ''
-  
+
   galacticLatitude= (ra,dec) ->
-    return Math.asin(Math.cos(dec)*Math.cos(astromath.radians(27.4))*Math.cos(ra-astromath.radians(192.25))+Math.sin(dec)*Math.sin(astromath.radians(27.4))) 
+    return Math.asin(Math.cos(dec)*Math.cos(astromath.radians(27.4))*Math.cos(ra-astromath.radians(192.25))+Math.sin(dec)*Math.sin(astromath.radians(27.4)))
 
   galacticLongitude= (ra,dec) ->
     x=Math.cos(dec)*Math.sin(ra-astromath.radians(192.25))*Math.cos(astromath.radians(27.4))
@@ -149,18 +175,18 @@ $ ->
     atan=Math.atan2(y,x)
     if atan<0 then atan=atan+2*Math.PI
     long=atan+astromath.radians(33)
-  
+
   getJulianDate=()->
     d=new Date()
     M=d.getUTCMonth()+1
     Y=d.getUTCFullYear()
     D=d.getUTCDate()#+d.getUTCHours()/24
-    if M<3 
+    if M<3
       Y=Y-1
       M=M+12
     A=Math.floor(Y/100)
     B=2-A+Math.floor(A/4)
-    if Y<0  
+    if Y<0
       C=Math.floor((375.25*Y)-.75)
     else
       C=Math.floor(365.25*Y)
@@ -183,7 +209,7 @@ $ ->
     latitude=observer.latitude()
     answer=Math.asin(Math.sin(dec)*Math.sin(latitude)+Math.cos(dec)* Math.cos(latitude)*Math.cos(hourAngle))
     answer=answer*360/2/Math.PI
-    
+
 
   getAzimuth=(ra,dec) ->
     latitude=observer.latitude()
@@ -194,7 +220,7 @@ $ ->
     if answer <0 then answer=2*Math.PI+answer
     answer=answer*360/2/Math.PI
 
-  
+
   screenWidth=$(window).width()
   canvasWidth=600
   canvasHeight=200
@@ -207,8 +233,8 @@ $ ->
     prefix=["","k","m","b"]
     n=/^(\S{3})/g.exec(t)[1]*10**(ex%3)
     return n+" "+prefix[Math.floor(ex/3)]
-  
-  
+
+
   drawCircle=(x,y)->
     ctx.beginPath()
     ctx.arc(x, y, 2, 0, Math.PI*2, true)
@@ -224,7 +250,7 @@ $ ->
     ctx.closePath()
     ctx.fillStyle="red"
     ctx.fill()
-    
+
   drawCross=()->
     ctx.beginPath()
     startX=canvasWidth/14
@@ -241,8 +267,8 @@ $ ->
     ctx.lineTo(startX+lengthCross/2,startY+lengthCross/2)
     ctx.strokeStyle="red"
     ctx.stroke()
-    
-        
+
+
   drawSideCross=()->
     ctx.beginPath()
     startX=canvasWidth/14+canvasWidth/4.1
@@ -259,13 +285,13 @@ $ ->
     ctx.lineTo(startX+lengthCross/2,startY+lengthCross/2)
     ctx.strokeStyle="red"
     ctx.stroke()
-    
 
-  c = document.getElementById("canvasTop") 
+
+  c = document.getElementById("canvasTop")
   ctx = c.getContext("2d")
   ctx.canvas.width=screenWidth
   ctx.canvas.height=200
- 
+
 
   getCartesian=(lat,long,r)->
     lat=Math.PI/2-lat
@@ -275,15 +301,15 @@ $ ->
     z1 = r * Math.cos(lat)
     #alert "x: #{x1} y:#{y1} z: #{z1}"
     scale=0.0018
-    x2D= y1*scale+canvasWidth/13 
+    x2D= y1*scale+canvasWidth/13
     y2D= x1*scale+ canvasWidth /6
-    z2D=z1*scale 
+    z2D=z1*scale
     #alert "x2: #{x2D} y2:#{y2D} z2: #{z2D}"
     drawCircle(x2D,y2D)
     drawSide(x2D,z2D)
     drawCross()
     drawSideCross()
-  
+
 
   showGal=()->
     ctx.clearRect(0,0,canvasWidth,canvasWidth)
@@ -307,9 +333,9 @@ $ ->
     ctx.strokeStyle=colorGalaxy
     ctx.lineWidth=5
     ctx.stroke()
-    
+
     getCartesian(co[index].galLatitude, co[index].galLongitude, co[index].lightYears)
-  
+
 
   replaceChar=(stro,i,char)->
     if i is 0
@@ -318,12 +344,12 @@ $ ->
       t=stro.substr(0,i)+char+stro.substr(i+1)
 
   #alert "Local Time: #{observer.localTime()} \n julian date: #{getJulianDate()} \n GST: #{getGST()} \n LST: #{getLST()} \n Latitude: #{observer.latitude()/2/Math.PI*360} \n Longitude: #{observer.longitude()/2/Math.PI*360}"
- 
-  
+
+
   phi=String.fromCharCode(934)
   iota =String.fromCharCode(921)
   omicron= String.fromCharCode(927)
-    
+
   makeObjectFromCSVFile = (url) ->
     $.ajax
         url: url+"?"+Math.round(Math.random()*100000)
@@ -338,38 +364,38 @@ $ ->
            rows=[]
            for row,ri in allTextLines[1..]
              obj={}
-             for header,i in headers 
+             for header,i in headers
                obj[header]=values[ri][i]
              rows.push(obj)
            makeObjectFromCSVFileSuccess(rows)
-               
+
 
   makeObjectFromCSVFileSuccess=(rows)->
     co=rows
-    
+
     for c in co
       c.name= c.name.replace(/M(\d+)/,"Messier $1")
       c.galLongitude=galacticLongitude(astromath.raRadians(c.raHours, c.raMinutes),astromath.decRadians(c.decDegrees, c.decMinutes))
       c.galLatitude=galacticLatitude(astromath.raRadians(c.raHours, c.raMinutes),astromath.decRadians(c.decDegrees, c.decMinutes))
       c.visible=if (getAltitude(astromath.raRadians(c.raHours, c.raMinutes),astromath.decRadians(c.decDegrees, c.decMinutes))>15*2*Math.PI/360) then true else false
     showData()
- 
+
   makeObjectFromCSVFile("CelestialObjects.csv")
- 
+
 
   co=co.sort (f,g) ->
     if f.raHours>g.raHours then return -1 else return 1
   alert co
-  
-  
+
+
   ###
 // store object
 localStorage.setItem( "obj", JSON.stringify( obj ) );
- 
+
 // retrieve object
 console.log( JSON.parse( localStorage.getItem( "obj" ) ) );
   ###
-  
+
   listener= (e) ->
     sensor=-e.accelerationIncludingGravity.x
     alt=Math.round(alt*10)/10
@@ -387,8 +413,8 @@ console.log( JSON.parse( localStorage.getItem( "obj" ) ) );
       if altDev is 0
         str="------------"+phi+"------------"
 
- 
-      
+
+
   listener2=(e2)->
     compassRaw= Math.round((e2.webkitCompassHeading-100)%360)
     compass=Math.round((compassRaw-offsetCompass)%360)
@@ -400,10 +426,10 @@ console.log( JSON.parse( localStorage.getItem( "obj" ) ) );
     strAz=replaceChar(strAz, numberBlanks/2+azDev,iota)
     if azDev is 0
         strAz="------------"+phi+"------------"
-      
 
 
-    c1 = document.getElementById("canvasGoTo") 
+
+    c1 = document.getElementById("canvasGoTo")
     ctxGoTo = c1.getContext("2d")
     ctxGoTo.canvas.width=screenWidth
     ctxGoTo.canvas.height=100
@@ -427,8 +453,8 @@ console.log( JSON.parse( localStorage.getItem( "obj" ) ) );
     if altDev>0 then ctxGoTo.fillText('\u21D7',5,ctxGoTo.canvas.height/3+10)
     if altDev<0 then ctxGoTo.fillText('\u21D8',5,ctxGoTo.canvas.height/3+10)
 
-    
-    
+
+
     ctxGoTo.beginPath()
     ctxGoTo.moveTo(50,ctxGoTo.canvas.height/3*2)
     ctxGoTo.lineTo(ctxGoTo.canvas.width-50, ctxGoTo.canvas.height/3*2)
@@ -452,38 +478,38 @@ console.log( JSON.parse( localStorage.getItem( "obj" ) ) );
 
   showData=()->
 
-    
+
     alt=getAltitude(astromath.raRadians(co[index].raHours, co[index].raMinutes),astromath.decRadians(co[index].decDegrees, co[index].decMinutes))
     az=getAzimuth(astromath.raRadians(co[index].raHours, co[index].raMinutes),astromath.decRadians(co[index].decDegrees, co[index].decMinutes))
     $("#textName").text(co[index].name)
     #$("#distance").text("distance: "+unitsToSI(co[index].lightYears)+"ly  alt: "+Math.round(alt)+" az: "+Math.round(az))
-     
+
     showGal()
     for type,i in objectTypes
        if type is co[index].type
           notesText= objectNames[i]
     $("#notes").html(notesText+"   "+unitsToSI(co[index].lightYears)+"ly   <br> "+co[index].notes)
-    
-  
+
+
   showCO=(type)->
       $("#listCO").empty()
       $("#listCO").append("<li   data-theme='#{if e.visible then 'a' else 'b'}'><a href='#' class='li' >#{e.name} </a></li>" for e,i in co when trim(e.type) is trim(type))
       $("#pageCO").trigger("create")
       $("#listCO").listview("refresh")
       $.mobile.changePage("#pageCO")
-    
+
   $("#buttonBrightStars").on "click" ,->
      showCO("BS")
 
   $("#buttonDoubleStars").on "click" ,->
      showCO("DS")
-      
+
   $("#buttonBrightNebulas").on "click" ,->
       showCO("BN")
-      
+
   $("#buttonOpenClusters").on "click" ,->
      showCO("OC")
-      
+
   $("#buttonGlobularClusters").on "click" ,->
      showCO("GC")
 
@@ -509,9 +535,9 @@ console.log( JSON.parse( localStorage.getItem( "obj" ) ) );
 
   $("#buttonHelp").on "click" , ->
      $.mobile.changePage("#pageHelp")
-     
+
   $("#buttonInfo").on "click" , ->
-    
+
     ###
     #searchString=if name.slice(0,3) is "NGC" then "NGC "+/(\d+)/g.exec(name)[0] else name.replace(" "," ")
     searchString=name.replace(" "," ")
@@ -528,20 +554,20 @@ console.log( JSON.parse( localStorage.getItem( "obj" ) ) );
           #alert "success"
           markup = data.parse.text["*"]
           blurb = $('<div></div>').html(markup)
- 
+
           #remove links as they will not work
           blurb.find('a').each ->
             $(this).replaceWith($(this).html())
- 
+
           # remove any references
           blurb.find('sup').remove()
- 
+
           # remove cite error
           blurb.find('.mw-ext-cite-error').remove()
 
           $('#article').html($(blurb).find('p'))
           $.mobile.changePage("#pageArticle")
-          
+
       error:  (errorMessage) ->
           alert "error"
   ###
@@ -551,7 +577,7 @@ console.log( JSON.parse( localStorage.getItem( "obj" ) ) );
   $("#buttonBack1").on "click" , ->
     $.mobile.changePage("#pageContent")
 
-  
+
 </script>
 <script type="text/javascript" src="coffeescript.js"></script>
 -->
@@ -573,7 +599,7 @@ console.log( JSON.parse( localStorage.getItem( "obj" ) ) );
   </div>
   <div data-role="footer" data-position="fixed" data-fullscreen="false"  data-theme="a">
 
-    
+
     <button id="buttonBrightStars">B</button>
        <button id="buttonDoubleStars">D</button>
         <button id="buttonBrightNebulas">N</button>
@@ -582,11 +608,11 @@ console.log( JSON.parse( localStorage.getItem( "obj" ) ) );
                 <button id="buttonGlobularClusters">G</button>
        <button id="buttonGalaxies">X</button>
      <button id="buttonHelp">?</button>
-    
+
 
   </div>
 </div>
-  
+
   <div id="pageCO" data-role="page">
   <div data-role="header" data-position="fixed" data-fullscreen="false"  data-theme="a">
     <h1>Go To</h1>
@@ -606,7 +632,7 @@ console.log( JSON.parse( localStorage.getItem( "obj" ) ) );
    <button id="buttonBack" class="ui-btn-right">back</button>
   </div>
     <div data-role="content"  data-theme="a">
-          
+
     <div id="article" class="normal"></div>
 
 </div>
@@ -647,13 +673,13 @@ Stars have their common names or their constellation names.  The deep space obje
 <h2 id="lists">Object Lists</h2>
 The objects are greyed out if they are less than 15 degrees above the horizon and so cannot be seen well. <br/>
 <h2 id="installing">Installing</h2>
-The device the app is running on needs to be mounted at 45 degrees to the long axis of the telescope. 
+The device the app is running on needs to be mounted at 45 degrees to the long axis of the telescope.
 <h2 id="about">About</h2>
-The web app was written by Brian Edgar in 2018. It contains code from others for which I am grateful that it was shared and this is acknowledge in the code. The data base of objects was cut from various places on the web and pasted into a spreadsheet which is read by the app. I will update this as I discover more objects to look at. 
-  
+The web app was written by Brian Edgar in 2018. It contains code from others for which I am grateful that it was shared and this is acknowledge in the code. The data base of objects was cut from various places on the web and pasted into a spreadsheet which is read by the app. I will update this as I discover more objects to look at.
+
 
 </div>
 </div>
-  
+
 </body>
 </html>
