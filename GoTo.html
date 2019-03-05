@@ -103,7 +103,7 @@
     ctx.fillStyle="red"
     ctx.fill()
   }
-  
+
 //
 //   drawSide=(x,z)->
 //     ctx.beginPath()
@@ -197,7 +197,7 @@
 //     ctx.lineWidth=5
 //     ctx.stroke()
 //
-//     getCartesian(co[index].galLatitude, co[index].galLongitude, co[index].lightYears)
+//     getCartesian(cos[index].galLatitude, cos[index].galLongitude, cos[index].lightYears)
 //
 //
 //   replaceChar=(stro,i,char)->
@@ -225,187 +225,191 @@
 // console.log( JSON.parse( localStorage.getItem( "obj" ) ) );
 //   ###
 //
-//   listener= (e) ->
-//     sensor=-e.accelerationIncludingGravity.x
-//     alt=Math.round(alt*10)/10
-//     if Math.abs(sensor-previousSensor)>0.05
-//       previousAngle=sensor
-//       adjSensor=a+b*sensor
-//       trueAngle=Math.round(adjSensor-offsetInclination)
-//       trueAngle=Math.min(trueAngle,90)
-//       trueAngle=Math.max(trueAngle,0)
-//       altDev=Math.min((trueAngle-alt),numberBlanks/2)
-//       altDev=Math.max((trueAngle-alt),-numberBlanks/2)
-//       #$("#distance").text(trueAngle)
-//       str="------------"+omicron+"------------"
-//       str=replaceChar(str, numberBlanks/2+altDev,iota)
-//       if altDev is 0
-//         str="------------"+phi+"------------"
-//
-//
-//
-//   listener2=(e2)->
-//     compassRaw= Math.round((e2.webkitCompassHeading-100)%360)
-//     compass=Math.round((compassRaw-offsetCompass)%360)
-//     az=Math.round(az*10)/10
-//     azDev =((compass-az) + 540) % 360 - 180
-//     azDev=Math.min(azDev, numberBlanks/2)
-//     azDev=Math.max(azDev, -numberBlanks/2)
-//     strAz="------------"+omicron+"------------"
-//     strAz=replaceChar(strAz, numberBlanks/2+azDev,iota)
-//     if azDev is 0
-//         strAz="------------"+phi+"------------"
-//
-//
-//
-//     c1 = document.getElementById("canvasGoTo")
-//     ctxGoTo = c1.getContext("2d")
-//     ctxGoTo.canvas.width=screenWidth
-//     ctxGoTo.canvas.height=100
-//     ctxGoTo.beginPath()
-//     ctxGoTo.moveTo(50,ctxGoTo.canvas.height/3)
-//     ctxGoTo.lineTo(ctxGoTo.canvas.width-50, ctxGoTo.canvas.height/3)
-//     ctxGoTo.strokeStyle="red"
-//     ctxGoTo.lineWidth=2
-//     ctxGoTo.stroke()
-//     ctxGoTo.beginPath()
-//     ctxGoTo.moveTo(ctxGoTo.canvas.width/2.2+altDev*10,ctxGoTo.canvas.height/3-20)
-//     ctxGoTo.lineTo( ctxGoTo.canvas.width/2.2+altDev*10, ctxGoTo.canvas.height/3+20)
-//     ctxGoTo.strokeStyle="red"
-//     ctxGoTo.lineWidth=2
-//     ctxGoTo.stroke()
-//     ctxGoTo.beginPath()
-//     ctxGoTo.arc(ctxGoTo.canvas.width/2.2, ctxGoTo.canvas.height/3, 15, 0, Math.PI*2, true)
-//     ctxGoTo.stroke()
-//     ctxGoTo.fillStyle="red"
-//     ctxGoTo.font = "30px Arial"
-//     if altDev>0 then ctxGoTo.fillText('\u21D7',5,ctxGoTo.canvas.height/3+10)
-//     if altDev<0 then ctxGoTo.fillText('\u21D8',5,ctxGoTo.canvas.height/3+10)
-//
-//
-//
-//     ctxGoTo.beginPath()
-//     ctxGoTo.moveTo(50,ctxGoTo.canvas.height/3*2)
-//     ctxGoTo.lineTo(ctxGoTo.canvas.width-50, ctxGoTo.canvas.height/3*2)
-//     ctxGoTo.strokeStyle="red"
-//     ctxGoTo.lineWidth=2
-//     ctxGoTo.stroke()
-//     ctxGoTo.beginPath()
-//     ctxGoTo.moveTo(ctxGoTo.canvas.width/2.2+azDev*10,ctxGoTo.canvas.height/3*2-20)
-//     ctxGoTo.lineTo( ctxGoTo.canvas.width/2.2+azDev*10, ctxGoTo.canvas.height/3*2+20)
-//     ctxGoTo.strokeStyle="red"
-//     ctxGoTo.lineWidth=2
-//     ctxGoTo.stroke()
-//     ctxGoTo.beginPath()
-//     ctxGoTo.arc(ctxGoTo.canvas.width/2.2, ctxGoTo.canvas.height/3*2, 15, 0, Math.PI*2, true)
-//     ctxGoTo.stroke()
-//     if azDev>0 then ctxGoTo.fillText('\u21BA',5,ctxGoTo.canvas.height/3*2+10)
-//     if azDev<0 then ctxGoTo.fillText('\u21BB',5,ctxGoTo.canvas.height/3*2+10)
-//
-//   window.addEventListener('devicemotion', listener)
-//   window.addEventListener('deviceorientation', listener2)
-//
-//   showData=()->
-//
-//
-//     alt=getAltitude(astromath.raRadians(co[index].raHours, co[index].raMinutes),astromath.decRadians(co[index].decDegrees, co[index].decMinutes))
-//     az=getAzimuth(astromath.raRadians(co[index].raHours, co[index].raMinutes),astromath.decRadians(co[index].decDegrees, co[index].decMinutes))
-//     $("#textName").text(co[index].name)
-//     #$("#distance").text("distance: "+unitsToSI(co[index].lightYears)+"ly  alt: "+Math.round(alt)+" az: "+Math.round(az))
-//
-//     showGal()
-//     for type,i in objectTypes
-//        if type is co[index].type
-//           notesText= objectNames[i]
-//     $("#notes").html(notesText+"   "+unitsToSI(co[index].lightYears)+"ly   <br> "+co[index].notes)
-//
-//
-//   showCO=(type)->
-//       $("#listCO").empty()
-//       $("#listCO").append("<li   data-theme='#{if e.visible then 'a' else 'b'}'><a href='#' class='li' >#{e.name} </a></li>" for e,i in co when trim(e.type) is trim(type))
-//       $("#pageCO").trigger("create")
-//       $("#listCO").listview("refresh")
-//       $.mobile.changePage("#pageCO")
-//
-//   $("#buttonBrightStars").on "click" ,->
-//      showCO("BS")
-//
-//   $("#buttonDoubleStars").on "click" ,->
-//      showCO("DS")
-//
-//   $("#buttonBrightNebulas").on "click" ,->
-//       showCO("BN")
-//
-//   $("#buttonOpenClusters").on "click" ,->
-//      showCO("OC")
-//
-//   $("#buttonGlobularClusters").on "click" ,->
-//      showCO("GC")
-//
-//   $("#buttonGalaxies").on "click" ,->
-//      showCO("GX")
-//
-//   $("#buttonPlanetaryNebulas").on "click" ,->
-//      showCO("PN")
-//
-//   $("#listCO").on "click", "li",->
-//      i= $(this).closest("li").index()
-//      name1=$(this).text()
-//      index= (i for c,i in co when trim(c.name) is trim(name1))
-//      $.mobile.changePage("#pageContent")
-//      showData()
-//
-//   $("#buttonCalibrate").on "click" , ->
-//      offsetCompass=compassRaw-az
-//      offsetInclination=adjSensor-alt
-//      localStorage.setItem "offsetCompass",offsetCompass
-//      localStorage.setItem "offsetInclination",offsetInclination
-//      #alert "inclination: sensor:#{Math.round(adjSensor)} alt:#{alt} offset: #{Math.round(offsetInclination)} \n compass: #{Math.round(offsetCompass)}"
-//
-//   $("#buttonHelp").on "click" , ->
-//      $.mobile.changePage("#pageHelp")
-//
-//   $("#buttonInfo").on "click" , ->
-//
-//     ###
-//     #searchString=if name.slice(0,3) is "NGC" then "NGC "+/(\d+)/g.exec(name)[0] else name.replace(" "," ")
-//     searchString=name.replace(" "," ")
-//     url="http://en.wikipedia.org/w/api.php?action=parse&format=json&prop=text&page=#{searchString}&callback=?"
-//     #alert url
-//     #code below from http://www.9bitstudios.com/2014/03/getting-data-from-the-wikipedia-api-using-jquery/
-//     $.ajax
-//       type: "GET"
-//       url: url
-//       contentType: "application/json; charset=utf-8"
-//       async: false
-//       dataType: "json"
-//       success:  (data, textStatus, jqXHR) ->
-//           #alert "success"
-//           markup = data.parse.text["*"]
-//           blurb = $('<div></div>').html(markup)
-//
-//           #remove links as they will not work
-//           blurb.find('a').each ->
-//             $(this).replaceWith($(this).html())
-//
-//           # remove any references
-//           blurb.find('sup').remove()
-//
-//           # remove cite error
-//           blurb.find('.mw-ext-cite-error').remove()
-//
-//           $('#article').html($(blurb).find('p'))
-//           $.mobile.changePage("#pageArticle")
-//
-//       error:  (errorMessage) ->
-//           alert "error"
-//   ###
-//   $("#buttonBack").on "click" , ->
-//     $.mobile.changePage("#pageContent")
-//
-//   $("#buttonBack1").on "click" , ->
-//     $.mobile.changePage("#pageContent")
-//
+  listener= (e) => {
+    sensor=-e.accelerationIncludingGravity.x
+    alt=Math.round(alt*10)/10
+    if (Math.abs(sensor-previousSensor)>0.05) {
+      previousAngle=sensor
+      adjSensor=a+b*sensor
+      trueAngle=Math.round(adjSensor-offsetInclination)
+      trueAngle=Math.min(trueAngle,90)
+      trueAngle=Math.max(trueAngle,0)
+      altDev=Math.min((trueAngle-alt),numberBlanks/2)
+      altDev=Math.max((trueAngle-alt),-numberBlanks/2)
+      //$("#distance").text(trueAngle)
+      str="------------"+omicron+"------------"
+      str=replaceChar(str, numberBlanks/2+altDev,iota)
+      if (altDev === 0) {
+        str="------------"+phi+"------------"
+      }
+      }
+      }
+
+
+  listener2=(e2)=>{
+    compassRaw= Math.round((e2.webkitCompassHeading-100)%360)
+    compass=Math.round((compassRaw-offsetCompass)%360)
+    az=Math.round(az*10)/10
+    azDev =((compass-az) + 540) % 360 - 180
+    azDev=Math.min(azDev, numberBlanks/2)
+    azDev=Math.max(azDev, -numberBlanks/2)
+    strAz="------------"+omicron+"------------"
+    strAz=replaceChar(strAz, numberBlanks/2+azDev,iota)
+    if (azDev === 0) {
+        strAz="------------"+phi+"------------"
+}
+
+
+    c1 = document.getElementById("canvasGoTo")
+    ctxGoTo = c1.getContext("2d")
+    ctxGoTo.canvas.width=screenWidth
+    ctxGoTo.canvas.height=100
+    ctxGoTo.beginPath()
+    ctxGoTo.moveTo(50,ctxGoTo.canvas.height/3)
+    ctxGoTo.lineTo(ctxGoTo.canvas.width-50, ctxGoTo.canvas.height/3)
+    ctxGoTo.strokeStyle="red"
+    ctxGoTo.lineWidth=2
+    ctxGoTo.stroke()
+    ctxGoTo.beginPath()
+    ctxGoTo.moveTo(ctxGoTo.canvas.width/2.2+altDev*10,ctxGoTo.canvas.height/3-20)
+    ctxGoTo.lineTo( ctxGoTo.canvas.width/2.2+altDev*10, ctxGoTo.canvas.height/3+20)
+    ctxGoTo.strokeStyle="red"
+    ctxGoTo.lineWidth=2
+    ctxGoTo.stroke()
+    ctxGoTo.beginPath()
+    ctxGoTo.arc(ctxGoTo.canvas.width/2.2, ctxGoTo.canvas.height/3, 15, 0, Math.PI*2, true)
+    ctxGoTo.stroke()
+    ctxGoTo.fillStyle="red"
+    ctxGoTo.font = "30px Arial"
+    if (altDev>0)  {ctxGoTo.fillText('\u21D7',5,ctxGoTo.canvas.height/3+10)}
+    if (altDev<0) {ctxGoTo.fillText('\u21D8',5,ctxGoTo.canvas.height/3+10)}
+
+
+
+    ctxGoTo.beginPath()
+    ctxGoTo.moveTo(50,ctxGoTo.canvas.height/3*2)
+    ctxGoTo.lineTo(ctxGoTo.canvas.width-50, ctxGoTo.canvas.height/3*2)
+    ctxGoTo.strokeStyle="red"
+    ctxGoTo.lineWidth=2
+    ctxGoTo.stroke()
+    ctxGoTo.beginPath()
+    ctxGoTo.moveTo(ctxGoTo.canvas.width/2.2+azDev*10,ctxGoTo.canvas.height/3*2-20)
+    ctxGoTo.lineTo( ctxGoTo.canvas.width/2.2+azDev*10, ctxGoTo.canvas.height/3*2+20)
+    ctxGoTo.strokeStyle="red"
+    ctxGoTo.lineWidth=2
+    ctxGoTo.stroke()
+    ctxGoTo.beginPath()
+    ctxGoTo.arc(ctxGoTo.canvas.width/2.2, ctxGoTo.canvas.height/3*2, 15, 0, Math.PI*2, true)
+    ctxGoTo.stroke()
+    if (azDev>0) {ctxGoTo.fillText('\u21BA',5,ctxGoTo.canvas.height/3*2+10)}
+    if (azDev<0)  {ctxGoTo.fillText('\u21BB',5,ctxGoTo.canvas.height/3*2+10)}
+  }
+  window.addEventListener('devicemotion', listener)
+  window.addEventListener('deviceorientation', listener2)
+
+  showData=()=>{
+
+
+    alt=getAltitude(astromath.raRadians(cos[index].raHours, cos[index].raMinutes),astromath.decRadians(cos[index].decDegrees, cos[index].decMinutes))
+    az=getAzimuth(astromath.raRadians(cos[index].raHours, cos[index].raMinutes),astromath.decRadians(cos[index].decDegrees, cos[index].decMinutes))
+    $("#textName").text(closest[index].name)
+    //$("#distance").text("distance: "+unitsToSI(cos[index].lightYears)+"ly  alt: "+Math.round(alt)+" az: "+Math.round(az))
+
+    showGal()
+    for ([i,type] of objectTypes) {
+       if (type === cos[index].type) {
+          notesText= objectNames[i]
+        }
+    $("#notes").html(notesText+"   "+unitsToSI(cos[index].lightYears)+"ly   <br> "+cos[index].notes)
+}
+
+  showCO=(type)=>
+      $("#listCO").empty()
+      for ([e,i] of cos) {
+        if (trim(e.type) === trim(type)) {
+      $("#listCO").append(`<li   data-theme='${e.visible ? 'a' : 'b'}'><a href='#' class='li' >${e.name} </a></li>`) ;
+    }
+  }
+  $("#pageCO").trigger("create")
+      $("#listCO").listview("refresh")
+      $.mobile.changePage("#pageCO")
+
+  $("#buttonBrightStars").on("click",() => showCO("BS"));
+
+  $("#buttonDoubleStars").on("click",() => showCO("DS"));
+
+  $("#buttonBrightNebulas").on("click",() => showCO("BN"));
+
+  $("#buttonOpenClusters").on("click",() => showCO("OC"));
+
+  $("#buttonGlobularClusters").on("click",() => showCO("GC"));
+
+  $("#buttonGalaxies").on("click",() => showCO("GX"));
+
+  $("#buttonPlanetaryNebulas").on("click",() => showCO("PN"));
+
+  $("#listCO").on("click", "li", () => {
+     i= $(this).closest("li").index()
+     name1=$(this).text()
+     if (trim(c.name) === trim(name1)) {
+     index= i for ([c,i] of cos )
+   }
+     $.mobile.changePage("#pageContent")
+     showData()
+   )
+   }
+
+  $("#buttonCalibrate").on "click" , ->
+     offsetCompass=compassRaw-az
+     offsetInclination=adjSensor-alt
+     localStorage.setItem "offsetCompass",offsetCompass
+     localStorage.setItem "offsetInclination",offsetInclination
+     #alert "inclination: sensor:#{Math.round(adjSensor)} alt:#{alt} offset: #{Math.round(offsetInclination)} \n compass: #{Math.round(offsetCompass)}"
+
+  $("#buttonHelp").on "click" , ->
+     $.mobile.changePage("#pageHelp")
+
+  $("#buttonInfo").on "click" , ->
+
+    ###
+    #searchString=if name.slice(0,3) is "NGC" then "NGC "+/(\d+)/g.exec(name)[0] else name.replace(" "," ")
+    searchString=name.replace(" "," ")
+    url="http://en.wikipedia.org/w/api.php?action=parse&format=json&prop=text&page=#{searchString}&callback=?"
+    #alert url
+    #code below from http://www.9bitstudios.com/2014/03/getting-data-from-the-wikipedia-api-using-jquery/
+    $.ajax
+      type: "GET"
+      url: url
+      contentType: "application/json; charset=utf-8"
+      async: false
+      dataType: "json"
+      success:  (data, textStatus, jqXHR) ->
+          #alert "success"
+          markup = data.parse.text["*"]
+          blurb = $('<div></div>').html(markup)
+
+          #remove links as they will not work
+          blurb.find('a').each ->
+            $(this).replaceWith($(this).html())
+
+          # remove any references
+          blurb.find('sup').remove()
+
+          # remove cite error
+          blurb.find('.mw-ext-cite-error').remove()
+
+          $('#article').html($(blurb).find('p'))
+          $.mobile.changePage("#pageArticle")
+
+      error:  (errorMessage) ->
+          alert "error"
+  ###
+  $("#buttonBack").on "click" , ->
+    $.mobile.changePage("#pageContent")
+
+  $("#buttonBack1").on "click" , ->
+    $.mobile.changePage("#pageContent")
+
 
 </script>
 
