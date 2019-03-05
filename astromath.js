@@ -79,6 +79,16 @@ getAltitude : function(ra,dec){
   answer=answer*360/2/Math.PI;
 },
 
+  getAzimuth: function(ra,dec) {
+
+    hourAngle=(getLST()*2*Math.PI/24-ra);
+    y=-1*Math.cos(dec)*Math.cos(latitude) *Math.sin(hourAngle);
+    x=Math.sin(dec) - Math.sin(latitude)*Math.sin(getAltitude(ra,dec )*2*Math.PI/360 );
+    answer= Math.atan2(y,x);
+    if (answer < 0) { answer=2*Math.PI+answer;}
+    answer=answer*360/2/Math.PI;
+  },
+
 distSunToCentre :
 function(ra,dec,distance){
 return distance*Math.cos(dec);

@@ -20,29 +20,43 @@ let data=[
 "Messier 25,18,32,-19,15,2000,4.6,OC,",
 "NGC1039 M34,2,42,42,47,1400,5.2,OC,"]
 
-class CelestialObjects
-co=[];
+class CelestialObject {
+  constructor(name,raHours,raMinutes,decDegrees,decMinutes,lightYears,absMagnitue,type,notes) {
+    this.name=name;
+    this.raHours=raHours;
+   this.raMinutes=raMinutes;
+   this.decDegrees=decDegrees;
+   this.decMinutes=decMinutes;
+   this.lightYears=lightYears;
+   this.absMagnitue=absMagnitue;
+   this.type=type;
+   this.notes=notes;
+
+
+
+    this.name= this.name.replace(/M(\d+)/,"Messier $1")
+    this.galLongitude=astromath.galacticLongitude(astromath.raRadians(this.raHours, this.raMinutes),astromath.decRadians(this.decDegrees, this.decMinutes))
+    this.galLatitude=astromath.galacticLatitude(astromath.raRadians(this.raHours, this.raMinutes),astromath.decRadians(this.decDegrees, this.decMinutes))
+    this.visible= astromath.getAltitude(astromath.raRadians(this.raHours, this.raMinutes),astromath.decRadians(this.decDegrees, this.decMinutes))>15*2*Math.PI/360 ? true : false
+
+  }
+
+}
+
+class CelestialObjects {
+  constructor() {
+  }
+  makeCelestialObjects() {
+celestialObjects=[];
 for (let datum of data) {
  let c=datum.split(",");
- c.name=c[0];
- c.raHours=c[1];
-c.raMinutes=c[2];
-c.decDegrees=c[3];
-c.decMinutes=c[4];
-c.lightYears=c[5];
-c.absMagnitue=c[6];
-c.type=c[7];
-c.notes=c[8];
-c.name= c.name.replace(/M(\d+)/,"Messier $1")
-c.galLongitude=astromath.galacticLongitude(astromath.raRadians(c.raHours, c.raMinutes),astromath.decRadians(c.decDegrees, c.decMinutes))
-c.galLatitude=astromath.galacticLatitude(astromath.raRadians(c.raHours, c.raMinutes),astromath.decRadians(c.decDegrees, c.decMinutes))
-c.visible= astromath.getAltitude(astromath.raRadians(c.raHours, c.raMinutes),astromath.decRadians(c.decDegrees, c.decMinutes))>15*2*Math.PI/360 ? true : false
-co.push(c);
-//co=co.sort (f,g) ->
-//  if f.raHours>g.raHours then return -1 else return 1
+ let celestialObject=new CelestialObject(c[0],c[1],c[2],c[3],c[4],c[5],c[6],c[7],c[8])
+  celestialObjects.push(celestialObject);
+}
+celestialObjects=celestialObjects.sort((f,g) => (f.raHours>g.raHours) ?  -1 :  1)
 
-
- console.log(co["name"]);
+return celestialObjects;
+}
 }
 /*
 NGC1068 M77,2,43,0,1,60000000,8.8,GX,
