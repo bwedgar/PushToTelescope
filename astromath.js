@@ -40,7 +40,46 @@ long=atan+astromath.radians(33);
 return long;
 },
 
-distSunToCentre : 
+getJulianDate : function(){
+  d=new Date();
+  M=d.getUTCMonth()+1;
+  Y=d.getUTCFullYear();
+  D=d.getUTCDate()+d.getUTCHours()/24;
+  if (M<3) {
+    Y=Y-1;
+    M=M+12;
+  }
+  A=Math.floor(Y/100);
+  B=2-A+Math.floor(A/4);
+  if (Y<0) { C=Math.floor((375.25*Y)-.75)}
+  else
+    { C=Math.floor(365.25*Y) }
+  E=Math.floor(30.6001*(M+1));
+  JD=B+C+D+E+1720994.5;
+},
+
+getGST : function() {
+  d=new Date()
+  JD=astromath.getJulianDate()
+  GMT=d.getUTCHours()+d.getUTCMinutes()/60
+  T= (JD-2451545.0)/36525.0
+  T0=6.697374558+ (2400.051336*T)+(0.000025862*T*T)+(GMT*1.0027379093)
+  T0=T0%24
+},
+
+getLST : function() {
+  LST=astromath.getGST()+(longitude/15);
+  return LST
+},
+
+getAltitude : function(ra,dec){
+  hourAngle=(astromath.getLST()*2*Math.PI/24-ra);
+  //latitude=observer.latitude();
+  answer=Math.asin(Math.sin(dec)*Math.sin(latitude)+Math.cos(dec)* Math.cos(latitude)*Math.cos(hourAngle));
+  answer=answer*360/2/Math.PI;
+},
+
+distSunToCentre :
 function(ra,dec,distance){
 return distance*Math.cos(dec);
 },
@@ -49,7 +88,7 @@ distInPlane : function(ra,dec,distance){
 return distance*Math.sin(dec)*Math.sin(ra)
 },
 
-distAbovePlane : 
+distAbovePlane :
 function(ra,dec,distance){
 return distance*Math.sin(dec)*Math.cos(ra);
 },
@@ -100,7 +139,7 @@ angleSub : function(angle1,angle2) {
 if (angle1-angle2>Math.PI) {return (angle1-angle2)-2*Math.PI;
 exit;
 }
-if (angle1-angle2<-1*Math.PI) 
+if (angle1-angle2<-1*Math.PI)
 {return (angle1-angle2)+2*Math.PI;}
 else {return angle1-angle2;}
 },
@@ -110,7 +149,7 @@ screenY : function(altitude,azimuth,azCentre) {
 
 //return altitude<0?-1000:Math.round(((3.14/2-altitude)*300)-60,0);
 
-//subtract the altitude from PI/2 deg  to get the distance from the top from 0 to PI/2.  
+//subtract the altitude from PI/2 deg  to get the distance from the top from 0 to PI/2.
 //a distance of pi/2 should equal the height of the canvas
 //so divide the distance by pi/2 and multiply by the height of the canvas
 scale=2/3.14*($('#skyViewDiv').height())*4/5; //4/5 is for the fact I move the stars down 1/5th of the screen
@@ -138,6 +177,3 @@ return Math.floor(radians/2/Math.PI*360)+' &deg; '+Math.floor((radians/2/Math.PI
 }
 
 }
-
-
-
