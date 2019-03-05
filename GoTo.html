@@ -37,87 +37,18 @@
 </style>
 <script  src="jquery.js"></script>
 <script  src="jquery.mobile.js"></script>
-<script  src="data.js"></script>
+<script  src="celestialobjects.js"></script>
 <script src="astromath.js"></script>
 
   <script>
 
   longitude=174.76;
   latitude=-36.8485;
-//console.log(data)
-let co=[];
-for (let datum of data) {
-  let c=datum.split(",");
-  c.name=c[0];
-  c.raHours=c[1];
-c.raMinutes=c[2];
-c.decDegrees=c[3];
-c.decMinutes=c[4];
-c.lightYears=c[5];
-c.absMagnitue=c[6];
-c.type=c[7];
-c.notes=c[8];
-c.name= c.name.replace(/M(\d+)/,"Messier $1")
-c.galLongitude=astromath.galacticLongitude(astromath.raRadians(c.raHours, c.raMinutes),astromath.decRadians(c.decDegrees, c.decMinutes))
-c.galLatitude=astromath.galacticLatitude(astromath.raRadians(c.raHours, c.raMinutes),astromath.decRadians(c.decDegrees, c.decMinutes))
-c.visible= astromath.getAltitude(astromath.raRadians(c.raHours, c.raMinutes),astromath.decRadians(c.decDegrees, c.decMinutes))>15*2*Math.PI/360 ? true : false
-co.push(c);
-//co=co.sort (f,g) ->
-//  if f.raHours>g.raHours then return -1 else return 1
+
+co=new CelestialObjects();
+for (c of co) {console.log(c.name)}
 
 
-  console.log(co["name"]);
-}
-//`${c.name}  ${c.type}`);
-   //data1="name,raHours,raMinutes,decDegrees,decMinutes,lightYears,absMagnitue,type,notes\
-   //console.log(astromath.raRadians(3,40));
-
-// fetch("https://github.com/bwedgar/PushToTelescope/blob/master/CelestialObjects.csv",{mode:"no-cors"})
-//.then(res => res.text())
-//.then(data => console.log(data))
-//.then(data => console.log(data))
-
- /*
- const makeObjectFromCSVFile = (url) =>
-    $.ajax({
-        url: url+"?"+Math.round(Math.random()*100000) //to stop caching,
-        dataType: "text",
-        type: "get",
-        error: function(jqXHR, textStatus, errorThrown) {
-           alert  "AJAX Error at download: #{textStatus}"
-    },
-        success: function(data, textStatus, jqXHR) {
-           allTextLines = data.split(/\r\n|\n/);
-           headers = allTextLines[0].split(',');
-           values=(textLine.split(",") for textLine in allTextLines[1..]);
-           rows=[];
-           for row,ri in allTextLines[1..] {
-             obj={}
-             for header,i in headers
-               obj[header]=values[ri][i]
-             rows.push(obj)
-
-           makeObjectFromCSVFileSuccess(rows);
-    }
-
-  makeObjectFromCSVFileSuccess = (rows) =>
-    co=rows
-
-    for c of co {
-      c.name= c.name.replace(/M(\d+)/,"Messier $1")
-      c.galLongitude=galacticLongitude(astromath.raRadians(c.raHours, c.raMinutes),astromath.decRadians(c.decDegrees, c.decMinutes))
-      c.galLatitude=galacticLatitude(astromath.raRadians(c.raHours, c.raMinutes),astromath.decRadians(c.decDegrees, c.decMinutes))
-      c.visible=if (getAltitude(astromath.raRadians(c.raHours, c.raMinutes),astromath.decRadians(c.decDegrees, c.decMinutes))>15*2*Math.PI/360) then true else false
-    //showData()
-    }
-  makeObjectFromCSVFile("CelestialObjects.csv")
-
-  co=co.sort (f,g) ->
-    if f.raHours>g.raHours then return -1 else return 1
-  alert co
-
-
- */
 
  </script>
 
