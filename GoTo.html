@@ -322,7 +322,7 @@
 
       showData = () => {
         let index=4;
-        alert("at showdata");
+        //alert("at showdata");
         let alt = astromath.getAltitude(astromath.raRadians(cos[index].raHours, cos[index].raMinutes), astromath.decRadians(cos[index].decDegrees, cos[index].decMinutes))
         let az = astromath.getAzimuth(astromath.raRadians(cos[index].raHours, cos[index].raMinutes), astromath.decRadians(cos[index].decDegrees, cos[index].decMinutes))
         console.log(`cos.name:${cos[index].name}, alt:${this.alt}, az:${this.az}`)
@@ -338,7 +338,7 @@
       }
 
       showCO = (type) => {
-        alert("test");//$("#listCO").html());
+        alert($("#listCO").html());
         $("#listCO").empty()
         for ([e, i] of cos) {
           if (trim(e.type) === trim(type)) {
