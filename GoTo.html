@@ -340,9 +340,9 @@
       }
 
       showCO = (type) => {
-        alert("ll");//$("#listCO").html());
+        alert(cos[3].name)//alert("ll");//$("#listCO").html());
         $("#listCO").empty()
-        for (const co of cos.entries()) {
+        for (const co of cos) {
           console.log(co.name);
           if (trim(co.type) === trim(type)) {
             $("#listCO").append(`<li   data-theme='${co.visible ? 'a' : 'b'}'><a href='#' class='li' >${co.name} </a></li>`);
@@ -353,11 +353,11 @@
 
       showData();
 
-      $("#pageCO").trigger("create")
-      $("#listCO").listview("refresh")
-      $.mobile.changePage("#pageCO")
+      $("#pageCO").trigger("create");
+      $("#listCO").listview("refresh");
+      $.mobile.changePage("#pageCO");
 
-      $("#buttonBrightStars").on("click", () => {alert("oo"); showCO("BS");});
+      $("#buttonBrightStars").on("click", () => showCO("BS"));
 
       $("#buttonDoubleStars").on("click", () => showCO("DS"));
 
