@@ -14,8 +14,10 @@
     <link rel="stylesheet" href="jquery.mobile.css" type="text/css" />
     <link rel="stylesheet" href="GoTo.css" type="text/css" />
     <link rel="stylesheet" href="jquery.mobile.icons.min.css" type="text/css" />
-    <link rel="stylesheet" href="https://code.jquery.com/mobile/1.4.5/jquery.mobile.structure-1.4.5.min.css" type="text/css" />
-    <style>
+
+    <link rel="stylesheet" href="jquery.mobile.css" type="text/css" />
+
+  <style>
       body {
         background-color: black;
       }
@@ -338,11 +340,12 @@
       }
 
       showCO = (type) => {
-        alert($("#listCO").html());
+        alert("ll");//$("#listCO").html());
         $("#listCO").empty()
-        for ([e, i] of cos) {
-          if (trim(e.type) === trim(type)) {
-            $("#listCO").append(`<li   data-theme='${e.visible ? 'a' : 'b'}'><a href='#' class='li' >${e.name} </a></li>`);
+        for (const co of cos.entries()) {
+          console.log(co.name);
+          if (trim(co.type) === trim(type)) {
+            $("#listCO").append(`<li   data-theme='${co.visible ? 'a' : 'b'}'><a href='#' class='li' >${co.name} </a></li>`);
           }
         }
         console.log($("#listCO").html());
@@ -354,7 +357,7 @@
       $("#listCO").listview("refresh")
       $.mobile.changePage("#pageCO")
 
-      $("#buttonBrightStars").on("click", () => showCO("BS"));
+      $("#buttonBrightStars").on("click", () => {alert("oo"); showCO("BS");});
 
       $("#buttonDoubleStars").on("click", () => showCO("DS"));
 
