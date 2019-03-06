@@ -54,6 +54,15 @@
       celestialObjects = new CelestialObjects;
       cos = celestialObjects.makeCelestialObjects();
       console.log(cos[7].name);
+    trim = (s) => s.replace(/^\s*|\s*$/g, '');
+
+        for (const co of cos) {
+          console.log(co.name);
+          //if (trim(co.type) === trim(type)) {
+            $("#listCO").append(`<li   data-theme='${co.visible ? 'a' : 'b'}'><a href='#' class='li' >${co.name} </a></li>`);
+        //  }
+        }
+
 
 
 
@@ -84,7 +93,7 @@
       offsetInclination = localStorage.getItem("offsetInclination")
 
 
-      trim = (s) => s.replace(/^\s*|\s*$/g, '')
+
 
 
       screenWidth = $(window).width()
@@ -323,6 +332,7 @@
       window.addEventListener('deviceorientation', listener2)
 
       showData = () => {
+
         let index=4;
         //alert("at showdata");
         let alt = astromath.getAltitude(astromath.raRadians(cos[index].raHours, cos[index].raMinutes), astromath.decRadians(cos[index].decDegrees, cos[index].decMinutes))
@@ -340,7 +350,7 @@
       }
 
       showCO = (type) => {
-        alert(cos[3].name)//alert("ll");//$("#listCO").html());
+        //alert(cos[3].name)//alert("ll");//$("#listCO").html());
         $("#listCO").empty()
         for (const co of cos) {
           console.log(co.name);
@@ -350,7 +360,7 @@
         }
         console.log($("#listCO").html());
       }
-
+        console.log($("#listCO").html());
       showData();
 
       $("#pageCO").trigger("create");
