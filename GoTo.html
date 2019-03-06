@@ -338,13 +338,14 @@
       }
 
       showCO = (type) => {
-        alert("at showCO");
+        alert("test");//$("#listCO").html());
         $("#listCO").empty()
         for ([e, i] of cos) {
           if (trim(e.type) === trim(type)) {
             $("#listCO").append(`<li   data-theme='${e.visible ? 'a' : 'b'}'><a href='#' class='li' >${e.name} </a></li>`);
           }
         }
+        console.log($("#listCO").html());
       }
 
       showData();
