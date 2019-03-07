@@ -12,9 +12,9 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
 
     <link rel="stylesheet" href="jquery.mobile.css" type="text/css" />
-    <link rel="stylesheet" href="GoTo.css" type="text/css" />
-    <link rel="stylesheet" href="jquery.mobile.icons.min.css" type="text/css" />
 
+    <link  href="GoTo.css" type="text/css" />
+    <link rel="stylesheet" href="jquery.mobile.icons.min.css" type="text/css" />
     <link rel="stylesheet" href="jquery.mobile.css" type="text/css" />
 
     <style>
@@ -49,8 +49,8 @@
 
 
     <script>
-      // $(document).ready(function() {
-        document.addEventListener("DOMContentLoaded",function(){
+      $(document).ready(function() {
+      //  document.addEventListener("DOMContentLoaded",function(){
         $.mobile.changePage("#pageContent");
         longitude = 174.76;
         latitude = -36.8485;
@@ -83,9 +83,6 @@
 
         offsetCompass = localStorage.getItem("offsetCompass")
         offsetInclination = localStorage.getItem("offsetInclination")
-
-
-
 
 
         screenWidth = $(window).width()
@@ -441,7 +438,7 @@
   <body data-theme="a">
     <div id="pageContent" data-role="page">
       <div data-role="header" data-position="fixed" data-fullscreen="false" data-theme="a">
-        <h1>Go To v1</h1>
+        <h1>Go To v2</h1>
         <button id="buttonCalibrate">cal</button>
         <button id="buttonInfo">info</button>
       </div>
