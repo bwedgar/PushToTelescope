@@ -72,22 +72,21 @@ getLST : function() {
   return LST
 },
 
-getAltitude : function(ra,dec){
-  hourAngle=(astromath.getLST()*2*Math.PI/24-ra);
-  //latitude=observer.latitude();
-  answer=Math.asin(Math.sin(dec)*Math.sin(latitude)+Math.cos(dec)* Math.cos(latitude)*Math.cos(hourAngle));
-  answer=answer*360/2/Math.PI;
-},
-
-  getAzimuth: function(ra,dec) {
-
-    hourAngle=(astromath.getLST()*2*Math.PI/24-ra);
-    y=-1*Math.cos(dec)*Math.cos(latitude) *Math.sin(hourAngle);
-    x=Math.sin(dec) - Math.sin(latitude)*Math.sin(astromath.getAltitude(ra,dec )*2*Math.PI/360 );
-    answer= Math.atan2(y,x);
-    if (answer < 0) { answer=2*Math.PI+answer;}
-    answer=answer*360/2/Math.PI;
-  },
+// getAltitude : function(ra,dec){
+//   hourAngle=(astromath.getLST()*2*Math.PI/24-ra);
+//   //latitude=observer.latitude();
+//   answer=Math.asin(Math.sin(dec)*Math.sin(latitude)+Math.cos(dec)* Math.cos(latitude)*Math.cos(hourAngle));
+//   answer=answer*360/2/Math.PI;
+// },
+//
+//   getAzimuth: function(ra,dec) {
+//     hourAngle=(astromath.getLST()*2*Math.PI/24-ra);
+//     y=-1*Math.cos(dec)*Math.cos(latitude) *Math.sin(hourAngle);
+//     x=Math.sin(dec) - Math.sin(latitude)*Math.sin(astromath.getAltitude(ra,dec )*2*Math.PI/360 );
+//     answer= Math.atan2(y,x);
+//     if (answer < 0) { answer=2*Math.PI+answer;}
+//     answer=answer*360/2/Math.PI;
+//   },
 
 distSunToCentre :
 function(ra,dec,distance){
@@ -105,14 +104,14 @@ return distance*Math.sin(dec)*Math.cos(ra);
 
 daysFromJ2000 : function() {
 epoch=new Date(2000,0,1,12,0,0);
-today=setDate;
+today=new Date();
 return (today-epoch)/(1000*60*60*24);
 },
 
 LST : function() {
 longitudeDeg=longitude*360/2/Math.PI;
 daysFromJ2000=astromath.daysFromJ2000();
-today=setDate;
+today=new Date();
 //today =observer.localTime;
 UT = today.getUTCHours()+today.getUTCMinutes()/60;
 answer= ((100.46 + 0.985647 * daysFromJ2000 + longitudeDeg + 15*UT)%360);

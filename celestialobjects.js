@@ -1,62 +1,94 @@
 //let data1="name,raHours,raMinutes,decDegrees,decMinutes,lightYears,absMagnitue,type,notes\
-let data=[
-"47 Tucanae,0,24,-72,5,13000,,GC,30 thousand stars with a dense core which may contain a black hole. Second brightest globular cluster. Not part of the LMC. 12 myo.",
-"Andromeda Galaxy,0,43,41,16,2900000,3.4,GX,Nearest major galaxy to us. one trillion stars. 2X milky way.",
-"Blue Planetary Nebula,11,50,-57,10,4900,,RN,brightest nebula in the south",
-"Butterfly Cluster,17,40,-32,13,2000,4.2,OC,",
-"Carina nebula,10,45,-59,52,7000,,NB,Includes Eta Carina.",
-"Centaurus A,13,25,-43,1,10000000,,GX,The centre of this galaxy is a massive black hole that is creating a jet of X-rays and radio waves.",
-"Centre of Galaxy,17,49,-27,50,27000,1,ST,You cannot see this but you can see where it is.",
-"Coal Sack Nebula,12,50,-62,30,600,0,NB,covers 7 degrees. A cloud that stops light.",
-"Crab Nebula,5,34,22,1,6300,8.4,RN,This is the remains of a supernova explosion. These happen when a massive star runs out of fuel and collapses before exploding.The shock wave produced heats up gas to millions of degrees and makes it luminous. The supernova was seen in China in 1054 AD. In the centre is a pulsing neutron star that is emitting radio and X-ray waves.",
+let data = [
+  "47 Tucanae,0,24,-72,5,13000,,GC,30 thousand stars with a dense core which may contain a black hole. Second brightest globular cluster. Not part of the LMC. 12 myo.",
+  "Andromeda Galaxy,0,43,41,16,2900000,3.4,GX,Nearest major galaxy to us. one trillion stars. 2X milky way.",
+  "Blue Planetary Nebula,11,50,-57,10,4900,,RN,brightest nebula in the south",
+  "Butterfly Cluster,17,40,-32,13,2000,4.2,OC,",
+  "Carina nebula,10,45,-59,52,7000,,NB,Includes Eta Carina.",
+  "Centaurus A,13,25,-43,1,10000000,,GX,The centre of this galaxy is a massive black hole that is creating a jet of X-rays and radio waves.",
+  "Centre of Galaxy,17,49,-27,50,27000,1,ST,You cannot see this but you can see where it is.",
+  "Coal Sack Nebula,12,50,-62,30,600,0,NB,covers 7 degrees. A cloud that stops light.",
+  "Crab Nebula,5,34,22,1,6300,8.4,RN,This is the remains of a supernova explosion. These happen when a massive star runs out of fuel and collapses before exploding.The shock wave produced heats up gas to millions of degrees and makes it luminous. The supernova was seen in China in 1054 AD. In the centre is a pulsing neutron star that is emitting radio and X-ray waves.",
 
   "Eta Carinae Nebula,10,45,-59,41,7500,4,NB,This covers several degrees. In the middle is the star eta Carina. In 1843 it erupted to be the second brightest star in the sky. It is surrounded by the homunculus nebula",
   "Ghost of Jupiter,10,25,-18,38,2500,,RN,blueish oval 25X15 with fainter outside envelope.",
-"IC2391,8,40,-53,4,500,,OC,30 stars  visible to naked eye",
-"Jewel Box,12,57,-60,22,6400,,OC,Only 14 myo. Very bright blue stars with one red giant.",
-"Lagoon nebula,18,3,-24,23,5200,5.8,NB,",
-"Large Magellanic Cloud,5,18,-69,13,160000,,GX,Satellite galaxy of Milky Way.  14 kly diameter. 10 billion solar Masses. Covers 10 degrees of sky.",
-"M83,13,38,-29,52,15000000,7.6,GX,shows spiral arms.",
-"Messier 25,18,32,-19,15,2000,4.6,OC,",
-"NGC1039 M34,2,42,42,47,1400,5.2,OC,"]
+  "IC2391,8,40,-53,4,500,,OC,30 stars  visible to naked eye",
+  "Jewel Box,12,57,-60,22,6400,,OC,Only 14 myo. Very bright blue stars with one red giant.",
+  "Lagoon nebula,18,3,-24,23,5200,5.8,NB,",
+  "Large Magellanic Cloud,5,18,-69,13,160000,,GX,Satellite galaxy of Milky Way.  14 kly diameter. 10 billion solar Masses. Covers 10 degrees of sky.",
+  "M83,13,38,-29,52,15000000,7.6,GX,shows spiral arms.",
+  "Messier 25,18,32,-19,15,2000,4.6,OC,",
+  "NGC1039 M34,2,42,42,47,1400,5.2,OC,"
+];
 
 class CelestialObject {
-  constructor(name,raHours,raMinutes,decDegrees,decMinutes,lightYears,absMagnitue,type,notes) {
-    this.name=name;
-    this.raHours=raHours;
-   this.raMinutes=raMinutes;
-   this.decDegrees=decDegrees;
-   this.decMinutes=decMinutes;
-   this.lightYears=lightYears;
-   this.absMagnitue=absMagnitue;
-   this.type=type;
-   this.notes=notes;
+  constructor(
+    name,
+    raHours,
+    raMinutes,
+    decDegrees,
+    decMinutes,
+    lightYears,
+    absMagnitue,
+    type,
+    notes
+  )
+{
+    this.name = name;
+    this.raHours = raHours;
+    this.raMinutes = raMinutes;
+    this.decDegrees = decDegrees;
+    this.decMinutes = decMinutes;
+    this.lightYears = lightYears;
+    this.absMagnitue = absMagnitue;
+    this.type = type;
+    this.notes = notes;
 
-
-
-    this.name= this.name.replace(/M(\d+)/,"Messier $1")
-    this.galLongitude=astromath.galacticLongitude(astromath.raRadians(this.raHours, this.raMinutes),astromath.decRadians(this.decDegrees, this.decMinutes))
-    this.galLatitude=astromath.galacticLatitude(astromath.raRadians(this.raHours, this.raMinutes),astromath.decRadians(this.decDegrees, this.decMinutes))
-    this.visible= astromath.getAltitude(astromath.raRadians(this.raHours, this.raMinutes),astromath.decRadians(this.decDegrees, this.decMinutes))>15*2*Math.PI/360 ? true : false
-
-  }
-
+    this.name = this.name.replace(/M(\d+)/, "Messier $1");
+    this.galLongitude = astromath.galacticLongitude(
+      astromath.raRadians(this.raHours, this.raMinutes),
+      astromath.decRadians(this.decDegrees, this.decMinutes)
+    );
+    this.galLatitude = astromath.galacticLatitude(
+      astromath.raRadians(this.raHours, this.raMinutes),
+      astromath.decRadians(this.decDegrees, this.decMinutes)
+    );
+    this.visible =
+      astromath.altitude(
+        astromath.raRadians(this.raHours, this.raMinutes),
+        astromath.decRadians(this.decDegrees, this.decMinutes)
+      ) >
+      15 * 2 * Math.PI / 360
+        ? true
+        : false;
+}
 }
 
 class CelestialObjects {
-  constructor() {
-  }
+  constructor() {}
   makeCelestialObjects() {
-celestialObjects=[];
-for (let datum of data) {
- let c=datum.split(",");
- let celestialObject=new CelestialObject(c[0],c[1],c[2],c[3],c[4],c[5],c[6],c[7],c[8])
-  celestialObjects.push(celestialObject);
-}
-celestialObjects=celestialObjects.sort((f,g) => (f.raHours>g.raHours) ?  -1 :  1)
+    celestialObjects = [];
+    for (let datum of data) {
+      let c = datum.split(",");
+      let celestialObject = new CelestialObject(
+        c[0],
+        c[1],
+        c[2],
+        c[3],
+        c[4],
+        c[5],
+        c[6],
+        c[7],
+        c[8]
+      );
+      celestialObjects.push(celestialObject);
+    }
+    celestialObjects = celestialObjects.sort(
+      (f, g) => (f.raHours > g.raHours ? -1 : 1)
+    );
 
-return celestialObjects;
-}
+    return celestialObjects;
+  }
 }
 /*
 NGC1068 M77,2,43,0,1,60000000,8.8,GX,
