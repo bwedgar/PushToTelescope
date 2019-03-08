@@ -13,10 +13,10 @@
 
 
 <!-- v3.  removed rel="stylesheet" from links below to stop error message -->
-  <link   href="jquery.mobile.css" type="text/css" />
+  <!-- <link   href="jquery.mobile.css" type="text/css" />
     <link  href="GoTo.css" type="text/css" />
     <link  href="jquery.mobile.icons.min.css" type="text/css" />
-    <link  href="jquery.mobile.css" type="text/css" />
+    <link  href="jquery.mobile.css" type="text/css" /> -->
 
     <style>
       body {
@@ -42,17 +42,17 @@
         font-size: 200%;
       }
     </style>
-    <script src="jquery.js"></script>
-    <script src="jquery.mobile.js"></script>
+    <!-- <script src="jquery.js"></script>
+    <script src="jquery.mobile.js"></script> -->
 
     <script src="astromath.js"></script>
     <script src="celestialobjects.js"></script>
 
 
     <script>
-      $(document).ready(function() {
-      //  document.addEventListener("DOMContentLoaded",function(){
-        $.mobile.changePage("#pageContent");
+      //$(document).ready(function() {
+       document.addEventListener("DOMContentLoaded",function(){
+      //  $.mobile.changePage("#pageContent");
         longitude = 174.76;
         latitude = -36.8485;
         celestialObjects = new CelestialObjects;
@@ -80,13 +80,13 @@
         objectTypes = ["GX", "OC", "GC", "BS", "BN", "DS", "PN"]
         objectNames = ["galaxy", "open cluster", "globular cluster", "star", "nebula", "double star", "planetary nebula"]
         indexObjectType = 5
-        $("#buttonFilter").text(objectNames[indexObjectType])
+      //  $("#buttonFilter").text(objectNames[indexObjectType])
 
         offsetCompass = localStorage.getItem("offsetCompass")
         offsetInclination = localStorage.getItem("offsetInclination")
 
 
-        screenWidth = $(window).width()
+        screenWidth = 800; //window.width()
         canvasWidth = 600
         canvasHeight = 200
         colorGalaxy = "rgb(60,60,60)"
@@ -204,12 +204,8 @@
         //     getCartesian(cos[index].galLatitude, cos[index].galLongitude, cos[index].lightYears)
         //
         //
-        //   replaceChar=(stro,i,char)->
-        //     if i is 0
-        //       t=char+stro.substr(1)
-        //     else
-        //       t=stro.substr(0,i)+char+stro.substr(i+1)
-        //
+        replaceChar = (stro,i,char) =>  (i === 0) ? t=char+stro.substr(1) : t=stro.substr(0,i)+char+stro.substr(i+1)
+
         //   #alert "Local Time: #{observer.localTime()} \n julian date: #{getJulianDate()} \n GST: #{getGST()} \n LST: #{getLST()} \n Latitude: #{observer.latitude()/2/Math.PI*360} \n Longitude: #{observer.longitude()/2/Math.PI*360}"
         //
         //
@@ -251,7 +247,8 @@
 
 
         listener2 = (e2) => {
-          compassRaw = Math.round((e2.webkitCompassHeading - 100) % 360)
+          // compassRaw = Math.round((e2.webkitCompassHeading - 100) % 360)
+            compassRaw = Math.round((120- 100) % 360)
           compass = Math.round((compassRaw - offsetCompass) % 360)
           az = Math.round(az * 10) / 10
           azDev = ((compass - az) + 540) % 360 - 180
@@ -320,50 +317,52 @@
 
         window.addEventListener('devicemotion', listener)
         window.addEventListener('deviceorientation', listener2)
-
+listener2();
 
         showData = (index) => {
           alt = astromath.altitude(astromath.raRadians(cos[index].raHours, cos[index].raMinutes), astromath.decRadians(cos[index].decDegrees, cos[index].decMinutes))
           az = astromath.azimuth(astromath.raRadians(cos[index].raHours, cos[index].raMinutes), astromath.decRadians(cos[index].decDegrees, cos[index].decMinutes))
           //console.log(`cos.name:${cos[index].name}, raHours:${cos[index].raHours}, alt:${alt}, az:${az}`)
-          $("#textName").text(cos[index].name)
+          //$("#textName").text(cos[index].name)
+          document.getElementById("textName").innerHTML=(cos[index].name)
           //$("#distance").text("distance: "+unitsToSI(cos[index].lightYears)+"ly  alt: "+Math.round(alt)+" az: "+Math.round(az))
 
           // showGal()
 
             notesText = objectNames[objectTypes.findIndex(x => x == cos[index].type)]
 
-             $("#notes").html(notesText + "   " + unitsToSI(cos[index].lightYears) + "ly   <br> " + cos[index].notes)
+             document.getElementById("notes").innerHTML=(notesText + "   " + unitsToSI(cos[index].lightYears) + "ly   <br> " + cos[index].notes)
         }
 
         showCO = (type) => {
-          $("#listCO").empty()
+          document.getElementById("listCO").innerHTML="";
           for (const co of cos) {
             if (co.type == type) {
-              $("#listCO").append(`<li   data-theme='${co.visible ? 'a' : 'b'}'><a href='#' class='li' >${co.name} </a></li>`);
-            }
+              document.getElementById("listCO").append(`<li   data-theme='${co.visible ? 'a' : 'b'}'><a href='#' class='li' >${co.name} </a></li>`);
+            //console.log(co.name)
           }
-          $("#pageCO").trigger("create");
-          $("#listCO").listview("refresh");
-          $.mobile.changePage("#pageCO");
+          }
+          //$("pageCO").trigger("create");
+          //$("#listCO").listview("refresh");
+          //$.mobile.changePage("#pageCO");
         }
 
         showData(index);
 
 
-        $("#buttonBrightStars").on("click", () => showCO("BS"));
+        document.getElementById("buttonBrightStars").addEventListener("click", (e) => showCO("BS"));
 
-        $("#buttonDoubleStars").on("click", () => showCO("DS"));
+        document.getElementById("buttonDoubleStars").addEventListener("click", (e) => showCO("DS"));
 
-        $("#buttonBrightNebulas").on("click", () => showCO("BN"));
+        document.getElementById("buttonBrightNebulas").addEventListener("click", (e) => showCO("BN"));
 
-        $("#buttonOpenClusters").on("click", () => showCO("OC"));
+        document.getElementById("buttonOpenClusters").addEventListener("click", (e) => showCO("OC"));
 
-        $("#buttonGlobularClusters").on("click", () => showCO("GC"));
+        document.getElementById("buttonGlobularClusters").addEventListener("click", (e) => showCO("GC"));
 
-        $("#buttonGalaxies").on("click", () => showCO("GX"));
+        document.getElementById("buttonGalaxies").addEventListener("click", (e) => showCO("GX"));
 
-        $("#buttonPlanetaryNebulas").on("click", () => showCO("PN"));
+        document.getElementById("buttonPlanetaryNebulas").addEventListener("click", (e) => showCO("PN"));
 
         let listCO=document.getElementById("listCO")
 
@@ -371,11 +370,11 @@
             let nameOfCos=e.target.innerHTML
             index=cos.findIndex(x => x.name == nameOfCos.trim());
             //  console.log(`name of cos:${nameOfCos}; index: ${o}; `);
-            $.mobile.changePage("#pageContent");
+          //  $.mobile.changePage("#pageContent");
             showData(index);
           });
 
-        $("#buttonCalibrate").on("click", () => {
+        document.getElementById("buttonCalibrate").addEventListener("click", (e) => {
           offsetCompass = compassRaw - az;
           offsetInclination = adjSensor - alt;
           localStorage.setItem("offsetCompass", offsetCompass);
@@ -383,8 +382,8 @@
           //alert "inclination: sensor:#{Math.round(adjSensor)} alt:#{alt} offset: #{Math.round(offsetInclination)} \n compass: #{Math.round(offsetCompass)}"
         });
 
-        $("#buttonHelp").on("click", () => {
-          $.mobile.changePage("#pageHelp")
+        document.getElementById("buttonHelp").addEventListener("click", (e) => {
+          //$.mobile.changePage("#pageHelp")
         });
 
         // $("#buttonInfo").on("click" , () => {
@@ -473,7 +472,7 @@
       </div>
       <div data-role="content" data-theme="a">
         <br>
-        <ul id="listCO" data-role="listview">
+        <ul id="listCO">// data-role="listview">
         </ul>
         <!-- <br/>
         <br/>
