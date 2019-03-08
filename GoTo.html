@@ -46,6 +46,7 @@
 
     <script src="jquery.js"></script>
     <script src="jquery.mobile.js"></script>
+
     <script src="astromath.js"></script>
     <script src="celestialobjects.js"></script>
 
@@ -248,7 +249,7 @@
 
 
         listener2 = (e2) => {
-          // compassRaw = Math.round((e2.webkitCompassHeading - 100) % 360) //removed to stest on desktop
+          //compassRaw = Math.round((e2.webkitCompassHeading - 100) % 360) //removed to stest on desktop
           compassRaw = Math.round((120 - 100) % 360)
           compass = Math.round((compassRaw - offsetCompass) % 360)
           az = Math.round(az * 10) / 10
@@ -334,16 +335,16 @@
         }
 
         showCO = (type) => {
-          console.log("at showCO");
-          document.getElementById("listCO").innerHTML = "";
+          //console.log("at showCO");
+          $("#listCO").empty();
           for (const co of cos) {
             if (co.type == type) {
-              document.getElementById("listCO").append(`<li   data-theme='${co.visible ? 'a' : 'b'}'><a href='#' class='li' >${co.name} </a></li>`);
-              //console.log(document.getElementById("listCO").innerHTML)
+              $("#listCO").append(`<li   data-theme='${co.visible ? 'a' : 'b'}'><a href='#' class='li' >${co.name} </a></li>`);
+              //console.log(document.getElementById("pageCO").innerHTML)
             }
           }
           $("#pageCO").trigger("create");
-          $("#listCO").listview("refresh");
+          $("#listCO").listview().listview("refresh"); //need to use listview() to initialize the listview.
           $.mobile.changePage("#pageCO");
         }
 
@@ -356,7 +357,7 @@
 
         document.getElementById("buttonBrightNebulas").addEventListener("click", () => showCO("BN"));
 
-        document.getElementById("buttonOpenClusters").addEventListener("click", () => showCO("OC"));
+        $("#buttonOpenClusters").on("click", () => showCO("OC"));
 
         document.getElementById("buttonGlobularClusters").addEventListener("click", () => showCO("GC"));
 
@@ -366,7 +367,7 @@
 
         let listCO = document.getElementById("listCO")
 
-        listCO.addEventListener("click", () => {
+        listCO.addEventListener("click", (e) => {
           let nameOfCos = e.target.innerHTML
           index = cos.findIndex(x => x.name == nameOfCos.trim());
           //  console.log(`name of cos:${nameOfCos}; index: ${o}; `);
@@ -438,7 +439,7 @@
   <body data-theme="a">
     <div id="pageContent" data-role="page">
       <div data-role="header" data-position="fixed" data-fullscreen="false" data-theme="a">
-        <h1>Go To v4</h1>
+        <h1>Go To v5</h1>
         <button id="buttonCalibrate">cal</button>
         <button id="buttonInfo">info</button>
       </div>
@@ -467,16 +468,15 @@
     </div>
 
     <div id="pageCO" data-role="page">
-      pageCO
       <div data-role="header" data-position="fixed" data-fullscreen="false" data-theme="a">
         <h1>Go To</h1>
       </div>
       <div data-role="content" data-theme="a">
         <br>
-        <ul id="listCO">// data-role="listview">
+        <ul id="listCO" data-role="listview">
         </ul>
 
-        <!-- <br/>
+      <br/>
         <br/>
         <br/>
         <br/>
@@ -484,7 +484,7 @@
         <br/>
         <br/>
         <br/>
-        <br/> -->
+        <br/>
 
       </div>
     </div>
