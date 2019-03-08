@@ -249,8 +249,8 @@
 
 
         listener2 = (e2) => {
-          //compassRaw = Math.round((e2.webkitCompassHeading - 100) % 360) //removed to stest on desktop
-          compassRaw = Math.round((120 - 100) % 360)
+          compassRaw = Math.round((e2.webkitCompassHeading - 100) % 360) //removed to stest on desktop
+          //compassRaw = Math.round((120 - 100) % 360)
           compass = Math.round((compassRaw - offsetCompass) % 360)
           az = Math.round(az * 10) / 10
           azDev = ((compass - az) + 540) % 360 - 180
