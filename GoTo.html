@@ -328,10 +328,12 @@
         showData = (index) => {
           alt = astromath.altitude(astromath.raRadians(cos[index].raHours, cos[index].raMinutes), astromath.decRadians(cos[index].decDegrees, cos[index].decMinutes))
           az = astromath.azimuth(astromath.raRadians(cos[index].raHours, cos[index].raMinutes), astromath.decRadians(cos[index].decDegrees, cos[index].decMinutes))
+          alert("index: "+index);
           document.getElementById("textName").innerHTML = (cos[index].name)
           // showGal()
 
           notesText = objectNames[objectTypes.findIndex(x => x == cos[index].type)]
+          alert("notesText: "+notesText);
 
           document.getElementById("notes").innerHTML = (notesText + "   " + unitsToSI(cos[index].lightYears) + "ly   <br> " + cos[index].notes)
         }
@@ -373,9 +375,9 @@
           let nameOfCos = e.target.innerHTML
           index = cos.findIndex(x => x.name == nameOfCos.trim());
           //  console.log(`name of cos:${nameOfCos}; index: ${o}; `);
-          alert('change page');
+          //alert('change page');
           $.mobile.changePage("#pageContent");
-          alert('showData');
+          //alert('showData');
           showData(index);
         });
 
