@@ -328,14 +328,14 @@
         showData = (index) => {
           alt = astromath.altitude(astromath.raRadians(cos[index].raHours, cos[index].raMinutes), astromath.decRadians(cos[index].decDegrees, cos[index].decMinutes))
           az = astromath.azimuth(astromath.raRadians(cos[index].raHours, cos[index].raMinutes), astromath.decRadians(cos[index].decDegrees, cos[index].decMinutes))
-          alert("index: "+index);
+          //alert("index: "+index);
           document.getElementById("textName").innerHTML = (cos[index].name)
           // showGal()
 
           notesText = objectNames[objectTypes.findIndex(x => x == cos[index].type)]
-          alert("notesText: "+notesText);
+          //alert("notesText: "+notesText);
 
-          document.getElementById("notes").innerHTML = (notesText + "   " + unitsToSI(cos[index].lightYears) + "ly   <br> " + cos[index].notes)
+          //document.getElementById("notes").innerHTML = (notesText + "   " + unitsToSI(cos[index].lightYears) + "ly   <br> " + cos[index].notes)
         }
 
         showCO = (type) => {
