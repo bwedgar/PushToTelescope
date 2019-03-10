@@ -53,9 +53,7 @@
 
 
     <script>
-      // $(document).ready(function() {
       document.addEventListener("DOMContentLoaded", function() {
-          // $.mobile.changePage("#pageContent");
         longitude = 174.76;
         latitude = -36.8485;
         celestialObjects = new CelestialObjects;
@@ -327,6 +325,7 @@
         //listener2(); //fire listener2 for testing on a desktop
 
         showData = (index) => {
+          console.log("at showdata")
           alt = astromath.altitude(astromath.raRadians(cos[index].raHours, cos[index].raMinutes), astromath.decRadians(cos[index].decDegrees, cos[index].decMinutes))
           az = astromath.azimuth(astromath.raRadians(cos[index].raHours, cos[index].raMinutes), astromath.decRadians(cos[index].decDegrees, cos[index].decMinutes))
           //alert("index: "+index);
@@ -359,6 +358,8 @@
 
         }
 
+        document.getElementById("pageCO").style.display = "block";
+        document.getElementById("pageContent").style.display = "block";
         showData(index);
 
 
@@ -381,10 +382,6 @@
         listCO.addEventListener("click", (e) => {
           let nameOfCos = e.target.innerHTML
           index = cos.findIndex(x => x.name == nameOfCos.trim());
-          //  console.log(`name of cos:${nameOfCos}; index: ${o}; `);
-          //alert('change page');
-          // $.mobile.changePage("#pageContent");
-          //alert('showData');
           showData(index);
         });
 
