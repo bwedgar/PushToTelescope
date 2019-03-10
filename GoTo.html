@@ -3,20 +3,21 @@
 
   <head>
 
-    <!--<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, minimal-ui">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, minimal-ui">
    <link rel="apple-touch-icon" href="launch.png">
     <link rel="apple-touch-startup-image" href="launch.png">
     <meta name="apple-mobile-web-app-title" content="Go To Telescope">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
--->
+
 
     <!-- v3.  removed rel="stylesheet" from links below to stop error message -->
     <link  href="jquery.mobile.css" type="text/css" />
     <link  href="GoTo.css" type="text/css" />
-   <!-- <link  href="jquery.mobile.icons.min.css" type="text/css" /> -->
-    <link  href="jquery.mobile.css" type="text/css" />
+   <link  href="jquery.mobile.icons.min.css" type="text/css" />
+    <link  rel="stylesheet"  href="jquery.mobile.css" type="text/css" />
 
 
     <style>
@@ -45,7 +46,7 @@
     </style>
 
     <script src="jquery.js"></script>
-    <!--<script src="jquery.mobile.js"></script>-->
+    <script src="jquery.mobile.js"></script>
 
     <script src="astromath.js"></script>
     <script src="celestialobjects.js"></script>
@@ -348,8 +349,8 @@
             }
           }
           $("#pageCO").trigger("create");
-          //$("#listCO").listview().listview("refresh"); //need to use listview() to initialize the listview.
-          $("#listCO").listview("refresh");
+          $("#listCO").listview().listview("refresh"); //need to use listview() to initialize the listview.
+        //  $("#listCO").listview("refresh");
           $.mobile.changePage("#pageCO");
         }
 
@@ -362,7 +363,7 @@
 
         document.getElementById("buttonBrightNebulas").addEventListener("click", () => showCO("BN"));
 
-        $("#buttonOpenClusters").on("click", () => showCO("OC"));
+        document.getElementById("buttonOpenClusters").addEventListener("click", () => showCO("OC"));
 
         document.getElementById("buttonGlobularClusters").addEventListener("click", () => showCO("GC"));
 
@@ -482,16 +483,6 @@
         <br>
         <ul id="listCO" data-role="listview">
         </ul>
-
-      <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
 
       </div>
     </div>
