@@ -373,7 +373,9 @@
           let nameOfCos = e.target.innerHTML
           index = cos.findIndex(x => x.name == nameOfCos.trim());
           //  console.log(`name of cos:${nameOfCos}; index: ${o}; `);
+          alert('change page');
           $.mobile.changePage("#pageContent");
+          alert('showData');
           showData(index);
         });
 
