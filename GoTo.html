@@ -338,14 +338,17 @@
 
           document.getElementById("notes").innerHTML = (notesText + "   " + unitsToSI(cos[index].lightYears) + "ly   <br> " + cos[index].notes)
           document.getElementById("pageCO").style.display = "none";
-          document.getElementById("pageContent").style.display = "block"; 
+          document.getElementById("pageContent").style.display = "block";
 
         }
 
         showCO = (type) => {
+            listCO.innerHTML="";
           for (const co of cos) {
             if (co.type == type) {
     var node = document.createElement("LI");
+
+
     var textnode = document.createTextNode(co.name);
     node.appendChild(textnode);
     document.getElementById("listCO").appendChild(node);
