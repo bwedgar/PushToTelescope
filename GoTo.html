@@ -37,8 +37,6 @@
       font-family: verdana;
       font-size: 120%;
     } */
-
-
   </style>
 
   <!-- <script src="jquery.js"></script>
@@ -49,9 +47,11 @@
 
 
   <script>
-   document.addEventListener("DOMContentLoaded", function() {
+  function ready() {
+
+
     console.log("dom load");
-    let textName=document.getElementById("textName");
+    let textName = document.getElementById("textName");
     console.log(textName);
     longitude = 174.76;
     latitude = -36.8485;
@@ -346,7 +346,7 @@
         if (co.type == type) {
           var node = document.createElement("LI");
 
-console.log(co.name)
+          console.log(co.name)
           var textnode = document.createTextNode(co.name);
           node.appendChild(textnode);
           document.getElementById("listCO").appendChild(node);
@@ -357,8 +357,8 @@ console.log(co.name)
 
     }
 
-   document.getElementById("pageCO").style.display = "block";
-   document.getElementById("pageContent").style.display = "block";
+    document.getElementById("pageCO").style.display = "block";
+    document.getElementById("pageContent").style.display = "block";
     showData(index);
 
 
@@ -393,7 +393,7 @@ console.log(co.name)
     });
 
     document.getElementById("buttonHelp").addEventListener("click", (e) => {
-      // $.mobile.changePage("#pageHelp")
+    // $.mobile.changePage("#pageHelp")
     });
 
     // $("#buttonInfo").on("click" , () => {
@@ -440,7 +440,9 @@ console.log(co.name)
 
     // }
     // );
-         });
+  //  });
+}
+   document.addEventListener("DOMContentLoaded", ready);
   </script>
 
 </head>
