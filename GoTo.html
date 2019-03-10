@@ -478,7 +478,11 @@
       //  });
     }
     //document.addEventListener("DOMContentLoaded", ready);
-    document.addEventListener("load", ready);
+    if (document.readyState == 'loading') {
+      document.addEventListener('DOMContentLoaded', ready);
+    } else {
+      ready();
+    }
   </script>
 
 </head>
@@ -590,6 +594,7 @@
 
     </div>
 </div> -->
+<!-- <script>    document.addEventListener("load", ready);</script> -->
 </body>
 
 </html>
