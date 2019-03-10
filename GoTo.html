@@ -51,6 +51,8 @@
       font-size: 4vw;
       border: 1px solid red;
           padding: 2% 2%;
+          width: 99%;
+          text-align: left;
     }
 
 
@@ -380,12 +382,13 @@
         document.getElementById("listCO").innerHTML = "";
         for (const co of cos) {
           if (co.type == type) {
-            var node = document.createElement("LI");
-
-            console.log(co.name)
+            //var node = document.createElement("LI");
+var node = document.createElement("BUTTON");
+            //console.log(co.name)
             var textnode = document.createTextNode(co.name);
             node.appendChild(textnode);
-            document.getElementById("listCO").appendChild(node);
+            btn=document.getElementById("listCO").appendChild(node);
+            btn.classList.add("button");
           }
         }
         document.getElementById("pageCO").style.display = "block";
@@ -485,9 +488,9 @@
 
 
 <body>
+
   <div id="pageContent">
     <div>
-
       <button id="buttonCalibrate" class="btngroup2">cal</button>
       <button id="buttonInfo"  class="btngroup2">info</button>
     </div>
@@ -512,12 +515,8 @@
 
   <div id="pageCO">
     <div>
-      <h1>Go To</h1>
-    </div>
-    <div>
-      <br>
-      <ul id="listCO">
-      </ul>
+       <div id="listCO">
+      </div>
     </div>
   </div>
 
@@ -592,7 +591,7 @@
 
 
     </div>
-</div> --> -->
+</div> -->
 </body>
 
 </html>
