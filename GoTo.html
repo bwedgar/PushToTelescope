@@ -112,7 +112,7 @@
         //  $("#buttonFilter").text(objectNames[indexObjectType])
 
         offsetCompass = localStorage.getItem("offsetCompass")
-        offsetInclination = 0; //localStorage.getItem("offsetInclination")
+        offsetInclination = localStorage.getItem("offsetInclination")
 
 
         screenWidth = screen.width;
@@ -267,12 +267,13 @@
             trueAngle = Math.max(trueAngle, 0)
             altDev = Math.min((trueAngle - alt), numberBlanks / 2)
             altDev = Math.max((trueAngle - alt), -numberBlanks / 2)
+
             //$("#distance").text(trueAngle)
-            str = "------------" + omicron + "------------"
-            str = replaceChar(str, numberBlanks / 2 + altDev, iota)
-            if (altDev === 0) {
-              str = "------------" + phi + "------------"
-            }
+            // str = "------------" + omicron + "------------"
+            // str = replaceChar(str, numberBlanks / 2 + altDev, iota)
+            // if (altDev === 0) {
+            //   str = "------------" + phi + "------------"
+            // }
           }
         }
 
