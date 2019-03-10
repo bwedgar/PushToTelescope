@@ -66,7 +66,7 @@
         font-family: verdana;
         font-size: 4vw;
         border: 1px solid red;
-        width: 13%;
+        width: 12.5%;
         padding: 2% 2%;
       }
     </style>
@@ -89,7 +89,7 @@
 
 
         previousSensor = 0
-        a = 0; //45
+        a = 90; //45
         b = 6
         sensor = 0
         adjSensor = 0
@@ -261,7 +261,7 @@
           alt = Math.round(alt * 10) / 10
           if (Math.abs(sensor - previousSensor) > 0.05) {
             previousAngle = sensor
-            adjSensor = sensor; //a + b * sensor
+            adjSensor = a + b * sensor
             trueAngle = Math.round(adjSensor - offsetInclination)
             trueAngle = Math.min(trueAngle, 90)
             trueAngle = Math.max(trueAngle, 0)
