@@ -11,17 +11,17 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
+<!--
 
 
-    <!-- v3.  removed rel="stylesheet" from links below to stop error message -->
     <link rel="stylesheet"  href="jquery.mobile-1.4.5.css" type="text/css" />
     <link rel="stylesheet" href="GoTo.css" type="text/css" />
    <link  rel="stylesheet" href="jquery.mobile.icons-1.4.5.css" type="text/css" />
-    <link rel="stylesheet"  href="jquery.mobile-1.4.5.css" type="text/css" />
+    <link rel="stylesheet"  href="jquery.mobile-1.4.5.css" type="text/css" /> -->
 
 
     <style>
-      body {
+      /* body {
         background-color: black;
       }
 
@@ -42,20 +42,20 @@
 
       .buttonSelector {
         font-size: 200%;
-      }
+      } */
     </style>
 
-    <script src="jquery.js"></script>
-    <script src="jquery.mobile-1.4.5.js"></script>
+    <!-- <script src="jquery.js"></script>
+    <script src="jquery.mobile-1.4.5.js"></script> -->
 
     <script src="astromath.js"></script>
     <script src="celestialobjects.js"></script>
 
 
     <script>
-      $(document).ready(function() {
-      //document.addEventListener("DOMContentLoaded", function() {
-          $.mobile.changePage("#pageContent");
+      // $(document).ready(function() {
+      document.addEventListener("DOMContentLoaded", function() {
+          // $.mobile.changePage("#pageContent");
         longitude = 174.76;
         latitude = -36.8485;
         celestialObjects = new CelestialObjects;
@@ -337,21 +337,23 @@
           //alert("notesText: "+notesText);
 
           document.getElementById("notes").innerHTML = (notesText + "   " + unitsToSI(cos[index].lightYears) + "ly   <br> " + cos[index].notes)
+          document.getElementById("pageCO").style.display = "none";
+          document.getElementById("pageContent").style.display = "block"; 
+
         }
 
         showCO = (type) => {
-          //console.log("at showCO");
-          $("#listCO").empty();
           for (const co of cos) {
             if (co.type == type) {
-              $("#listCO").append(`<li   data-theme='${co.visible ? 'a' : 'b'}'><a href='#' class='li' >${co.name} </a></li>`);
-              //console.log(document.getElementById("pageCO").innerHTML)
+    var node = document.createElement("LI");
+    var textnode = document.createTextNode(co.name);
+    node.appendChild(textnode);
+    document.getElementById("listCO").appendChild(node);
+  }
             }
-          }
-          $("#pageCO").trigger("create");
-          $("#listCO").listview().listview("refresh"); //need to use listview() to initialize the listview.
-        //  $("#listCO").listview("refresh");
-          $.mobile.changePage("#pageCO");
+            document.getElementById("pageCO").style.display = "block";
+            document.getElementById("pageContent").style.display = "none";
+
         }
 
         showData(index);
@@ -378,7 +380,7 @@
           index = cos.findIndex(x => x.name == nameOfCos.trim());
           //  console.log(`name of cos:${nameOfCos}; index: ${o}; `);
           //alert('change page');
-          $.mobile.changePage("#pageContent");
+          // $.mobile.changePage("#pageContent");
           //alert('showData');
           showData(index);
         });
@@ -392,7 +394,7 @@
         });
 
         document.getElementById("buttonHelp").addEventListener("click", (e) => {
-          $.mobile.changePage("#pageHelp")
+          // $.mobile.changePage("#pageHelp")
         });
 
         // $("#buttonInfo").on("click" , () => {
@@ -444,10 +446,11 @@
 
   </head>
 
+
   <body data-theme="a">
-    <div id="pageContent" data-role="page">
-      <div data-role="header" data-position="fixed" data-fullscreen="false" data-theme="a">
-        <h1>Go To v5</h1>
+    <div id="pageContent">
+      <div>
+        <h1>Push to Telescope</h1>
         <button id="buttonCalibrate">cal</button>
         <button id="buttonInfo">info</button>
       </div>
@@ -475,13 +478,13 @@
       </div>
     </div>
 
-    <div id="pageCO" data-role="page">
-      <div data-role="header" data-position="fixed" data-fullscreen="false" data-theme="a">
+    <div id="pageCO">
+      <div>
         <h1>Go To</h1>
       </div>
-      <div data-role="content" data-theme="a">
+      <div>
         <br>
-        <ul id="listCO" data-role="listview">
+        <ul id="listCO">
         </ul>
 
       </div>
