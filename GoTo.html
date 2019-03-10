@@ -337,8 +337,8 @@
           //alert("notesText: "+notesText);
 
           document.getElementById("notes").innerHTML = (notesText + "   " + unitsToSI(cos[index].lightYears) + "ly   <br> " + cos[index].notes)
-          document.getElementById("pageCO").style.display = "none";
-          document.getElementById("pageContent").style.display = "block";
+         // document.getElementById("pageCO").style.display = "none";
+         // document.getElementById("pageContent").style.display = "block";
 
         }
 
@@ -354,13 +354,13 @@
     document.getElementById("listCO").appendChild(node);
   }
             }
-            document.getElementById("pageCO").style.display = "block";
-            document.getElementById("pageContent").style.display = "none";
+           // document.getElementById("pageCO").style.display = "block";
+           // document.getElementById("pageContent").style.display = "none";
 
         }
 
-        document.getElementById("pageCO").style.display = "block";
-        document.getElementById("pageContent").style.display = "block";
+      //  document.getElementById("pageCO").style.display = "block";
+      //  document.getElementById("pageContent").style.display = "block";
         showData(index);
 
 
@@ -451,7 +451,7 @@
   <body>
     <div id="pageContent">
       <div>
-        <h1>Push to Telescope v2</h1>
+        <h1>Push to Telescope v3</h1>
         <button id="buttonCalibrate">cal</button>
         <button id="buttonInfo">info</button>
       </div>
