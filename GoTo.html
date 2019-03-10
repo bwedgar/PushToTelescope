@@ -335,7 +335,7 @@
           notesText = objectNames[objectTypes.findIndex(x => x == cos[index].type)]
           //alert("notesText: "+notesText);
 
-          //document.getElementById("notes").innerHTML = (notesText + "   " + unitsToSI(cos[index].lightYears) + "ly   <br> " + cos[index].notes)
+          document.getElementById("notes").innerHTML = (notesText + "   " + unitsToSI(cos[index].lightYears) + "ly   <br> " + cos[index].notes)
         }
 
         showCO = (type) => {
@@ -348,7 +348,8 @@
             }
           }
           $("#pageCO").trigger("create");
-          $("#listCO").listview().listview("refresh"); //need to use listview() to initialize the listview.
+          //$("#listCO").listview().listview("refresh"); //need to use listview() to initialize the listview.
+          $("#listCO").listview("refresh");
           $.mobile.changePage("#pageCO");
         }
 
