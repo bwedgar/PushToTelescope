@@ -268,7 +268,7 @@
             altDev = Math.min((trueAngle - alt), numberBlanks / 2)
             altDev = Math.max((trueAngle - alt), -numberBlanks / 2)
 
-            $("#distance").text(trueAngle)
+            getElementById("distance").innerHTML(trueAngle)
             // str = "------------" + omicron + "------------"
             // str = replaceChar(str, numberBlanks / 2 + altDev, iota)
             // if (altDev === 0) {
@@ -458,7 +458,7 @@
       <div id="content">
         <br>
         <div id="textName"></div>
-        <div id="distance" ></div> 
+        <div id="distance" ></div>
         <canvas id="canvasGoTo"></canvas>
         <canvas id="canvasTop"></canvas>
         <div id="notes" class="notes"></div>
