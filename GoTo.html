@@ -246,18 +246,19 @@
       listener = (e) => {
         sensor = -e.accelerationIncludingGravity.x //sensor= 0 when vertical, -6.9 when clockwise 45 degrees, +6.9 when antoclockwise. +/- 10 when horizontal
         alt = Math.round(alt * 10) / 10 //alt is the altitude of the object
-        //  if (Math.abs(sensor - previousSensor) > 0.05) { //test if the sensor has changed
-        //    previousSensor = sensor
-        //when phone is 45 degrees clockwise altitude is 0, when phone is 45 anticlockwise altitude is 90 degrees
-        //adjSensor = //a + b * sensor
-        altitude = (sensor + 6.9) * 6.4;
-        altDev = altitude - alt; //Math.min((trueAngle - alt), numberBlanks / 2)
-        document.getElementById("distance").innerHTML = ("sensor: " + sensor + "<br>telescope altitude: " + altitude + "<br> altitude: " + alt + "<br> azimuth: " + az +
-          "<br> deviation: " + altDev + "<br>julian date: " + astromath.getJulianDate() +
-          "<br>GST: " + astromath.getGST() + "<br> LST: " + astromath.radiansToHoursAndMinutes(astromath.getLST() / 24 * 2 * Math.PI) +
-          "<br>Hour Angle: " + hourAngle + "<br>Latitude: " + astromath.latitude +
-          "<br>Longitude: " + astromath.longitude);
-        //   document.getElementById("distance").style.display=none;
+        if (Math.abs(sensor - previousSensor) > 0.05) { //test if the sensor has changed
+          previousSensor = sensor
+          //when phone is 45 degrees clockwise altitude is 0, when phone is 45 anticlockwise altitude is 90 degrees
+          //adjSensor = //a + b * sensor
+          altitude = (sensor + 6.9) * 6.4;
+          altDev = altitude - alt; //Math.min((trueAngle - alt), numberBlanks / 2)
+          document.getElementById("distance").innerHTML = ("sensor: " + sensor + "<br>telescope altitude: " + altitude + "<br> altitude: " + alt + "<br> azimuth: " + az +
+            "<br> deviation: " + altDev + "<br>julian date: " + astromath.getJulianDate() +
+            "<br>GST: " + astromath.getGST() + "<br> LST: " + astromath.radiansToHoursAndMinutes(astromath.getLST() / 24 * 2 * Math.PI) +
+            "<br>Hour Angle: " + hourAngle + "<br>Latitude: " + astromath.latitude +
+            "<br>Longitude: " + astromath.longitude);
+          //   document.getElementById("distance").style.display=none;
+        }
       }
 
 
@@ -334,7 +335,7 @@
       window.addEventListener('deviceorientation', listener2)
 
       showData = (index) => {
-        //console.log("at showdata")
+        console.log("at showdata")
         alt = astromath.altitude(astromath.raRadians(cos[index].raHours, cos[index].raMinutes), astromath.decRadians(cos[index].decDegrees, cos[index].decMinutes))
 
         az = astromath.azimuth(astromath.raRadians(cos[index].raHours, cos[index].raMinutes), astromath.decRadians(cos[index].decDegrees, cos[index].decMinutes))
