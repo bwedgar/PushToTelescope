@@ -267,11 +267,11 @@
             //trueAngle = Math.round(adjSensor - offsetInclination)
             //trueAngle = Math.min(trueAngle, 90)
             //trueAngle = Math.max(trueAngle, 0)
-          alt=alt/2*Math.PI*360;
-            altDev = altitude+alt;//Math.min((trueAngle - alt), numberBlanks / 2)
+          alt=alt/2*3*360;
+            altDev = altitude-alt;//Math.min((trueAngle - alt), numberBlanks / 2)
             //altDev = Math.max((trueAngle - alt), -numberBlanks / 2)
 
-            document.getElementById("distance").innerHTML=("sensor: "+sensor+"\n altitude: "+altitude+"\n alt: "+alt+"\n deviation: "+altDev);
+            document.getElementById("distance").innerHTML=("sensor: "+sensor+"<br> altitude: "+altitude+"<br> alt: "+alt+"<br> deviation: "+altDev);
             // str = "------------" + omicron + "------------"
             // str = replaceChar(str, numberBlanks / 2 + altDev, iota)
             // if (altDev === 0) {
@@ -368,7 +368,7 @@
           alt = astromath.altitude(astromath.raRadians(cos[index].raHours, cos[index].raMinutes), astromath.decRadians(cos[index].decDegrees, cos[index].decMinutes))
           az = astromath.azimuth(astromath.raRadians(cos[index].raHours, cos[index].raMinutes), astromath.decRadians(cos[index].decDegrees, cos[index].decMinutes))
           //alert("index: "+index);
-          textName.innerHTML = (cos[index].name)
+          textName.innerHTML = (cos[index].name+" alt: "+alt)
           // showGal()
 
           notesText = objectNames[objectTypes.findIndex(x => x == cos[index].type)]
