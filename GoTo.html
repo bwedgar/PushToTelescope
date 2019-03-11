@@ -366,6 +366,7 @@
         showData = (index) => {
           console.log("at showdata")
           alt = astromath.altitude(astromath.raRadians(cos[index].raHours, cos[index].raMinutes), astromath.decRadians(cos[index].decDegrees, cos[index].decMinutes))
+          alt=-1*alt*45; //no idea why - empirical
           az = astromath.azimuth(astromath.raRadians(cos[index].raHours, cos[index].raMinutes), astromath.decRadians(cos[index].decDegrees, cos[index].decMinutes))
           //alert("index: "+index);
           textName.innerHTML = (cos[index].name+" alt: "+alt)
