@@ -265,8 +265,8 @@
             trueAngle = Math.round(adjSensor - offsetInclination)
             trueAngle = Math.min(trueAngle, 90)
             trueAngle = Math.max(trueAngle, 0)
-            altDev = Math.min((trueAngle - alt), numberBlanks / 2)
-            altDev = Math.max((trueAngle - alt), -numberBlanks / 2)
+            altDev = trueAngle;//Math.min((trueAngle - alt), numberBlanks / 2)
+            //altDev = Math.max((trueAngle - alt), -numberBlanks / 2)
 
             document.getElementById("distance").innerHTML=("true angle"+trueAngle);
             // str = "------------" + omicron + "------------"
