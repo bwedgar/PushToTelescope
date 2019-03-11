@@ -89,7 +89,7 @@
 
 
         previousSensor = 0
-        a = -45; //45
+        a = 65; //45
         b = 6
         sensor = 0
         adjSensor = 0
@@ -127,7 +127,7 @@
           ex = /(\d+)$/g.exec(t)[0]
           prefix = ["", "k", "m", "b"]
           n = /^(\S{3})/g.exec(t)[1] * 10 ** (ex % 3)
-          return n + " " + prefix[Math.floor(ex / 3)]
+          return Math.floor(n) + " " + prefix[Math.floor(ex / 3)]
         }
 
 
