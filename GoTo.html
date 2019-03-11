@@ -257,12 +257,11 @@
           //alt=alt/2*3*360;
           altDev = altitude - alt; //Math.min((trueAngle - alt), numberBlanks / 2)
           //altDev = Math.max((trueAngle - alt), -numberBlanks / 2)
-          //   #alert "Local Time: #{observer.localTime()} \n julian date: #{getJulianDate()} \n GST: #{getGST()} \n LST: #{getLST()} \n Latitude: #{observer.latitude()/2/Math.PI*360} \n Longitude: #{observer.longitude()/2/Math.PI*360}"
-
-          // document.getElementById("distance").innerHTML = ("sensor: " + sensor + "<br> altitude: " + altitude + "<br> alt: " + alt +
-          //   "<br> deviation: " + altDev + "<br>Local Time: " + observer.localTime() + "<br> julian date: " + getJulianDate() +
-          //   "<br>GST: " + getGST() + "<br> LST: " + getLST() + "<br> Latitude: " + latitude() / 2 / Math.PI * 360 +
-          //   "<br>Longitude: " + longitude() / 2 / Math.PI * 360);
+          document.getElementById("distance").innerHTML = ("sensor: " + sensor + "<br>telescope altitude: " + altitude + "<br> altitude: " + alt + "<br> azimuth: " + az +
+            "<br> deviation: " + altDev + "<br>julian date: " + astromath.getJulianDate() +
+            "<br>GST: " + astromath.getGST() + "<br> LST: " + astromath.radiansToHoursAndMinutes(astromath.getLST()/24*2*Math.PI) +
+            "<br>Hour Angle: " + hourAngle + "<br>Latitude: " + astromath.latitude +
+            "<br>Longitude: " + astromath.longitude);
           // str = "------------" + omicron + "------------"
           // str = replaceChar(str, numberBlanks / 2 + altDev, iota)
           // if (altDev === 0) {
@@ -363,11 +362,11 @@
 hourAngle=astromath.radiansToHoursAndMinutes(hourAngle);
         textName.innerHTML = (cos[index].name)
         // showGal()
-        document.getElementById("distance").innerHTML = ("sensor: " + sensor + "<br>telescope altitude: " + altitude + "<br> altitude: " + alt + "<br> azimuth: " + az +
-          "<br> deviation: " + altDev + "<br>julian date: " + astromath.getJulianDate() +
-          "<br>GST: " + astromath.getGST() + "<br> LST: " + astromath.radiansToHoursAndMinutes(astromath.getLST()/24*2*Math.PI) +
-          "<br>Hour Angle: " + hourAngle + "<br>Latitude: " + astromath.latitude +
-          "<br>Longitude: " + astromath.longitude);
+        // document.getElementById("distance").innerHTML = ("sensor: " + sensor + "<br>telescope altitude: " + altitude + "<br> altitude: " + alt + "<br> azimuth: " + az +
+        //   "<br> deviation: " + altDev + "<br>julian date: " + astromath.getJulianDate() +
+        //   "<br>GST: " + astromath.getGST() + "<br> LST: " + astromath.radiansToHoursAndMinutes(astromath.getLST()/24*2*Math.PI) +
+        //   "<br>Hour Angle: " + hourAngle + "<br>Latitude: " + astromath.latitude +
+        //   "<br>Longitude: " + astromath.longitude);
         notesText = objectNames[objectTypes.findIndex(x => x == cos[index].type)]
         //alert("notesText: "+notesText);
 
