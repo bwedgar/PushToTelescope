@@ -262,6 +262,7 @@
             "<br>GST: " + astromath.getGST() + "<br> LST: " + astromath.radiansToHoursAndMinutes(astromath.getLST()/24*2*Math.PI) +
             "<br>Hour Angle: " + hourAngle + "<br>Latitude: " + astromath.latitude +
             "<br>Longitude: " + astromath.longitude);
+            document.getElementById("distance").style.display=none;
           // str = "------------" + omicron + "------------"
           // str = replaceChar(str, numberBlanks / 2 + altDev, iota)
           // if (altDev === 0) {
@@ -457,7 +458,7 @@ hourAngle=astromath.radiansToHoursAndMinutes(hourAngle);
     <div id="content">
       <br>
       <div id="textName"></div>
-      <div id="distance" class="notes">distance</div>
+      <!-- <div id="distance" class="notes">distance</div> -->
       <canvas id="canvasGoTo"></canvas>
       <canvas id="canvasTop"></canvas>
       <div id="notes" class="notes"></div>
