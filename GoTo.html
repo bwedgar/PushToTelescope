@@ -258,9 +258,9 @@
         //
         listener = (e) => {
           sensor = -e.accelerationIncludingGravity.x
-          alt = Math.round(alt * 10) / 10
-          if (Math.abs(sensor - previousSensor) > 0.05) {
-            previousAngle = sensor
+          alt = Math.round(alt * 10) / 10 //alt is the altitude of the object
+          if (Math.abs(sensor - previousSensor) > 0.05) {  //test if the sensor has changed
+            previousSensor = sensor
             adjSensor = a + b * sensor
             trueAngle = Math.round(adjSensor - offsetInclination)
             trueAngle = Math.min(trueAngle, 90)
@@ -268,7 +268,7 @@
             altDev = trueAngle;//Math.min((trueAngle - alt), numberBlanks / 2)
             //altDev = Math.max((trueAngle - alt), -numberBlanks / 2)
 
-            document.getElementById("distance").innerHTML=("true angle"+trueAngle);
+            document.getElementById("distance").innerHTML=("sensor: "+sensor+" true angle"+trueAngle);
             // str = "------------" + omicron + "------------"
             // str = replaceChar(str, numberBlanks / 2 + altDev, iota)
             // if (altDev === 0) {
