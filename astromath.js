@@ -1,5 +1,5 @@
 astromath = {
-  //ALL FUNCTIONS TO ACCEPT AND RETURN RADIANS
+
   longitude: 0,
 
   latitude: 0,
@@ -99,17 +99,6 @@ astromath = {
     return LST //24 hour time
   },
 
-
-  //
-  //   getAzimuth: function(ra,dec) {
-  //     hourAngle=(astromath.getLST()*2*Math.PI/24-ra);
-  //     y=-1*Math.cos(dec)*Math.cos(latitude) *Math.sin(hourAngle);
-  //     x=Math.sin(dec) - Math.sin(latitude)*Math.sin(astromath.getAltitude(ra,dec )*2*Math.PI/360 );
-  //     answer= Math.atan2(y,x);
-  //     if (answer < 0) { answer=2*Math.PI+answer;}
-  //     answer=answer*360/2/Math.PI;
-  //   },
-
   distSunToCentre: function(ra, dec, distance) {
     return distance * Math.cos(dec);
   },
@@ -128,17 +117,6 @@ astromath = {
     return (today - epoch) / (1000 * 60 * 60 * 24);
   },
 
-
-  // LST : function() {
-  // longitudeDeg=longitude*360/2/Math.PI;
-  // daysFromJ2000=astromath.daysFromJ2000();
-  // today=new Date();
-  // //today =observer.localTime;
-  // UT = today.getUTCHours()+today.getUTCMinutes()/60;
-  // answer= ((100.46 + 0.985647 * daysFromJ2000 + longitudeDeg + 15*UT)%360);
-  // return astromath.radians(((answer<0?360:0)+answer));
-  // },
-  //hourAngle = (astromath.getLST() * 2 * Math.PI / 24 - ra);
 
   hourAngle: function(ra) {
     return astromath.getLST() * 2 * Math.PI / 24 - ra; //return radians
