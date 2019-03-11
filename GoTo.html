@@ -89,7 +89,7 @@
 
 
         previousSensor = 0
-        a = 90; //45
+        a = -45; //45
         b = 6
         sensor = 0
         adjSensor = 0
@@ -106,7 +106,7 @@
         blanks = "--------------------------"
         numberBlanks = 24
 
-        objectTypes = ["GX", "OC", "GC", "ST", "BN", "DS", "RN"]
+        objectTypes = ["GX", "OC", "GC", "ST", "NB", "DS", "RN"]
         objectNames = ["galaxy", "open cluster", "globular cluster", "star", "bright nebula", "double star", "remnant"]
         indexObjectType = 5
         //  $("#buttonFilter").text(objectNames[indexObjectType])
@@ -405,7 +405,7 @@
 
         document.getElementById("buttonDoubleStars").addEventListener("click", () => showCO("DS"));
 
-        document.getElementById("buttonBrightNebulas").addEventListener("click", () => showCO("BN"));
+        document.getElementById("buttonBrightNebulas").addEventListener("click", () => showCO("NB"));
 
         document.getElementById("buttonOpenClusters").addEventListener("click", () => showCO("OC"));
 
@@ -413,7 +413,7 @@
 
         document.getElementById("buttonGalaxies").addEventListener("click", () => showCO("GX"));
 
-        document.getElementById("buttonPlanetaryNebulas").addEventListener("click", () => showCO("PN"));
+        document.getElementById("buttonPlanetaryNebulas").addEventListener("click", () => showCO("RN"));
 
         let listCO = document.getElementById("listCO")
 
@@ -468,7 +468,7 @@
         <button id="buttonBrightStars" class="btngroup7">B</button>
         <button id="buttonDoubleStars" class="btngroup7">D</button>
         <button id="buttonBrightNebulas" class="btngroup7">N</button>
-        <button id="buttonPlanetaryNebulas" class="btngroup7">P</button>
+        <button id="buttonPlanetaryNebulas" class="btngroup7">R</button>
         <button id="buttonOpenClusters" class="btngroup7">O</button>
         <button id="buttonGlobularClusters" class="btngroup7">G</button>
         <button id="buttonGalaxies" class="btngroup7">X</button>

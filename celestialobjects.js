@@ -195,9 +195,9 @@ let data= [
 "Beta Grus,22,42,-46,53,170,2.06,ST,M5",
 "Fomalhaut in Piscis Austrinus (Alpha),22,57,-29,37,25,1.17,ST,A3",
 "Markab in Pegasus (Alpha),23,4,15,12,139,2.49,ST,B9.5",
-"Beta Monocerotis,6,26,-7,0,,,ST,Triple star 4.7 and 4.6 sep 7.5sec and 5.6 sep 2.8sec from 4.6.",
-"Dunlop 30,6,28,-50,12,,,ST,Double star 9th red and 5.3 yellow. Both stars are themselves doubles.",
-"Gamma Leonis,10,17,20,6,,,ST,Double; 2.6 and 3.8 separated by 4.3sec",
+"Beta Monocerotis,6,26,-7,0,,,DS,Triple star 4.7 and 4.6 sep 7.5sec and 5.6 sep 2.8sec from 4.6.",
+"Dunlop 30,6,28,-50,12,,,DS,Double star 9th red and 5.3 yellow. Both stars are themselves doubles.",
+"Gamma Leonis,10,17,20,6,,,DS,Double; 2.6 and 3.8 separated by 4.3sec",
 "Gem Cluster,10,31,-57,58,1400,,OC,Red supergiant surrounded by blue stars. 8min across."
 ]
 
