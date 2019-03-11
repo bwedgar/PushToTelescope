@@ -257,18 +257,20 @@
         //   ###
         //
         listener = (e) => {
-          sensor = -e.accelerationIncludingGravity.x
+          sensor = -e.accelerationIncludingGravity.x //sensor= 0 when vertical, -6.9 when clockwise 45 degrees, +6.9 when antoclockwise. +/- 10 when horizontal
           alt = Math.round(alt * 10) / 10 //alt is the altitude of the object
           if (Math.abs(sensor - previousSensor) > 0.05) {  //test if the sensor has changed
             previousSensor = sensor
-            adjSensor = a + b * sensor
-            trueAngle = Math.round(adjSensor - offsetInclination)
-            trueAngle = Math.min(trueAngle, 90)
-            trueAngle = Math.max(trueAngle, 0)
-            altDev = trueAngle;//Math.min((trueAngle - alt), numberBlanks / 2)
+            //when phone is 45 degrees clockwise altitude is 0, when phone is 45 anticlockwise altitude is 90 degrees
+            //adjSensor = //a + b * sensor
+            altitude=(sensor+6.9)*6.4;
+            //trueAngle = Math.round(adjSensor - offsetInclination)
+            //trueAngle = Math.min(trueAngle, 90)
+            //trueAngle = Math.max(trueAngle, 0)
+            altDev = altitude-alt;//Math.min((trueAngle - alt), numberBlanks / 2)
             //altDev = Math.max((trueAngle - alt), -numberBlanks / 2)
 
-            document.getElementById("distance").innerHTML=("sensor: "+sensor+" true angle"+trueAngle);
+            document.getElementById("distance").innerHTML=("sensor: "+sensor+" altitude: "+altitude+" deviation: "+altDev);
             // str = "------------" + omicron + "------------"
             // str = replaceChar(str, numberBlanks / 2 + altDev, iota)
             // if (altDev === 0) {
