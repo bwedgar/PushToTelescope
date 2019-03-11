@@ -363,9 +363,9 @@
 hourAngle=astromath.radiansToHoursAndMinutes(hourAngle);
         textName.innerHTML = (cos[index].name)
         // showGal()
-        document.getElementById("distance").innerHTML = ("sensor: " + sensor + "<br>altitude: " + "altitude" + "<br> alt: " + alt +
+        document.getElementById("distance").innerHTML = ("sensor: " + sensor + "<br>telescope altitude: " + altitude + "<br> altitude: " + alt + "<br> azimuth: " + az +
           "<br> deviation: " + altDev + "<br>julian date: " + astromath.getJulianDate() +
-          "<br>GST: " + astromath.getGST() + "<br> LST: " + astromath.radiansToHoursAndMinutes(astromath.radians(astromath.getLST())) +
+          "<br>GST: " + astromath.getGST() + "<br> LST: " + astromath.radiansToHoursAndMinutes(astromath.getLST()/24*2*Math.PI) +
           "<br>Hour Angle: " + hourAngle + "<br>Latitude: " + astromath.latitude +
           "<br>Longitude: " + astromath.longitude);
         notesText = objectNames[objectTypes.findIndex(x => x == cos[index].type)]
