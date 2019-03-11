@@ -97,7 +97,7 @@
         compassRaw = 0
         offsetCompass = 0
         offsetInclination = 45
-        alt = 74
+        alt = 44;//74
         altDev = 0
         az = 192
         str = "-"
@@ -268,7 +268,7 @@
             altDev = Math.min((trueAngle - alt), numberBlanks / 2)
             altDev = Math.max((trueAngle - alt), -numberBlanks / 2)
 
-            getElementById("distance").innerHTML(trueAngle)
+            getElementById("distance").innerHTML(trueAngle);
             // str = "------------" + omicron + "------------"
             // str = replaceChar(str, numberBlanks / 2 + altDev, iota)
             // if (altDev === 0) {
