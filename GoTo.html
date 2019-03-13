@@ -32,7 +32,7 @@
         background-color: black;
         color: red;
         font-family: verdana;
-        font-size: 3vw;
+        font-size: 4vw;
         border: 1px solid red;
         width: 100%;
         height: 250px;
@@ -233,8 +233,8 @@
             document.getElementById("notes").innerHTML = (
               objectNames[index] + " distance: " + unitsToSI(cos[index].lightYears) + "ly   <br> " + cos[index].notes +
               "<br>ra: "+cos[index].raHours+":"+cos[index].raMinutes+" dec: "+cos[index].decDegrees+":" +cos[index].decMinutes +
-              "<br> altitude: " + Math.round(alt) + " telescope altitude: " + altitude + " alt dev: " + Math.round(altDev) +
-              " <br> sensor: " + sensor + " inclination offset: " + offsetInclination +
+              "<br> altitude: " + Math.round(alt) + " telescope altitude: " + Math.round(altitude) + " alt dev: " + Math.round(altDev) +
+              " <br> sensor: " + Math.round(sensor) + " inclination offset: " + offsetInclination +
               "<br> azimuth: " + Math.round(az) + " compass: " + Math.round(compass) + " az dev: "+Math.round(azDev)+" compassOffset: " + offsetCompass +
               "<br>julian date: " + Math.round(astromath.getJulianDate()) + " GST: " + astromath.radiansToHoursAndMinutes(astromath.getGST()) + " LST: " + astromath.radiansToHoursAndMinutes(astromath.getLST() / 24 * 2 * Math.PI) +
               "<br>Hour Angle: " + hourAngle +
