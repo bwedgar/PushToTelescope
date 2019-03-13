@@ -306,7 +306,7 @@
           console.log("at showdata")
           alt = astromath.altitude(astromath.raRadians(cos[index].raHours, cos[index].raMinutes), astromath.decRadians(cos[index].decDegrees, cos[index].decMinutes))
           az = astromath.azimuth(astromath.raRadians(cos[index].raHours, cos[index].raMinutes), astromath.decRadians(cos[index].decDegrees, cos[index].decMinutes))
-          hourAngle = astromath.radiansToHoursAndMinutes(2*Math.PI-astromath.hourAngle(astromath.raRadians(cos[index].raHours, cos[index].raMinutes)));
+          hourAngle = astromath.radiansToHoursAndMinutes(astromath.hourAngle(astromath.raRadians(cos[index].raHours, cos[index].raMinutes)));
           textName.innerHTML = (cos[index].name)
 
 
