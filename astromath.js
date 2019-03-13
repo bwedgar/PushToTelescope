@@ -17,11 +17,11 @@ astromath = {
   },
 
   radiansToHoursAndMinutes: function(radians) {
-    return Math.floor(radians / 2 / Math.PI * 24) + ' hr; ' + Math.floor((radians / 2 / Math.PI * 24) % 1 * 60) + ' min';
+    return Math.floor(radians / 2 / Math.PI * 24) + ':' + Math.floor((radians / 2 / Math.PI * 24) % 60);
   },
 
   radiansToDegreesAndMinutes: function(radians) {
-    return Math.floor(radians / 2 / Math.PI * 360) + ' &deg; ' + Math.floor((radians / 2 / Math.PI * 360) % 1 * 60) + ' min';
+    return Math.floor(radians / 2 / Math.PI * 360) + '&deg;' + Math.floor((radians / 2 / Math.PI * 360) % 1 * 60) + '\'';
   },
 
   raHours: function(radiansIn) {
@@ -117,9 +117,8 @@ astromath = {
     return (today - epoch) / (1000 * 60 * 60 * 24);
   },
 
-
   hourAngle: function(ra) {
-    return astromath.getLST() * 2 * Math.PI / 24 - ra; //return radians
+    return  (astromath.getLST() * 2 * Math.PI / 24 - ra); //return radians
   },
 
   altitude: function(ra, dec) {
@@ -144,6 +143,7 @@ astromath = {
   latitudeRadians: function(degrees, minutes, direction) {
     return astromath.decRadians((direction == 'S' ? -1 : 1) * degrees, minutes);
   },
+
 
   angleSub: function(angle1, angle2) {
     if (angle1 - angle2 > Math.PI) {
