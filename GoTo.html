@@ -112,6 +112,7 @@
           n = /^(\S{3})/g.exec(t)[1] * 10 ** (ex % 3)
           return Math.floor(n) + " " + prefix[Math.floor(ex / 3)]
         }
+
         drawCircle = (x, y) => {
           ctx.beginPath()
           ctx.arc(x, y, 2, 0, Math.PI * 2, true)
@@ -224,8 +225,8 @@
             previousSensor = sensor
             //when phone is 45 degrees clockwise altitude is 0, when phone is 45 anticlockwise altitude is 90 degrees
             //adjSensor = //a + b * sensor
-            altitude = (sensor + 6.9) * 6.4 -  offsetInclination;
-            altDev = altitude - alt;
+            altitude = (sensor + 6.9) * 6.4 ;
+            altDev = altitude - alt -  offsetInclination ;
             document.getElementById("notes").innerHTML = (
               objectNames[index] + " distance: " + unitsToSI(cos[index].lightYears) + "ly   <br> " + cos[index].notes +
               "<br>ra: "+cos[index].raHours+":"+cos[index].raMinutes+" dec: "+cos[index].decDegrees+":" +cos[index].decMinutes +
@@ -351,8 +352,8 @@
           offsetInclination = altitude - alt;
           localStorage.setItem("offsetCompass", offsetCompass);
           localStorage.setItem("offsetInclination", offsetInclination);
-          //alert "inclination: sensor:#{Math.round(adjSensor)} alt:#{alt} offset: #{Math.round(offsetInclination)} \n compass: #{Math.round(offsetCompass)}"
         });
+
         document.getElementById("buttonInfo").addEventListener("click", (e) => {
           window.location.href = "https://bwedgar.github.io/index.html";
         });
