@@ -35,7 +35,7 @@
         font-size: 3vw;
         border: 1px solid red;
         width: 100%;
-        height: 150px;
+        height: 250px;
         overflow: scroll;
       }
 
@@ -83,10 +83,7 @@
         celestialObjects = new CelestialObjects;
         cos = celestialObjects.makeCelestialObjects();
         previousSensor = 0
-        a = 35; //45
-        b = 6
         sensor = 0
-        adjSensor = 0
         compass = 0 //not needed
         compassRaw = 0
         offsetCompass = 0
@@ -232,7 +229,18 @@
             //when phone is 45 degrees clockwise altitude is 0, when phone is 45 anticlockwise altitude is 90 degrees
             //adjSensor = //a + b * sensor
             altitude = Math.round((sensor + 6.9) * 6.4 * 10) / 10;
-            altDev = altitude - alt; //Math.min((trueAngle - alt), numberBlanks / 2)
+            altDev = altitude - alt;
+            document.getElementById("notes").innerHTML = (
+              objectNames[index] + " distance: " + unitsToSI(cos[index].lightYears) + "ly   <br> " + cos[index].notes +
+              "<br>ra: "+cos[index].raHours+":"+cos[index].raMinutes+" dec: "+cos[index].decDegrees+":" +cos[index].decMinutes +
+              "<br> altitude: " + Math.round(alt) + " telescope altitude: " + altitude + " deviation: " + altDev +
+              " <br> sensor: " + sensor + " inclination offset: " + offsetInclination +
+              "<br> azimuth: " + Math.round(az) + " compass: " + Math.round(compass) + " compassOffset: " + offsetCompass +
+              "<br>julian date: " + Math.round(astromath.getJulianDate()) + " GST: " + astromath.radiansToHoursAndMinutes(astromath.getGST()) + " LST: " + astromath.radiansToHoursAndMinutes(astromath.getLST() / 24 * 2 * Math.PI) +
+              "<br>Hour Angle: " + hourAngle +
+              "<br>Latitude: " + astromath.radiansToDegreesAndMinutes(astromath.latitude) +  " Longitude: " + astromath.radiansToDegreesAndMinutes(astromath.longitude)
+
+            )
 
           }
         }
@@ -244,7 +252,7 @@
           c1 = document.getElementById("canvasGoTo")
           ctxGoTo = c1.getContext("2d")
           ctxGoTo.canvas.width = screenWidth
-          ctxGoTo.canvas.height = 60;
+          ctxGoTo.canvas.height = 100;
           //horizontal line
           ctxGoTo.beginPath()
           ctxGoTo.moveTo(50, ctxGoTo.canvas.height / 3)
@@ -301,21 +309,11 @@
           console.log("at showdata")
           alt = astromath.altitude(astromath.raRadians(cos[index].raHours, cos[index].raMinutes), astromath.decRadians(cos[index].decDegrees, cos[index].decMinutes))
           az = astromath.azimuth(astromath.raRadians(cos[index].raHours, cos[index].raMinutes), astromath.decRadians(cos[index].decDegrees, cos[index].decMinutes))
-          hourAngle = astromath.radiansToHoursAndMinutes(astromath.hourAngle(astromath.raRadians(cos[index].raHours, cos[index].raMinutes)));
+          hourAngle = astromath.radiansToHoursAndMinutes(2*Math.PI-astromath.hourAngle(astromath.raRadians(cos[index].raHours, cos[index].raMinutes)));
           //hourAngle = astromath.radiansToHoursAndMinutes(hourAngle);
           textName.innerHTML = (cos[index].name)
 
-          document.getElementById("notes").innerHTML = (
-            objectNames[index] + " distance: " + unitsToSI(cos[index].lightYears) + "ly   <br> " + cos[index].notes +
-            "<br>ra: "+cos[index].raHours+":"+cos[index].raMinutes+" dec: "+cos[index].decDegrees+":" +cos[index].decMinutes +
-            "<br> altitude: " + Math.round(alt) + " telescope altitude: " + altitude + " deviation: " + altDev +
-            " <br> sensor: " + sensor + " inclination offset: " + offsetInclination +
-            "<br> azimuth: " + Math.round(az) + " compass: " + Math.round(compass) + " compassOffset: " + offsetCompass +
-            "<br>julian date: " + Math.round(astromath.getJulianDate()) + " GST: " + astromath.radiansToHoursAndMinutes(astromath.getGST()) + " LST: " + astromath.radiansToHoursAndMinutes(astromath.getLST() / 24 * 2 * Math.PI) +
-            "<br>Hour Angle: " + hourAngle +
-            "<br>Latitude: " + astromath.radiansToDegreesAndMinutes(astromath.latitude) +  " Longitude: " + astromath.radiansToDegreesAndMinutes(astromath.longitude)
 
-          )
 
           document.getElementById("pageCO").style.display = "none";
           document.getElementById("pageContent").style.display = "block";
@@ -338,6 +336,7 @@
         }
         document.getElementById("pageCO").style.display = "block";
         document.getElementById("pageContent").style.display = "block";
+
         showData(index);
         document.getElementById("buttonBrightStars").addEventListener("click", () => showCO("ST"));
         document.getElementById("buttonDoubleStars").addEventListener("click", () => showCO("DS"));
@@ -356,7 +355,7 @@
 
         document.getElementById("buttonCalibrate").addEventListener("click", (e) => {
           offsetCompass = compassRaw - az;
-          offsetInclination = adjSensor - alt;
+          offsetInclination = sensor - alt;
           localStorage.setItem("offsetCompass", offsetCompass);
           localStorage.setItem("offsetInclination", offsetInclination);
           //alert "inclination: sensor:#{Math.round(adjSensor)} alt:#{alt} offset: #{Math.round(offsetInclination)} \n compass: #{Math.round(offsetCompass)}"
