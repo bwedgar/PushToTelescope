@@ -233,9 +233,9 @@
             document.getElementById("notes").innerHTML = (
               objectNames[index] + " distance: " + unitsToSI(cos[index].lightYears) + "ly   <br> " + cos[index].notes +
               "<br>ra: "+cos[index].raHours+":"+cos[index].raMinutes+" dec: "+cos[index].decDegrees+":" +cos[index].decMinutes +
-              "<br> altitude: " + Math.round(alt) + " telescope altitude: " + altitude + " deviation: " + altDev +
+              "<br> altitude: " + Math.round(alt) + " telescope altitude: " + altitude + " alt dev: " + Math.round(altDev) +
               " <br> sensor: " + sensor + " inclination offset: " + offsetInclination +
-              "<br> azimuth: " + Math.round(az) + " compass: " + Math.round(compass) + " compassOffset: " + offsetCompass +
+              "<br> azimuth: " + Math.round(az) + " compass: " + Math.round(compass) + " az dev: "+Math.round(azDev)+" compassOffset: " + offsetCompass +
               "<br>julian date: " + Math.round(astromath.getJulianDate()) + " GST: " + astromath.radiansToHoursAndMinutes(astromath.getGST()) + " LST: " + astromath.radiansToHoursAndMinutes(astromath.getLST() / 24 * 2 * Math.PI) +
               "<br>Hour Angle: " + hourAngle +
               "<br>Latitude: " + astromath.radiansToDegreesAndMinutes(astromath.latitude) +  " Longitude: " + astromath.radiansToDegreesAndMinutes(astromath.longitude)
