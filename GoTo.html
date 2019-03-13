@@ -348,7 +348,7 @@
 
         document.getElementById("buttonCalibrate").addEventListener("click", (e) => {
           offsetCompass = compassRaw - az;
-          offsetInclination = sensor - alt;
+          offsetInclination = altitude - alt;
           localStorage.setItem("offsetCompass", offsetCompass);
           localStorage.setItem("offsetInclination", offsetInclination);
           //alert "inclination: sensor:#{Math.round(adjSensor)} alt:#{alt} offset: #{Math.round(offsetInclination)} \n compass: #{Math.round(offsetCompass)}"
