@@ -17,7 +17,7 @@ astromath = {
   },
 
   radiansToHoursAndMinutes: function(radians) {
-    return Math.floor(radians / 2 / Math.PI * 24) + ':' + Math.floor((radians / 2 / Math.PI *24) % 60);
+    return Math.floor(radians / 2 / Math.PI * 24) + ':' + Math.floor((radians / 2 / Math.PI *24) % 1 * 60);
   },
 
   radiansToDegreesAndMinutes: function(radians) {
