@@ -118,18 +118,16 @@ astromath = {
   },
 
   hourAngle: function(ra) {
-    return  (astromath.getLST() * 2 * Math.PI / 24 - ra); //return radians
+    return  (astromath.getLST()*2*Math.PI/24 - ra); //return radians
   },
 
   altitude: function(ra, dec) {
-    hourAngle = astromath.hourAngle(ra);
-    //latitude=observer.latitude();
-    radians = Math.asin(Math.sin(dec) * Math.sin(astromath.latitude) + Math.cos(dec) * Math.cos(astromath.latitude) * Math.cos(hourAngle));
+    radians = Math.asin(Math.sin(dec) * Math.sin(astromath.latitude) + Math.cos(dec) * Math.cos(astromath.latitude) * Math.cos(astromath.hourAngle(ra)));
     return radians * 360 / 2 / Math.PI;
   },
 
   azimuth: function(ra, dec) {
-    y = -1 * Math.cos(dec) * Math.cos(astromath.latitude) * Math.sin(hourAngle);
+    y = -1 * Math.cos(dec) * Math.cos(astromath.latitude) * Math.sin(astromath.hourAngle(ra));
     x = Math.sin(dec) - Math.sin(astromath.latitude) * Math.sin(astromath.altitude(ra, dec));
     answer = Math.atan2(y, x);
     radians = (answer < 0 ? 2 * Math.PI : 0) + answer;
