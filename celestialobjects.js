@@ -232,35 +232,34 @@ class CelestialObject {
       astromath.raRadians(this.raHours, this.raMinutes),
       astromath.decRadians(this.decDegrees, this.decMinutes)
     );
+    this.azimuth = astromath.azimuth(astromath.raRadians(this.raHours, this.raMinutes), astromath.decRadians(this.decDegrees, this.decMinutes));
     this.visible =
-      astromath.altitude(astromath.raRadians(this.raHours, this.raMinutes),astromath.decRadians(this.decDegrees, this.decMinutes))> 15 ? true : false;
+      astromath.altitude(astromath.raRadians(this.raHours, this.raMinutes), astromath.decRadians(this.decDegrees, this.decMinutes)) > 15 ? true : false;
   }
 }
 
-  class CelestialObjects {
-    constructor() {}
-    makeCelestialObjects() {
-      celestialObjects = [];
-      for (let datum of data) {
-        let c = datum.split(",");
-        //console.log(c);
-        let celestialObject = new CelestialObject(
-          c[0],
-          c[1],
-          c[2],
-          c[3],
-          c[4],
-          c[5],
-          c[6],
-          c[7],
-          c[8]
-        );
-        celestialObjects.push(celestialObject);
-      }
-      celestialObjects = celestialObjects.sort(
-        (f, g) => (astromath.azimuth(astromath.raRadians(f.raHours, f.raMinutes),astromath.decRadians(f.decDegrees, f.decMinutes)) > astromath.azimuth(astromath.raRadians(f.raHours, f.raMinutes),astromath.decRadians(f.decDegrees, f.decMinutes)) ? -1 : 1)
+class CelestialObjects {
+  constructor() {}
+  makeCelestialObjects() {
+    celestialObjects = [];
+    for (let datum of data) {
+      let c = datum.split(",");
+      //console.log(c);
+      let celestialObject = new CelestialObject(
+        c[0],
+        c[1],
+        c[2],
+        c[3],
+        c[4],
+        c[5],
+        c[6],
+        c[7],
+        c[8]
       );
-
-      return celestialObjects;
+      celestialObjects.push(celestialObject);
     }
-  }
+    celestialObjects = celestialObjects.sort( (f, g) => (f.azimuth < g.azimuth) ? -1 : 1);
+
+  return celestialObjects;
+}
+}

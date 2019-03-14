@@ -102,8 +102,7 @@
         // console.log("dom load");
         // let textName = document.getElementById("textName");
         // console.log(textName);
-        celestialObjects = new CelestialObjects;
-        let cos = celestialObjects.makeCelestialObjects();
+
         let previousSensor = 0;
         let sensor = 0;
         let compass = 0;
@@ -119,6 +118,9 @@
 
         astromath.longitude = astromath.radians(174.76); //longitude of observer in degrees East
         astromath.latitude = astromath.radians(-36.8485); //latitude of observer in degrees
+
+        celestialObjects = new CelestialObjects;
+        let cos = celestialObjects.makeCelestialObjects();
 
         let objectTypes = ["GX", "OC", "GC", "ST", "NB", "DS", "RN"]
         let objectNames = ["galaxy", "open cluster", "globular cluster", "star", "bright nebula", "double star", "remnant"]
@@ -334,7 +336,16 @@
           alt = astromath.altitude(astromath.raRadians(cos[index].raHours, cos[index].raMinutes), astromath.decRadians(cos[index].decDegrees, cos[index].decMinutes))
           az = astromath.azimuth(astromath.raRadians(cos[index].raHours, cos[index].raMinutes), astromath.decRadians(cos[index].decDegrees, cos[index].decMinutes))
           textName.innerHTML = (cos[index].name);
-
+          // document.getElementById("notes").innerHTML = (
+          //   "distance: " + unitsToSI(cos[index].lightYears) + "ly   <br> " + cos[index].notes + "<br><br><br><br>" +
+          //   "<br>ra: "+cos[index].raHours+":"+cos[index].raMinutes+" dec: "+cos[index].decDegrees+":" +cos[index].decMinutes +
+          //   "<br> altitude: " + Math.round(alt) + " telescope altitude: " + Math.round(altitude) + " alt dev: " + Math.round(altDev) +
+          //   "<br> sensor: " + (sensor<0?"":"+") + Math.round(sensor*100)/100 + " inclination offset: " + Math.round(offsetInclination) +
+          //   "<br> azimuth: " + Math.round(az) + " compass: " + Math.round(compass) + " az dev: "+ Math.round(azDev)+" compassOffset: " + Math.round(offsetCompass) +
+          //   "<br>julian date: " + Math.round(astromath.getJulianDate()) + " GST: " + astromath.radiansToHoursAndMinutes(astromath.getGST()) + " LST: " + astromath.radiansToHoursAndMinutes(astromath.getLST() / 24 * 2 * Math.PI) +
+          //   "<br>Hour Angle: " + astromath.radiansToHoursAndMinutes(astromath.hourAngle(astromath.raRadians(cos[index].raHours, cos[index].raMinutes))) +
+          //   "<br>Latitude: " + astromath.radiansToDegreesAndMinutes(astromath.latitude) +  " Longitude: " + astromath.radiansToDegreesAndMinutes(astromath.longitude)
+          // )
 
 
 
