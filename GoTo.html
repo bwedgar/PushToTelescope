@@ -254,7 +254,7 @@
             altitude = (sensor + 6.9) * 6.4 ;
             altDev = altitude - alt -  offsetInclination ;
             document.getElementById("notes").innerHTML = (
-              objectNames[index] + " distance: " + unitsToSI(cos[index].lightYears) + "ly   <br> " + cos[index].notes +
+              "distance: " + unitsToSI(cos[index].lightYears) + "ly   <br> " + cos[index].notes + "<br><br><br><br>" +
               "<br>ra: "+cos[index].raHours+":"+cos[index].raMinutes+" dec: "+cos[index].decDegrees+":" +cos[index].decMinutes +
               "<br> altitude: " + Math.round(alt) + " telescope altitude: " + Math.round(altitude) + " alt dev: " + Math.round(altDev) +
               "<br> sensor: " + (sensor<0?"":"+") + Math.round(sensor*100)/100 + " inclination offset: " + Math.round(offsetInclination) +
@@ -345,7 +345,7 @@
         showCO = (type) => {
           document.getElementById("listCO").innerHTML = "";
           for (const co of cos) {
-            if (co.type == type) {
+            if (co.type == type && co.visible == true) {
               var node = document.createElement("BUTTON");
               var textnode = document.createTextNode(co.name);
               node.appendChild(textnode);
