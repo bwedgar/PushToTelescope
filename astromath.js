@@ -118,7 +118,9 @@ astromath = {
   },
 
   hourAngle: function(ra) {
-    return  (astromath.getLST()*2*Math.PI/24 - ra); //return radians
+    ha=  (astromath.getLST()*2*Math.PI/24 - ra);
+    ha = (ha<0) ? ha+2*Math.PI : ha ;
+    return ha; //return radians
   },
 
   altitude: function(ra, dec) {
