@@ -258,7 +258,7 @@ class CelestialObject {
         celestialObjects.push(celestialObject);
       }
       celestialObjects = celestialObjects.sort(
-        (f, g) => (f.raHours > g.raHours ? -1 : 1)
+        (f, g) => (astromath.azimuth(astromath.raRadians(f.raHours, f.raMinutes),astromath.decRadians(f.decDegrees, f.decMinutes)) > astromath.azimuth(astromath.raRadians(f.raHours, f.raMinutes),astromath.decRadians(f.decDegrees, f.decMinutes)) ? -1 : 1)
       );
 
       return celestialObjects;
