@@ -28,11 +28,21 @@
         font-size: 120%;
       }
 
+      .name {
+        background-color: black;
+        color: red;
+        font-family: verdana;
+        font-size: 7vw;
+        width: 100%;
+        height: 20px;
+
+      }
+
       .notes {
         background-color: black;
         color: red;
         font-family: verdana;
-        font-size: 4vw;
+        font-size: 7vw;
         border: 1px solid red;
         width: 100%;
         height: 200px;
@@ -43,7 +53,7 @@
         background-color: black;
         color: red;
         font-family: verdana;
-        font-size: 5vw;
+        font-size: 7vw;
         border: 1px solid red;
         width: 100%;
           height: 600px;
@@ -54,7 +64,7 @@
         background-color: black;
         color: red;
         font-family: verdana;
-        font-size: 5vw;
+        font-size: 7vw;
         border: 1px solid red;
         padding: 2% 2%;
         width: 99%;
@@ -65,7 +75,7 @@
         background-color: black;
         color: red;
         font-family: verdana;
-        font-size: 5vw;
+        font-size: 7vw;
         border: 1px solid red;
         width: 48%;
         padding: 2% 2%;
@@ -75,7 +85,7 @@
         background-color: black;
         color: red;
         font-family: verdana;
-        font-size: 5vw;
+        font-size: 7vw;
         border: 1px solid red;
         width: 12.5%;
         padding: 2% 2%;
@@ -85,7 +95,7 @@
         background-color: black;
         color: red;
         font-family: verdana;
-        font-size: 5vw;
+        font-size: 7vw;
         border: 1px solid red;
         width: 12.5%;
         padding: 2% 2%;
@@ -112,7 +122,7 @@
         let index = 1
         let alt = 0; //altitude of object in degrees
         let altitude = 0; //altitude of telescope in degrees
-        
+
         let altDev = 0; //difference between alt of object and altitude of telescope in degrees
         let azDev=0;
         let az=0;
@@ -421,7 +431,7 @@
       </div>
       <div id="content">
         <br>
-        <div id="textName"></div>
+        <div id="textName" class="name"></div>
         <!-- <div id="distance" class="notes">distance</div> -->
         <canvas id="canvasGoTo"></canvas>
         <!-- <canvas id="canvasTop"></canvas> -->
