@@ -350,8 +350,8 @@
           az = astromath.azimuth(astromath.raRadians(cos[index].raHours, cos[index].raMinutes), astromath.decRadians(cos[index].decDegrees, cos[index].decMinutes))
           textName.innerHTML = (cos[index].name);
 
-          // document.getElementById("notes").innerHTML = (
-          //   "distance: " + unitsToSI(cos[index].lightYears) + "ly   <br> " + cos[index].notes + "<br>" +
+          document.getElementById("notes").innerHTML = (
+            "distance: " + unitsToSI(cos[index].lightYears) + "ly   <br> " + cos[index].notes  );
           //   "<br>ra: "+cos[index].raHours+":"+cos[index].raMinutes+" dec: "+cos[index].decDegrees+":" +cos[index].decMinutes +
           //   "<br> azimuth: " + Math.round(az) +   " altitude: " + Math.round(alt) +
           //   " HA: " + astromath.radiansToHoursAndMinutes(astromath.hourAngle(astromath.raRadians(cos[index].raHours, cos[index].raMinutes))) +
