@@ -112,6 +112,7 @@
         let index = 1
         let alt = 0; //altitude of object in degrees
         let altitude = 0; //altitude of telescope in degrees
+        
         let altDev = 0; //difference between alt of object and altitude of telescope in degrees
         let azDev=0;
         let az=0;
@@ -256,10 +257,13 @@
             altitude = (sensor + 6.9) * 6.4 ;
             altDev = altitude - alt -  offsetInclination ;
             document.getElementById("notes").innerHTML = (
-              "distance: " + unitsToSI(cos[index].lightYears) + "ly   <br> " + cos[index].notes + "<br><br><br><br>" +
+              "distance: " + unitsToSI(cos[index].lightYears) + "ly   <br> " + cos[index].notes + "<br>" +
               "<br>ra: "+cos[index].raHours+":"+cos[index].raMinutes+" dec: "+cos[index].decDegrees+":" +cos[index].decMinutes +
+              "<br> azimuth: " + Math.round(az) +   " altitude: " + Math.round(alt) +
+              " HA: " + astromath.radiansToHoursAndMinutes(astromath.hourAngle(astromath.raRadians(cos[index].raHours, cos[index].raMinutes))) +
               "<br> altitude: " + Math.round(alt) + " telescope altitude: " + Math.round(altitude) + " alt dev: " + Math.round(altDev) +
               "<br> sensor: " + (sensor<0?"":"+") + Math.round(sensor*100)/100 + " inclination offset: " + Math.round(offsetInclination) +
+              "<br> azimuth: " + Math.round(az) + " compass: " + Math.round(compass) + " az dev: "+ Math.round(azDev)+" compassOffset: " + Math.round(offsetCompass) +
               "<br>julian date: " + Math.round(astromath.getJulianDate()) + " GST: " + astromath.radiansToHoursAndMinutes(astromath.getGST()) + " LST: " + astromath.radiansToHoursAndMinutes(astromath.getLST() / 24 * 2 * Math.PI) +
               "<br>Hour Angle: " + astromath.radiansToHoursAndMinutes(astromath.hourAngle(astromath.raRadians(cos[index].raHours, cos[index].raMinutes))) +
               "<br>Latitude: " + astromath.radiansToDegreesAndMinutes(astromath.latitude) +  " Longitude: " + astromath.radiansToDegreesAndMinutes(astromath.longitude)
