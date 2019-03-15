@@ -118,11 +118,14 @@ astromath = {
   },
 
   hourAngle: function(ra) {
-    ha=  astromath.getLST() - ra*24/2/Math.PI; //working in hours
+    //console.log("ra:"+ ra);
+    ha=  astromath.getLST() - ra*24/2/Math.PI;
+    //working in hours
+    //console.log("lst: "+ astromath.getLST()+" ra(hrs): "+ra*24/2/Math.PI+" HA: "+ha);
     ha = (ha<0) ? ha+24 : ha ; //if the hour angle is negtive ass 24 hours
     // ha=  (astromath.getLST()*2*Math.PI/24 - ra);
     // ha = (ha<0) ? ha+2*Math.PI : ha ;
-    return astromath.radians(ha); //return radians
+    return astromath.radians(ha*360/24); //return radians
   },
 
   altitude: function(ra, dec) {
