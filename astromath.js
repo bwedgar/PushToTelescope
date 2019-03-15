@@ -136,7 +136,7 @@ astromath = {
 
   azimuth: function(ra, dec) {
     y = -1 * Math.cos(dec) * Math.cos(astromath.latitude) * Math.sin(astromath.hourAngle(ra));
-    x = Math.sin(dec) - Math.sin(astromath.latitude) * Math.sin(astromath.altitude(ra, dec));
+    x = Math.sin(dec) - Math.sin(astromath.latitude) * Math.sin(astromath.radians(astromath.altitude(ra, dec)));
     answer = Math.atan2(y, x);
     radians = (answer < 0 ? 2 * Math.PI : 0) + answer;
     return radians * 360 / 2 / Math.PI;
