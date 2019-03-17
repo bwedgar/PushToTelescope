@@ -1,357 +1,275 @@
 <!DOCTYPE html>
 <html>
 
-  <head>
+<head>
 
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, minimal-ui">
-    <link rel="apple-touch-icon" href="launch.png">
-    <link rel="apple-touch-startup-image" href="launch.png">
-    <meta name="apple-mobile-web-app-title" content="Push To Telescope">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="apple-touch-icon" href="launch.png">
+  <link rel="apple-touch-startup-image" href="launch.png">
+  <meta name="apple-mobile-web-app-title" content="Push To Telescope">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
 
 
 
 
 
-    <style>
-      body {
-        background-color: black;
-        color: red;
-        font-family: verdana;
-        font-size: 120%;
+  <style>
+    body {
+      background-color: black;
+      color: red;
+      font-family: verdana;
+      font-size: 120%;
+    }
+
+    h1 {
+      font-size: 120%;
+    }
+
+    .name {
+      background-color: black;
+      color: red;
+      font-family: verdana;
+      font-size: 7vw;
+      width: 100%;
+      height: 55px;
+
+    }
+
+    .notes {
+      background-color: black;
+      color: red;
+      font-family: verdana;
+      font-size: 7vw;
+      border: 1px solid red;
+      width: 100%;
+      height: 200px;
+      overflow: scroll;
+    }
+
+    .list {
+      background-color: black;
+      color: red;
+      font-family: verdana;
+      font-size: 7vw;
+      border: 1px solid red;
+      width: 100%;
+      height: 600px;
+      /* height: 80%; */
+      overflow: scroll;
+    }
+
+    .button {
+      background-color: black;
+      color: red;
+      font-family: verdana;
+      font-size: 7vw;
+      border: 1px solid red;
+      padding: 2% 2%;
+      width: 99%;
+      text-align: left;
+    }
+
+    .btngroup2 {
+      background-color: black;
+      color: red;
+      font-family: verdana;
+      font-size: 7vw;
+      border: 1px solid red;
+      width: 48%;
+      padding: 2% 2%;
+    }
+
+    .btngroup7 {
+      background-color: black;
+      color: red;
+      font-family: verdana;
+      font-size: 7vw;
+      border: 1px solid red;
+      width: 12.5%;
+      padding: 2% 2%;
+    }
+
+    .listCO {
+      background-color: black;
+      color: red;
+      font-family: verdana;
+      font-size: 7vw;
+      border: 1px solid red;
+      width: 12.5%;
+      padding: 2% 2%;
+
+    }
+  </style>
+
+  <script src="astromath.js"></script>
+  <script src="planets.js"></script>
+  <script src="celestialobjects.js"></script>
+
+
+  <script>
+    function ready() {
+      // console.log("dom load");
+      // let textName = document.getElementById("textName");
+      // console.log(textName);
+
+      let previousSensor = 0;
+      let sensor = 0;
+      let compass = 0;
+      let compassRaw = 0;
+      let offsetCompass = 0;
+      let offsetInclination = 0;
+      let index = 1
+      let alt = 0; //altitude of object in degrees
+      let altitude = 0; //altitude of telescope in degrees
+
+      let altDev = 0; //difference between alt of object and altitude of telescope in degrees
+      let azDev = 0;
+      let az = 0;
+
+      astromath.longitude = astromath.radians(174.76); //longitude of observer in degrees East
+      astromath.latitude = astromath.radians(-36.8485); //latitude of observer in degrees
+
+      celestialObjects = new CelestialObjects;
+      let cos = celestialObjects.makeCelestialObjects();
+
+      let objectTypes = ["GX", "OC", "GC", "ST", "NB", "DS", "RN"]
+      let objectNames = ["galaxy", "open cluster", "globular cluster", "star", "bright nebula", "double star", "remnant"]
+      offsetCompass = localStorage.getItem("offsetCompass")
+      offsetInclination = localStorage.getItem("offsetInclination")
+      let screenWidth = screen.width;
+      let canvasWidth = screenWidth;
+      let canvasHeight = 200
+      document.getElementById('pageCO').style.height = screen.height * 0.5 + "px";
+      console.log(screen.height)
+      let colorGalaxy = "rgb(60,60,60)"
+
+      unitsToSI = (num1) => {
+        t = (num1 * 1).toExponential(2).toString()
+        ex = /(\d+)$/g.exec(t)[0]
+        prefix = ["", "k", "m", "b"]
+        n = /^(\S{3})/g.exec(t)[1] * 10 ** (ex % 3)
+        return Math.floor(n) + " " + prefix[Math.floor(ex / 3)]
       }
 
-      h1 {
-        font-size: 120%;
+      drawCircle = (x, y) => {
+        ctx.beginPath()
+        ctx.arc(x, y, 2, 0, Math.PI * 2, true)
+        ctx.closePath()
+        ctx.fillStyle = "red"
+        ctx.fill()
       }
-
-      .name {
-        background-color: black;
-        color: red;
-        font-family: verdana;
-        font-size: 7vw;
-        width: 100%;
-        height: 55px;
-
-      }
-
-      .notes {
-        background-color: black;
-        color: red;
-        font-family: verdana;
-        font-size: 7vw;
-        border: 1px solid red;
-        width: 100%;
-        height: 200px;
-        overflow: scroll;
-      }
-
-      .list {
-        background-color: black;
-        color: red;
-        font-family: verdana;
-        font-size: 7vw;
-        border: 1px solid red;
-        width: 100%;
-          height: 600px;
-        /* height: 80%; */
-        overflow: scroll;
-      }
-      .button {
-        background-color: black;
-        color: red;
-        font-family: verdana;
-        font-size: 7vw;
-        border: 1px solid red;
-        padding: 2% 2%;
-        width: 99%;
-        text-align: left;
-      }
-
-      .btngroup2 {
-        background-color: black;
-        color: red;
-        font-family: verdana;
-        font-size: 7vw;
-        border: 1px solid red;
-        width: 48%;
-        padding: 2% 2%;
-      }
-
-      .btngroup7 {
-        background-color: black;
-        color: red;
-        font-family: verdana;
-        font-size: 7vw;
-        border: 1px solid red;
-        width: 12.5%;
-        padding: 2% 2%;
-      }
-
-      .listCO {
-        background-color: black;
-        color: red;
-        font-family: verdana;
-        font-size: 7vw;
-        border: 1px solid red;
-        width: 12.5%;
-        padding: 2% 2%;
-
-      }
-    </style>
-
-    <script src="astromath.js"></script>
-    <script src="celestialobjects.js"></script>
-<script src="planets.js"></script>
-
-    <script>
-      function ready() {
-        // console.log("dom load");
-        // let textName = document.getElementById("textName");
-        // console.log(textName);
-
-        let previousSensor = 0;
-        let sensor = 0;
-        let compass = 0;
-        let compassRaw = 0;
-        let offsetCompass = 0;
-        let offsetInclination = 0;
-        let index = 1
-        let alt = 0; //altitude of object in degrees
-        let altitude = 0; //altitude of telescope in degrees
-
-        let altDev = 0; //difference between alt of object and altitude of telescope in degrees
-        let azDev=0;
-        let az=0;
-
-        astromath.longitude = astromath.radians(174.76); //longitude of observer in degrees East
-        astromath.latitude = astromath.radians(-36.8485); //latitude of observer in degrees
-
-        celestialObjects = new CelestialObjects;
-        let cos = celestialObjects.makeCelestialObjects();
-
-        let objectTypes = ["GX", "OC", "GC", "ST", "NB", "DS", "RN"]
-        let objectNames = ["galaxy", "open cluster", "globular cluster", "star", "bright nebula", "double star", "remnant"]
-        offsetCompass = localStorage.getItem("offsetCompass")
-        offsetInclination = localStorage.getItem("offsetInclination")
-        let screenWidth = screen.width;
-        let canvasWidth = screenWidth;
-        let canvasHeight = 200
-        document.getElementById('pageCO').style.height=screen.height*0.5+"px";
-        console.log(screen.height)
-        let colorGalaxy = "rgb(60,60,60)"
-
-        unitsToSI = (num1) => {
-          t = (num1 * 1).toExponential(2).toString()
-          ex = /(\d+)$/g.exec(t)[0]
-          prefix = ["", "k", "m", "b"]
-          n = /^(\S{3})/g.exec(t)[1] * 10 ** (ex % 3)
-          return Math.floor(n) + " " + prefix[Math.floor(ex / 3)]
-        }
-
-        drawCircle = (x, y) => {
-          ctx.beginPath()
-          ctx.arc(x, y, 2, 0, Math.PI * 2, true)
-          ctx.closePath()
-          ctx.fillStyle = "red"
-          ctx.fill()
-        }
-        //
-        //   drawSide=(x,z)->
-        //     ctx.beginPath()
-        //     offsetX=canvasWidth/4.1
-        //     offsetY=canvasHeight/2
-        //     ctx.arc(offsetX+x, offsetY-z/2, 2, 0, Math.PI*2, true)
-        //     ctx.closePath()
-        //     ctx.fillStyle="red"
-        //     ctx.fill()
-        //
-        //   drawCross=()->
-        //     ctx.beginPath()
-        //     startX=canvasWidth/14
-        //     startY=canvasHeight/2
-        //     ctx.moveTo(startX,startY)
-        //     lengthCross=10
-        //     ctx.lineWidth=1
-        //     ctx.lineTo(startX+lengthCross,startY)
-        //     ctx.strokeStyle="red"
-        //     ctx.stroke()
-        //     ctx.beginPath()
-        //     lengthCross=10
-        //     ctx.moveTo(startX+lengthCross/2,startY-lengthCross/2)
-        //     ctx.lineTo(startX+lengthCross/2,startY+lengthCross/2)
-        //     ctx.strokeStyle="red"
-        //     ctx.stroke()
-        //
-        //
-        //   drawSideCross=()->
-        //     ctx.beginPath()
-        //     startX=canvasWidth/14+canvasWidth/4.1
-        //     startY=canvasHeight/2
-        //     ctx.moveTo(startX,startY)
-        //     lengthCross=10
-        //     ctx.lineWidth=1
-        //     ctx.lineTo(startX+lengthCross,startY)
-        //     ctx.strokeStyle="red"
-        //     ctx.stroke()
-        //     ctx.beginPath()
-        //     ctx.moveTo(startX+lengthCross/2,startY-lengthCross/2)
-        //     lengthCross=10
-        //     ctx.lineTo(startX+lengthCross/2,startY+lengthCross/2)
-        //     ctx.strokeStyle="red"
-        //     ctx.stroke()
-        //
-        //
-        //   c = document.getElementById("canvasTop")
-        //   ctx = c.getContext("2d")
-        //   ctx.canvas.width=screenWidth
-        //   ctx.canvas.height=200
-        //
-        //
-        //   getCartesian=(lat,long,r)->
-        //     lat=Math.PI/2-lat
-        //     long=(long+Math.PI/2*1.0)%(Math.PI*2)
-        //     x1=r * Math.sin(lat) * Math.cos(long)
-        //     y1 = r * Math.sin(lat) * Math.sin(long)
-        //     z1 = r * Math.cos(lat)
-        //     #alert "x: #{x1} y:#{y1} z: #{z1}"
-        //     scale=0.0018
-        //     x2D= y1*scale+canvasWidth/13
-        //     y2D= x1*scale+ canvasWidth /6
-        //     z2D=z1*scale
-        //     #alert "x2: #{x2D} y2:#{y2D} z2: #{z2D}"
-        //     drawCircle(x2D,y2D)
-        //     drawSide(x2D,z2D)
-        //     drawCross()
-        //     drawSideCross()
-        //
-        //
-        //   showGal=()->
-        //     ctx.clearRect(0,0,canvasWidth,canvasWidth)
-        //     centerOfTopX=canvasWidth/7
-        //     centerOfTopY=canvasHeight/2
-        //     centerOfSideX=canvasWidth/2.5
-        //     ctx.beginPath()
-        //     ctx.arc(centerOfTopX, centerOfTopY, canvasHeight/3, 0, Math.PI*2, true)
-        //     ctx.closePath()
-        //     ctx.fillStyle=colorGalaxy
-        //     ctx.fill()
-        //     ctx.beginPath()
-        //     ctx.arc(centerOfSideX, centerOfTopY, canvasHeight/20, 0, Math.PI*2, true)
-        //     ctx.closePath()
-        //     ctx.fillStyle=colorGalaxy
-        //     ctx.fill()
-        //     ctx.beginPath()
-        //     lengthDisc=150#canvasWidth/6
-        //     ctx.moveTo(centerOfSideX-lengthDisc/2,centerOfTopY)
-        //     ctx.lineTo(centerOfSideX+lengthDisc/2,centerOfTopY)
-        //     ctx.strokeStyle=colorGalaxy
-        //     ctx.lineWidth=5
-        //     ctx.stroke()
-        //
-        //     getCartesian(cos[index].galLatitude, cos[index].galLongitude, cos[index].lightYears)
-        //
-        //
-        replaceChar = (stro, i, char) => (i === 0) ? t = char + stro.substr(1) : t = stro.substr(0, i) + char + stro.substr(i + 1)
-        listener = (e) => {
-          sensor = -e.accelerationIncludingGravity.x //sensor= 0 when vertical, -6.9 when clockwise 45 degrees, +6.9 when antoclockwise. +/- 10 when horizontal
-          sensor = Math.round(sensor * 100) / 100;
-          alt = Math.round(alt * 10) / 10 //alt is the altitude of the object
-          if (Math.abs(sensor - previousSensor) > 0.05) { //test if the sensor has changed
-            previousSensor = sensor
-            //when phone is 45 degrees clockwise altitude is 0, when phone is 45 anticlockwise altitude is 90 degrees
-            //adjSensor = //a + b * sensor
-            altitude = (sensor + 6.9) * 6.4 ;
-            altDev = altitude - alt -  offsetInclination ;
-            // document.getElementById("notes").innerHTML = (
-            //   "distance: " + unitsToSI(cos[index].lightYears) + "ly   <br> " + cos[index].notes + "<br>" +
-            //   "<br>ra: "+cos[index].raHours+":"+cos[index].raMinutes+" dec: "+cos[index].decDegrees+":" +cos[index].decMinutes +
-            //   "<br> azimuth: " + Math.round(az) +   " altitude: " + Math.round(alt) +
-            //   " HA: " + astromath.radiansToHoursAndMinutes(astromath.hourAngle(astromath.raRadians(cos[index].raHours, cos[index].raMinutes))) +
-            //   "<br> altitude: " + Math.round(alt) + " telescope altitude: " + Math.round(altitude) + " alt dev: " + Math.round(altDev) +
-            //   "<br> sensor: " + (sensor<0?"":"+") + Math.round(sensor*100)/100 + " inclination offset: " + Math.round(offsetInclination) +
-            //   "<br> azimuth: " + Math.round(az) + " compass: " + Math.round(compass) + " az dev: "+ Math.round(azDev)+" compassOffset: " + Math.round(offsetCompass) +
-            //   "<br>julian date: " + Math.round(astromath.getJulianDate()) + " GST: " + astromath.radiansToHoursAndMinutes(astromath.getGST()) + " LST: " + astromath.radiansToHoursAndMinutes(astromath.getLST() / 24 * 2 * Math.PI) +
-            //   "<br>Hour Angle: " + astromath.radiansToHoursAndMinutes(astromath.hourAngle(astromath.raRadians(cos[index].raHours, cos[index].raMinutes))) +
-            //   "<br>Latitude: " + astromath.radiansToDegreesAndMinutes(astromath.latitude) +  " Longitude: " + astromath.radiansToDegreesAndMinutes(astromath.longitude)
-            // )
-
-
-
-          }
-        }
-        listener2 = (e2) => {
-          compassRaw = Math.round((e2.webkitCompassHeading - 100) % 360)
-          compass = Math.round((compassRaw - offsetCompass) % 360)
-          az = Math.round(az * 10) / 10
-          azDev = ((compass - az) + 540) % 360 - 180
-          c1 = document.getElementById("canvasGoTo")
-          ctxGoTo = c1.getContext("2d")
-          ctxGoTo.canvas.width = screenWidth
-          ctxGoTo.canvas.height = 100;
-          //horizontal line
-          ctxGoTo.beginPath()
-          ctxGoTo.moveTo(50, ctxGoTo.canvas.height / 3)
-          ctxGoTo.lineTo(ctxGoTo.canvas.width - 50, ctxGoTo.canvas.height / 3)
-          ctxGoTo.strokeStyle = "red"
-          ctxGoTo.lineWidth = 2
-          ctxGoTo.stroke()
-          //cursor 40 units high?
-          ctxGoTo.beginPath()
-          ctxGoTo.moveTo(ctxGoTo.canvas.width / 2.2 + altDev * 10, ctxGoTo.canvas.height / 3 - 20)
-          ctxGoTo.lineTo(ctxGoTo.canvas.width / 2.2 + altDev * 10, ctxGoTo.canvas.height / 3 + 20)
-          ctxGoTo.strokeStyle = "red"
-          ctxGoTo.lineWidth = 2
-          ctxGoTo.stroke()
-          //centre drawCircle
-          ctxGoTo.beginPath()
-          ctxGoTo.arc(ctxGoTo.canvas.width / 2.2, ctxGoTo.canvas.height / 3, 15, 0, Math.PI * 2, true)
-          ctxGoTo.stroke()
-          ctxGoTo.fillStyle = "red"
-          ctxGoTo.font = "30px Arial"
-          //directional pointers
-          if (altDev > 0) {
-            ctxGoTo.fillText('\u21D7', 5, ctxGoTo.canvas.height / 3 + 10)
-          }
-          if (altDev < 0) {
-            ctxGoTo.fillText('\u21D8', 5, ctxGoTo.canvas.height / 3 + 10)
-          }
-          ctxGoTo.beginPath()
-          ctxGoTo.moveTo(50, ctxGoTo.canvas.height / 3 * 2)
-          ctxGoTo.lineTo(ctxGoTo.canvas.width - 50, ctxGoTo.canvas.height / 3 * 2)
-          ctxGoTo.strokeStyle = "red"
-          ctxGoTo.lineWidth = 2
-          ctxGoTo.stroke()
-          ctxGoTo.beginPath()
-          ctxGoTo.moveTo(ctxGoTo.canvas.width / 2.2 + azDev * 10, ctxGoTo.canvas.height / 3 * 2 - 20)
-          ctxGoTo.lineTo(ctxGoTo.canvas.width / 2.2 + azDev * 10, ctxGoTo.canvas.height / 3 * 2 + 20)
-          ctxGoTo.strokeStyle = "red"
-          ctxGoTo.lineWidth = 2
-          ctxGoTo.stroke()
-          ctxGoTo.beginPath()
-          ctxGoTo.arc(ctxGoTo.canvas.width / 2.2, ctxGoTo.canvas.height / 3 * 2, 15, 0, Math.PI * 2, true)
-          ctxGoTo.stroke()
-          if (azDev > 0) {
-            ctxGoTo.fillText('\u21BA', 5, ctxGoTo.canvas.height / 3 * 2 + 10)
-          }
-          if (azDev < 0) {
-            ctxGoTo.fillText('\u21BB', 5, ctxGoTo.canvas.height / 3 * 2 + 10)
-          }
-        }
-        window.addEventListener('devicemotion', listener)
-        window.addEventListener('deviceorientation', listener2)
-
-        showData = (index) => {
-          // console.log("at showdata")
-          alt = astromath.altitude(astromath.raRadians(cos[index].raHours, cos[index].raMinutes), astromath.decRadians(cos[index].decDegrees, cos[index].decMinutes))
-          az = astromath.azimuth(astromath.raRadians(cos[index].raHours, cos[index].raMinutes), astromath.decRadians(cos[index].decDegrees, cos[index].decMinutes))
-          textName.innerHTML = (cos[index].name);
-
-          document.getElementById("notes").innerHTML = (
-            "distance: " + unitsToSI(cos[index].lightYears) + "ly   <br> " + cos[index].notes  );
+      //
+      //   drawSide=(x,z)->
+      //     ctx.beginPath()
+      //     offsetX=canvasWidth/4.1
+      //     offsetY=canvasHeight/2
+      //     ctx.arc(offsetX+x, offsetY-z/2, 2, 0, Math.PI*2, true)
+      //     ctx.closePath()
+      //     ctx.fillStyle="red"
+      //     ctx.fill()
+      //
+      //   drawCross=()->
+      //     ctx.beginPath()
+      //     startX=canvasWidth/14
+      //     startY=canvasHeight/2
+      //     ctx.moveTo(startX,startY)
+      //     lengthCross=10
+      //     ctx.lineWidth=1
+      //     ctx.lineTo(startX+lengthCross,startY)
+      //     ctx.strokeStyle="red"
+      //     ctx.stroke()
+      //     ctx.beginPath()
+      //     lengthCross=10
+      //     ctx.moveTo(startX+lengthCross/2,startY-lengthCross/2)
+      //     ctx.lineTo(startX+lengthCross/2,startY+lengthCross/2)
+      //     ctx.strokeStyle="red"
+      //     ctx.stroke()
+      //
+      //
+      //   drawSideCross=()->
+      //     ctx.beginPath()
+      //     startX=canvasWidth/14+canvasWidth/4.1
+      //     startY=canvasHeight/2
+      //     ctx.moveTo(startX,startY)
+      //     lengthCross=10
+      //     ctx.lineWidth=1
+      //     ctx.lineTo(startX+lengthCross,startY)
+      //     ctx.strokeStyle="red"
+      //     ctx.stroke()
+      //     ctx.beginPath()
+      //     ctx.moveTo(startX+lengthCross/2,startY-lengthCross/2)
+      //     lengthCross=10
+      //     ctx.lineTo(startX+lengthCross/2,startY+lengthCross/2)
+      //     ctx.strokeStyle="red"
+      //     ctx.stroke()
+      //
+      //
+      //   c = document.getElementById("canvasTop")
+      //   ctx = c.getContext("2d")
+      //   ctx.canvas.width=screenWidth
+      //   ctx.canvas.height=200
+      //
+      //
+      //   getCartesian=(lat,long,r)->
+      //     lat=Math.PI/2-lat
+      //     long=(long+Math.PI/2*1.0)%(Math.PI*2)
+      //     x1=r * Math.sin(lat) * Math.cos(long)
+      //     y1 = r * Math.sin(lat) * Math.sin(long)
+      //     z1 = r * Math.cos(lat)
+      //     #alert "x: #{x1} y:#{y1} z: #{z1}"
+      //     scale=0.0018
+      //     x2D= y1*scale+canvasWidth/13
+      //     y2D= x1*scale+ canvasWidth /6
+      //     z2D=z1*scale
+      //     #alert "x2: #{x2D} y2:#{y2D} z2: #{z2D}"
+      //     drawCircle(x2D,y2D)
+      //     drawSide(x2D,z2D)
+      //     drawCross()
+      //     drawSideCross()
+      //
+      //
+      //   showGal=()->
+      //     ctx.clearRect(0,0,canvasWidth,canvasWidth)
+      //     centerOfTopX=canvasWidth/7
+      //     centerOfTopY=canvasHeight/2
+      //     centerOfSideX=canvasWidth/2.5
+      //     ctx.beginPath()
+      //     ctx.arc(centerOfTopX, centerOfTopY, canvasHeight/3, 0, Math.PI*2, true)
+      //     ctx.closePath()
+      //     ctx.fillStyle=colorGalaxy
+      //     ctx.fill()
+      //     ctx.beginPath()
+      //     ctx.arc(centerOfSideX, centerOfTopY, canvasHeight/20, 0, Math.PI*2, true)
+      //     ctx.closePath()
+      //     ctx.fillStyle=colorGalaxy
+      //     ctx.fill()
+      //     ctx.beginPath()
+      //     lengthDisc=150#canvasWidth/6
+      //     ctx.moveTo(centerOfSideX-lengthDisc/2,centerOfTopY)
+      //     ctx.lineTo(centerOfSideX+lengthDisc/2,centerOfTopY)
+      //     ctx.strokeStyle=colorGalaxy
+      //     ctx.lineWidth=5
+      //     ctx.stroke()
+      //
+      //     getCartesian(cos[index].galLatitude, cos[index].galLongitude, cos[index].lightYears)
+      //
+      //
+      replaceChar = (stro, i, char) => (i === 0) ? t = char + stro.substr(1) : t = stro.substr(0, i) + char + stro.substr(i + 1)
+      listener = (e) => {
+        sensor = -e.accelerationIncludingGravity.x //sensor= 0 when vertical, -6.9 when clockwise 45 degrees, +6.9 when antoclockwise. +/- 10 when horizontal
+        sensor = Math.round(sensor * 100) / 100;
+        alt = Math.round(alt * 10) / 10 //alt is the altitude of the object
+        if (Math.abs(sensor - previousSensor) > 0.05) { //test if the sensor has changed
+          previousSensor = sensor
+          //when phone is 45 degrees clockwise altitude is 0, when phone is 45 anticlockwise altitude is 90 degrees
+          //adjSensor = //a + b * sensor
+          altitude = (sensor + 6.9) * 6.4;
+          altDev = altitude - alt - offsetInclination;
+          // document.getElementById("notes").innerHTML = (
+          //   "distance: " + unitsToSI(cos[index].lightYears) + "ly   <br> " + cos[index].notes + "<br>" +
           //   "<br>ra: "+cos[index].raHours+":"+cos[index].raMinutes+" dec: "+cos[index].decDegrees+":" +cos[index].decMinutes +
           //   "<br> azimuth: " + Math.round(az) +   " altitude: " + Math.round(alt) +
           //   " HA: " + astromath.radiansToHoursAndMinutes(astromath.hourAngle(astromath.raRadians(cos[index].raHours, cos[index].raMinutes))) +
@@ -365,96 +283,187 @@
 
 
 
-          document.getElementById("pageCO").style.display = "none";
-          document.getElementById("pageContent").style.display = "block";
         }
-        showCO = (type) => {
-          document.getElementById("listCO").innerHTML = "";
-          for (const co of cos) {
-            if (co.type == type && co.visible == true) {
-              var node = document.createElement("BUTTON");
-              var textnode = document.createTextNode(co.name);
-              node.appendChild(textnode);
-              btn = document.getElementById("listCO").appendChild(node);
-              btn.classList.add("button");
-            }
+      }
+      listener2 = (e2) => {
+        compassRaw = Math.round((e2.webkitCompassHeading - 100) % 360)
+        compass = Math.round((compassRaw - offsetCompass) % 360)
+        az = Math.round(az * 10) / 10
+        azDev = ((compass - az) + 540) % 360 - 180
+        c1 = document.getElementById("canvasGoTo")
+        ctxGoTo = c1.getContext("2d")
+        ctxGoTo.canvas.width = screenWidth
+        ctxGoTo.canvas.height = 100;
+        //horizontal line
+        ctxGoTo.beginPath()
+        ctxGoTo.moveTo(50, ctxGoTo.canvas.height / 3)
+        ctxGoTo.lineTo(ctxGoTo.canvas.width - 50, ctxGoTo.canvas.height / 3)
+        ctxGoTo.strokeStyle = "red"
+        ctxGoTo.lineWidth = 2
+        ctxGoTo.stroke()
+        //cursor 40 units high?
+        ctxGoTo.beginPath()
+        ctxGoTo.moveTo(ctxGoTo.canvas.width / 2.2 + altDev * 10, ctxGoTo.canvas.height / 3 - 20)
+        ctxGoTo.lineTo(ctxGoTo.canvas.width / 2.2 + altDev * 10, ctxGoTo.canvas.height / 3 + 20)
+        ctxGoTo.strokeStyle = "red"
+        ctxGoTo.lineWidth = 2
+        ctxGoTo.stroke()
+        //centre drawCircle
+        ctxGoTo.beginPath()
+        ctxGoTo.arc(ctxGoTo.canvas.width / 2.2, ctxGoTo.canvas.height / 3, 15, 0, Math.PI * 2, true)
+        ctxGoTo.stroke()
+        ctxGoTo.fillStyle = "red"
+        ctxGoTo.font = "30px Arial"
+        //directional pointers
+        if (altDev > 0) {
+          ctxGoTo.fillText('\u21D7', 5, ctxGoTo.canvas.height / 3 + 10)
+        }
+        if (altDev < 0) {
+          ctxGoTo.fillText('\u21D8', 5, ctxGoTo.canvas.height / 3 + 10)
+        }
+        ctxGoTo.beginPath()
+        ctxGoTo.moveTo(50, ctxGoTo.canvas.height / 3 * 2)
+        ctxGoTo.lineTo(ctxGoTo.canvas.width - 50, ctxGoTo.canvas.height / 3 * 2)
+        ctxGoTo.strokeStyle = "red"
+        ctxGoTo.lineWidth = 2
+        ctxGoTo.stroke()
+        ctxGoTo.beginPath()
+        ctxGoTo.moveTo(ctxGoTo.canvas.width / 2.2 + azDev * 10, ctxGoTo.canvas.height / 3 * 2 - 20)
+        ctxGoTo.lineTo(ctxGoTo.canvas.width / 2.2 + azDev * 10, ctxGoTo.canvas.height / 3 * 2 + 20)
+        ctxGoTo.strokeStyle = "red"
+        ctxGoTo.lineWidth = 2
+        ctxGoTo.stroke()
+        ctxGoTo.beginPath()
+        ctxGoTo.arc(ctxGoTo.canvas.width / 2.2, ctxGoTo.canvas.height / 3 * 2, 15, 0, Math.PI * 2, true)
+        ctxGoTo.stroke()
+        if (azDev > 0) {
+          ctxGoTo.fillText('\u21BA', 5, ctxGoTo.canvas.height / 3 * 2 + 10)
+        }
+        if (azDev < 0) {
+          ctxGoTo.fillText('\u21BB', 5, ctxGoTo.canvas.height / 3 * 2 + 10)
+        }
+      }
+      window.addEventListener('devicemotion', listener)
+      window.addEventListener('deviceorientation', listener2)
+
+      showData = (index) => {
+        // console.log("at showdata")
+        alt = astromath.altitude(astromath.raRadians(cos[index].raHours, cos[index].raMinutes), astromath.decRadians(cos[index].decDegrees, cos[index].decMinutes))
+        az = astromath.azimuth(astromath.raRadians(cos[index].raHours, cos[index].raMinutes), astromath.decRadians(cos[index].decDegrees, cos[index].decMinutes))
+        textName.innerHTML = (cos[index].name);
+
+        document.getElementById("notes").innerHTML = (
+           unitsToSI(cos[index].lightYears) + "ly   <br> " + cos[index].notes );
+          // "<br>ra: " + cos[index].raHours + ":" + cos[index].raMinutes + " dec: " + cos[index].decDegrees + ":" + cos[index].decMinutes +
+          // "<br> azimuth: " + Math.round(az) + " altitude: " + Math.round(alt) +
+          // " HA: " + astromath.radiansToHoursAndMinutes(astromath.hourAngle(astromath.raRadians(cos[index].raHours, cos[index].raMinutes))) +
+          // "<br> altitude: " + Math.round(alt) + " telescope altitude: " + Math.round(altitude) + " alt dev: " + Math.round(altDev) +
+          // "<br> sensor: " + (sensor < 0 ? "" : "+") + Math.round(sensor * 100) / 100 + " inclination offset: " + Math.round(offsetInclination) +
+          // "<br> azimuth: " + Math.round(az) + " compass: " + Math.round(compass) + " az dev: " + Math.round(azDev) + " compassOffset: " + Math.round(offsetCompass) +
+          // "<br>julian date: " + Math.round(astromath.getJulianDate()) + " GST: " + astromath.radiansToHoursAndMinutes(astromath.getGST()) + " LST: " + astromath.radiansToHoursAndMinutes(astromath.getLST() / 24 * 2 * Math.PI) +
+          // "<br>Hour Angle: " + astromath.radiansToHoursAndMinutes(astromath.hourAngle(astromath.raRadians(cos[index].raHours, cos[index].raMinutes))) +
+          // "<br>Latitude: " + astromath.radiansToDegreesAndMinutes(astromath.latitude) + " Longitude: " + astromath.radiansToDegreesAndMinutes(astromath.longitude)
+    //    )
+
+
+
+        document.getElementById("pageCO").style.display = "none";
+        document.getElementById("pageContent").style.display = "block";
+      }
+      showCO = (type) => {
+        document.getElementById("listCO").innerHTML = "";
+        var numberOfItemsAdded = 0;
+        for (const co of cos) {
+          if (co.type == type && co.visible == true) {
+            numberOfItemsAdded++;
+            var node = document.createElement("BUTTON");
+            var textnode = document.createTextNode(co.name);
+            node.appendChild(textnode);
+            btn = document.getElementById("listCO").appendChild(node);
+            btn.classList.add("button");
           }
+
+
+        }
+        if (numberOfItemsAdded > 0) {
+
           document.getElementById("pageCO").style.display = "block";
           document.getElementById("pageContent").style.display = "none";
         }
-        document.getElementById("pageCO").style.display = "block";
-        document.getElementById("pageContent").style.display = "block";
+      }
+      document.getElementById("pageCO").style.display = "block";
+      document.getElementById("pageContent").style.display = "block";
 
+      showData(index);
+      document.getElementById("buttonBrightStars").addEventListener("click", () => showCO("ST"));
+      document.getElementById("buttonPlanets").addEventListener("click", () => showCO("PL"));
+      document.getElementById("buttonBrightNebulas").addEventListener("click", () => showCO("NB"));
+      document.getElementById("buttonOpenClusters").addEventListener("click", () => showCO("OC"));
+      document.getElementById("buttonGlobularClusters").addEventListener("click", () => showCO("GC"));
+      document.getElementById("buttonGalaxies").addEventListener("click", () => showCO("GX"));
+      document.getElementById("buttonPlanetaryNebulas").addEventListener("click", () => showCO("RN"));
+      let listCO = document.getElementById("listCO")
+
+      listCO.addEventListener("click", (e) => {
+        let nameOfCos = e.target.innerHTML
+        index = cos.findIndex(x => x.name == nameOfCos.trim());
         showData(index);
-        document.getElementById("buttonBrightStars").addEventListener("click", () => showCO("ST"));
-        document.getElementById("buttonDoubleStars").addEventListener("click", () => showCO("DS"));
-        document.getElementById("buttonBrightNebulas").addEventListener("click", () => showCO("NB"));
-        document.getElementById("buttonOpenClusters").addEventListener("click", () => showCO("OC"));
-        document.getElementById("buttonGlobularClusters").addEventListener("click", () => showCO("GC"));
-        document.getElementById("buttonGalaxies").addEventListener("click", () => showCO("GX"));
-        document.getElementById("buttonPlanetaryNebulas").addEventListener("click", () => showCO("RN"));
-        let listCO = document.getElementById("listCO")
+      });
 
-        listCO.addEventListener("click", (e) => {
-          let nameOfCos = e.target.innerHTML
-          index = cos.findIndex(x => x.name == nameOfCos.trim());
-          showData(index);
-        });
+      document.getElementById("buttonCalibrate").addEventListener("click", (e) => {
+        offsetCompass = compassRaw - az;
+        offsetInclination = altitude - alt;
+        localStorage.setItem("offsetCompass", offsetCompass);
+        localStorage.setItem("offsetInclination", offsetInclination);
+      });
 
-        document.getElementById("buttonCalibrate").addEventListener("click", (e) => {
-          offsetCompass = compassRaw - az;
-          offsetInclination = altitude - alt;
-          localStorage.setItem("offsetCompass", offsetCompass);
-          localStorage.setItem("offsetInclination", offsetInclination);
-        });
+      document.getElementById("buttonInfo").addEventListener("click", (e) => {
+        window.location.href = "https://bwedgar.github.io/index.html";
+      });
+    }
+    if (document.readyState == 'loading') {
+      document.addEventListener('DOMContentLoaded', ready);
+    } else {
+      ready();
+    }
+  </script>
 
-        document.getElementById("buttonInfo").addEventListener("click", (e) => {
-          window.location.href = "https://bwedgar.github.io/index.html";
-        });
-      }
-      if (document.readyState == 'loading') {
-        document.addEventListener('DOMContentLoaded', ready);
-      } else {
-        ready();
-      }
-    </script>
-
-  </head>
+</head>
 
 
-  <body>
+<body>
 
-    <div id="pageContent">
-      <div>
-        <button id="buttonCalibrate" class="btngroup2">cal</button>
-        <button id="buttonInfo" class="btngroup2">info</button>
-      </div>
-      <div id="content">
-        <br>
-        <div id="textName" class="name"></div>
-        <!-- <div id="distance" class="notes">distance</div> -->
-        <canvas id="canvasGoTo"></canvas>
-        <!-- <canvas id="canvasTop"></canvas> -->
-        <div id="notes" class="notes"></div>
-        <br>
-      </div>
-      <div>
-        <button id="buttonBrightStars" class="btngroup7">B</button>
-        <button id="buttonDoubleStars" class="btngroup7">D</button>
-        <button id="buttonBrightNebulas" class="btngroup7">N</button>
-        <button id="buttonPlanetaryNebulas" class="btngroup7">R</button>
-        <button id="buttonOpenClusters" class="btngroup7">O</button>
-        <button id="buttonGlobularClusters" class="btngroup7">G</button>
-        <button id="buttonGalaxies" class="btngroup7">X</button>
-      </div>
+  <div id="pageContent">
+    <div>
+      <button id="buttonCalibrate" class="btngroup2">cal</button>
+      <button id="buttonInfo" class="btngroup2">info</button>
     </div>
-
-    <div id="pageCO">
-
-      <div id="listCO" class="list">
-      </div>
+    <div id="content">
+      <br>
+      <div id="textName" class="name"></div>
+      <!-- <div id="distance" class="notes">distance</div> -->
+      <canvas id="canvasGoTo"></canvas>
+      <!-- <canvas id="canvasTop"></canvas> -->
+      <div id="notes" class="notes"></div>
       <br>
     </div>
+    <div>
+      <button id="buttonBrightStars" class="btngroup7">B</button>
+      <button id="buttonPlanets" class="btngroup7">P</button>
+      <button id="buttonOpenClusters" class="btngroup7">O</button>
+      <button id="buttonGlobularClusters" class="btngroup7">G</button>
+      <button id="buttonBrightNebulas" class="btngroup7">N</button>
+      <button id="buttonPlanetaryNebulas" class="btngroup7">R</button>
+      <button id="buttonGalaxies" class="btngroup7">X</button>
+    </div>
+  </div>
+
+  <div id="pageCO">
+
+    <div id="listCO" class="list">
+    </div>
+    <br>
+  </div>
 
 
 </html>

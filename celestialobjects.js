@@ -195,8 +195,8 @@ let data = ["47 Tucanae,0,24,-72,5,13000,,GC,30 thousand stars with a dense core
   "Alpha Piscis Austrinus    Fomalhaut,22,57,-29,37,25,1.17,ST,A3",
   "Alpha Pegasus    Markab,23,4,15,12,139,2.49,ST,B9.5",
   "Beta Monocerotis,6,26,-7,0,,,ST,Triple star 4.7 and 4.6 sep 7.5sec and 5.6 sep 2.8sec from 4.6.",
-  "Dunlop 30,6,28,-50,12,,,DS,Double star 9th red and 5.3 yellow. Both stars are themselves doubles.",
-  "Gamma Leonis,10,17,20,6,,,DS,Double; 2.6 and 3.8 separated by 4.3sec",
+  "Dunlop 30,6,28,-50,12,,,ST,Double star 9th red and 5.3 yellow. Both stars are themselves doubles.",
+  "Gamma Leonis,10,17,20,6,,,ST,Double; 2.6 and 3.8 separated by 4.3sec",
   "Gem Cluster,10,31,-57,58,1400,,OC,Red supergiant surrounded by blue stars. 8min across."
 ]
 
@@ -258,7 +258,27 @@ class CelestialObjects {
       );
       celestialObjects.push(celestialObject);
     }
-    celestialObjects = celestialObjects.sort( (f, g) => (f.azimuth < g.azimuth) ? -1 : 1);
+    for (var i of [0,1,3,4,5,6,7]) { //planets[0], planets[1], planets[3], planets[4], planets[5], planets[6], planets[7]]) {
+      //console.log("i: "+i+" name: "+ planets[i].name)
+
+      var ra = radecr(helios(planets[i]), helios(planets[2]))[0];
+//console.log(ra);
+      var raHours = Math.floor(ra);
+      var raMinutes = Math.round((ra - raHours) * 60);
+      var dec = radecr(helios(planets[i]), helios(planets[2]))[1];
+      var decDegrees = Math.floor(dec);
+      var decMinutes = Math.round((dec - decDegrees) * 60);
+      var distance = radecr(helios(planets[i]), helios(planets[2]))[2] * 0.00001581; //from AU to light Years
+      var n = planets[i].name;
+      var co = new CelestialObject(n, raHours, raMinutes, decDegrees, decMinutes, distance,"","PL",""   )
+
+    celestialObjects.push(co);
+
+  }
+  celestialObjects = celestialObjects.sort((f, g) => (f.azimuth < g.azimuth) ? -1 : 1);
+
+
+
 
   return celestialObjects;
 }
