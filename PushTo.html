@@ -161,102 +161,108 @@
         ctx.fillStyle = "red"
         ctx.fill()
       }
-      //
-      //   drawSide=(x,z)->
-      //     ctx.beginPath()
-      //     offsetX=canvasWidth/4.1
-      //     offsetY=canvasHeight/2
-      //     ctx.arc(offsetX+x, offsetY-z/2, 2, 0, Math.PI*2, true)
-      //     ctx.closePath()
-      //     ctx.fillStyle="red"
-      //     ctx.fill()
-      //
-      //   drawCross=()->
-      //     ctx.beginPath()
-      //     startX=canvasWidth/14
-      //     startY=canvasHeight/2
-      //     ctx.moveTo(startX,startY)
-      //     lengthCross=10
-      //     ctx.lineWidth=1
-      //     ctx.lineTo(startX+lengthCross,startY)
-      //     ctx.strokeStyle="red"
-      //     ctx.stroke()
-      //     ctx.beginPath()
-      //     lengthCross=10
-      //     ctx.moveTo(startX+lengthCross/2,startY-lengthCross/2)
-      //     ctx.lineTo(startX+lengthCross/2,startY+lengthCross/2)
-      //     ctx.strokeStyle="red"
-      //     ctx.stroke()
-      //
-      //
-      //   drawSideCross=()->
-      //     ctx.beginPath()
-      //     startX=canvasWidth/14+canvasWidth/4.1
-      //     startY=canvasHeight/2
-      //     ctx.moveTo(startX,startY)
-      //     lengthCross=10
-      //     ctx.lineWidth=1
-      //     ctx.lineTo(startX+lengthCross,startY)
-      //     ctx.strokeStyle="red"
-      //     ctx.stroke()
-      //     ctx.beginPath()
-      //     ctx.moveTo(startX+lengthCross/2,startY-lengthCross/2)
-      //     lengthCross=10
-      //     ctx.lineTo(startX+lengthCross/2,startY+lengthCross/2)
-      //     ctx.strokeStyle="red"
-      //     ctx.stroke()
-      //
-      //
-      //   c = document.getElementById("canvasTop")
-      //   ctx = c.getContext("2d")
-      //   ctx.canvas.width=screenWidth
-      //   ctx.canvas.height=200
-      //
-      //
-      //   getCartesian=(lat,long,r)->
-      //     lat=Math.PI/2-lat
-      //     long=(long+Math.PI/2*1.0)%(Math.PI*2)
-      //     x1=r * Math.sin(lat) * Math.cos(long)
-      //     y1 = r * Math.sin(lat) * Math.sin(long)
-      //     z1 = r * Math.cos(lat)
-      //     #alert "x: #{x1} y:#{y1} z: #{z1}"
-      //     scale=0.0018
-      //     x2D= y1*scale+canvasWidth/13
-      //     y2D= x1*scale+ canvasWidth /6
-      //     z2D=z1*scale
-      //     #alert "x2: #{x2D} y2:#{y2D} z2: #{z2D}"
-      //     drawCircle(x2D,y2D)
-      //     drawSide(x2D,z2D)
-      //     drawCross()
-      //     drawSideCross()
-      //
-      //
-      //   showGal=()->
-      //     ctx.clearRect(0,0,canvasWidth,canvasWidth)
-      //     centerOfTopX=canvasWidth/7
-      //     centerOfTopY=canvasHeight/2
-      //     centerOfSideX=canvasWidth/2.5
-      //     ctx.beginPath()
-      //     ctx.arc(centerOfTopX, centerOfTopY, canvasHeight/3, 0, Math.PI*2, true)
-      //     ctx.closePath()
-      //     ctx.fillStyle=colorGalaxy
-      //     ctx.fill()
-      //     ctx.beginPath()
-      //     ctx.arc(centerOfSideX, centerOfTopY, canvasHeight/20, 0, Math.PI*2, true)
-      //     ctx.closePath()
-      //     ctx.fillStyle=colorGalaxy
-      //     ctx.fill()
-      //     ctx.beginPath()
-      //     lengthDisc=150#canvasWidth/6
-      //     ctx.moveTo(centerOfSideX-lengthDisc/2,centerOfTopY)
-      //     ctx.lineTo(centerOfSideX+lengthDisc/2,centerOfTopY)
-      //     ctx.strokeStyle=colorGalaxy
-      //     ctx.lineWidth=5
-      //     ctx.stroke()
-      //
-      //     getCartesian(cos[index].galLatitude, cos[index].galLongitude, cos[index].lightYears)
-      //
-      //
+
+      drawSide = (x, z) => {
+        ctx.beginPath()
+        offsetX = canvasWidth / 4.1
+        offsetY = canvasHeight / 2
+        ctx.arc(offsetX + x, offsetY - z / 2, 2, 0, Math.PI * 2, true)
+        ctx.closePath()
+        ctx.fillStyle = "red"
+        ctx.fill()
+      }
+
+      drawCross = () => {
+        ctx.beginPath()
+        startX = canvasWidth / 14
+        startY = canvasHeight / 2
+        ctx.moveTo(startX, startY)
+        lengthCross = 10
+        ctx.lineWidth = 1
+        ctx.lineTo(startX + lengthCross, startY)
+        ctx.strokeStyle = "red"
+        ctx.stroke()
+        ctx.beginPath()
+        lengthCross = 10
+        ctx.moveTo(startX + lengthCross / 2, startY - lengthCross / 2)
+        ctx.lineTo(startX + lengthCross / 2, startY + lengthCross / 2)
+        ctx.strokeStyle = "red"
+        ctx.stroke()
+      }
+
+
+      drawSideCross = () => {
+        ctx.beginPath()
+        startX = canvasWidth / 14 + canvasWidth / 4.1
+        startY = canvasHeight / 2
+        ctx.moveTo(startX, startY)
+        lengthCross = 10
+        ctx.lineWidth = 1
+        ctx.lineTo(startX + lengthCross, startY)
+        ctx.strokeStyle = "red"
+        ctx.stroke()
+        ctx.beginPath()
+        ctx.moveTo(startX + lengthCross / 2, startY - lengthCross / 2)
+        lengthCross = 10
+        ctx.lineTo(startX + lengthCross / 2, startY + lengthCross / 2)
+        ctx.strokeStyle = "red"
+        ctx.stroke()
+      }
+
+      c = document.getElementById("canvasTop")
+      ctx = c.getContext("2d")
+      ctx.canvas.width = screenWidth
+      ctx.canvas.height = 200
+
+
+      getCartesian = (lat, long, r) => {
+        lat = Math.PI / 2 - lat
+        long = (long + Math.PI / 2 * 1.0) % (Math.PI * 2)
+        x1 = r * Math.sin(lat) * Math.cos(long)
+        y1 = r * Math.sin(lat) * Math.sin(long)
+        z1 = r * Math.cos(lat)
+        //alert "x: #{x1} y:#{y1} z: #{z1}"
+        scale = 0.0018
+        x2D = y1 * scale + canvasWidth / 13
+        y2D = x1 * scale + canvasWidth / 6
+        z2D = z1 * scale
+        //alert "x2: #{x2D} y2:#{y2D} z2: #{z2D}"
+        drawCircle(x2D, y2D)
+        drawSide(x2D, z2D)
+        drawCross()
+        drawSideCross()
+      }
+
+
+      showGal = () => {
+        ctx.clearRect(0, 0, canvasWidth, canvasWidth)
+        centerOfTopX = canvasWidth / 7
+        centerOfTopY = canvasHeight / 2
+        centerOfSideX = canvasWidth / 2.5
+        ctx.beginPath()
+        ctx.arc(centerOfTopX, centerOfTopY, canvasHeight / 3, 0, Math.PI * 2, true)
+        ctx.closePath()
+        ctx.fillStyle = colorGalaxy
+        ctx.fill()
+        ctx.beginPath()
+        ctx.arc(centerOfSideX, centerOfTopY, canvasHeight / 20, 0, Math.PI * 2, true)
+        ctx.closePath()
+        ctx.fillStyle = colorGalaxy
+        ctx.fill()
+        ctx.beginPath()
+        lengthDisc = 150 //canvasWidth/6
+        ctx.moveTo(centerOfSideX - lengthDisc / 2, centerOfTopY)
+        ctx.lineTo(centerOfSideX + lengthDisc / 2, centerOfTopY)
+        ctx.strokeStyle = colorGalaxy
+        ctx.lineWidth = 5
+        ctx.stroke()
+
+
+      getCartesian(cos[index].galLatitude, cos[index].galLongitude, cos[index].lightYears)
+
+}
+
+
       replaceChar = (stro, i, char) => (i === 0) ? t = char + stro.substr(1) : t = stro.substr(0, i) + char + stro.substr(i + 1)
       listener = (e) => {
         sensor = -e.accelerationIncludingGravity.x //sensor= 0 when vertical, -6.9 when clockwise 45 degrees, +6.9 when antoclockwise. +/- 10 when horizontal
@@ -353,23 +359,25 @@
         textName.innerHTML = (cos[index].name);
 
         document.getElementById("notes").innerHTML = (
-           unitsToSI(cos[index].lightYears) + "ly   <br> " + cos[index].notes );
-          // "<br>ra: " + cos[index].raHours + ":" + cos[index].raMinutes + " dec: " + cos[index].decDegrees + ":" + cos[index].decMinutes +
-          // "<br> azimuth: " + Math.round(az) + " altitude: " + Math.round(alt) +
-          // " HA: " + astromath.radiansToHoursAndMinutes(astromath.hourAngle(astromath.raRadians(cos[index].raHours, cos[index].raMinutes))) +
-          // "<br> altitude: " + Math.round(alt) + " telescope altitude: " + Math.round(altitude) + " alt dev: " + Math.round(altDev) +
-          // "<br> sensor: " + (sensor < 0 ? "" : "+") + Math.round(sensor * 100) / 100 + " inclination offset: " + Math.round(offsetInclination) +
-          // "<br> azimuth: " + Math.round(az) + " compass: " + Math.round(compass) + " az dev: " + Math.round(azDev) + " compassOffset: " + Math.round(offsetCompass) +
-          // "<br>julian date: " + Math.round(astromath.getJulianDate()) + " GST: " + astromath.radiansToHoursAndMinutes(astromath.getGST()) + " LST: " + astromath.radiansToHoursAndMinutes(astromath.getLST() / 24 * 2 * Math.PI) +
-          // "<br>Hour Angle: " + astromath.radiansToHoursAndMinutes(astromath.hourAngle(astromath.raRadians(cos[index].raHours, cos[index].raMinutes))) +
-          // "<br>Latitude: " + astromath.radiansToDegreesAndMinutes(astromath.latitude) + " Longitude: " + astromath.radiansToDegreesAndMinutes(astromath.longitude)
-    //    )
+          unitsToSI(cos[index].lightYears) + "ly   <br> " + cos[index].notes);
+        // "<br>ra: " + cos[index].raHours + ":" + cos[index].raMinutes + " dec: " + cos[index].decDegrees + ":" + cos[index].decMinutes +
+        // "<br> azimuth: " + Math.round(az) + " altitude: " + Math.round(alt) +
+        // " HA: " + astromath.radiansToHoursAndMinutes(astromath.hourAngle(astromath.raRadians(cos[index].raHours, cos[index].raMinutes))) +
+        // "<br> altitude: " + Math.round(alt) + " telescope altitude: " + Math.round(altitude) + " alt dev: " + Math.round(altDev) +
+        // "<br> sensor: " + (sensor < 0 ? "" : "+") + Math.round(sensor * 100) / 100 + " inclination offset: " + Math.round(offsetInclination) +
+        // "<br> azimuth: " + Math.round(az) + " compass: " + Math.round(compass) + " az dev: " + Math.round(azDev) + " compassOffset: " + Math.round(offsetCompass) +
+        // "<br>julian date: " + Math.round(astromath.getJulianDate()) + " GST: " + astromath.radiansToHoursAndMinutes(astromath.getGST()) + " LST: " + astromath.radiansToHoursAndMinutes(astromath.getLST() / 24 * 2 * Math.PI) +
+        // "<br>Hour Angle: " + astromath.radiansToHoursAndMinutes(astromath.hourAngle(astromath.raRadians(cos[index].raHours, cos[index].raMinutes))) +
+        // "<br>Latitude: " + astromath.radiansToDegreesAndMinutes(astromath.latitude) + " Longitude: " + astromath.radiansToDegreesAndMinutes(astromath.longitude)
+        //    )
 
 
 
         document.getElementById("pageCO").style.display = "none";
         document.getElementById("pageContent").style.display = "block";
+        showGal();
       }
+      
       showCO = (type) => {
         document.getElementById("listCO").innerHTML = "";
         var numberOfItemsAdded = 0;
@@ -443,7 +451,7 @@
       <div id="textName" class="name"></div>
       <!-- <div id="distance" class="notes">distance</div> -->
       <canvas id="canvasGoTo"></canvas>
-      <!-- <canvas id="canvasTop"></canvas> -->
+      <canvas id="canvasTop"></canvas>
       <div id="notes" class="notes"></div>
       <br>
     </div>
