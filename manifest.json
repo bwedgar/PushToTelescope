@@ -8,8 +8,8 @@
     "description": "Used to steer a telescope manually",
     "icons": [
         {
-            "src": "launch.png",
-            "sizes": "144x144",
+            "src": "launch3.png",
+            "sizes": "100X100",
             "type": "image/png"
         },
         {}
