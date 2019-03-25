@@ -1,32 +1,17 @@
 
 {
-    "name": "Simple site",
-    "short_name": "Simple",
-    "start_url": ".",
-    "display": "standalone",
-    "description": "This is a simple site",
+    "name": "Push To",
+    "short_name": "Push",
+    "start_url": "index.html",
+    "display": "fullscreen",
+      "orientation": "portrait"
+    "description": "Used to steer a telescope manually",
     "icons": [
         {
-            "src": "./assets/logo.png",
-            "sizes": "144x144",
+            "src": "launch3.png",
+            "sizes": "100X100",
             "type": "image/png"
         },
         {}
     ]
-}
-
-
-
-{
-  "name": "School Property Job Management",
-  "short_name": "Brians Jobs",
-  "icons": [{
-        "src": "launch.png",
-        "sizes": "64x64",
-        "type": "image/webp"
-      }],
- 
-  "start_url": "index.html",
-  "display": "fullscreen",
-  "orientation": "portrait"
 }
