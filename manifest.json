@@ -1,17 +1,15 @@
-
 {
     "name": "Push To",
     "short_name": "Push",
     "start_url": "index.html",
     "display": "fullscreen",
-      "orientation": "portrait"
+      "orientation": "portrait",
     "description": "Used to steer a telescope manually",
     "icons": [
         {
             "src": "launch3.png",
             "sizes": "100X100",
             "type": "image/png"
-        },
-        {}
+        }
     ]
 }
