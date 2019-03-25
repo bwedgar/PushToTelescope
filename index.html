@@ -6,9 +6,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, minimal-ui">
   <link rel="apple-touch-icon" href="launch3.png">
   <link rel="apple-touch-startup-image" href="launch3.png">
-   <link rel="apple-touch-startup-image" href="launch3.png">
-      <link rel="manifest" href="manifest.json">
-    <title>Document</title>
+  <link rel="apple-touch-startup-image" href="launch3.png">
+  <!-- <link rel="manifest" href="manifest.json"> -->
+  <title>Document</title>
   <meta name="apple-mobile-web-app-title" content="Push To Telescope">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="mobile-web-app-capable" content="yes">
@@ -111,16 +111,7 @@
 
   <script>
     function ready() {
-/*
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition((position) => {
-          var coords = position.coords;
-          console.log(`latitude: ${coords.latitude} longitude: ${coords.longitude}`)
-          astromath.longitude = astromath.radians(coords.longitude); //longitude of observer in degrees East
-          astromath.latitude = astromath.radians(coords.latitude); //latitude of observer in degrees
-        });
-      }
-*/
+
 
 
       let previousSensor = 0;
@@ -136,7 +127,7 @@
       let azDev = 0;
       let az = 0;
 
-          astromath.longitude = astromath.radians(174.76); //longitude of observer in degrees East
+      astromath.longitude = astromath.radians(174.76); //longitude of observer in degrees East
       astromath.latitude = astromath.radians(-36.8485); //latitude of observer in degrees
       celestialObjects = new CelestialObjects;
       let cos = celestialObjects.makeCelestialObjects();
@@ -345,13 +336,14 @@
       }
       window.addEventListener('devicemotion', listener)
       window.addEventListener('deviceorientation', listener2)
+
       showData = (index) => {
         // console.log("at showdata")
         alt = astromath.altitude(astromath.raRadians(cos[index].raHours, cos[index].raMinutes), astromath.decRadians(cos[index].decDegrees, cos[index].decMinutes))
         az = astromath.azimuth(astromath.raRadians(cos[index].raHours, cos[index].raMinutes), astromath.decRadians(cos[index].decDegrees, cos[index].decMinutes))
         textName.innerHTML = (cos[index].name);
         document.getElementById("notes").innerHTML = (
-          unitsToSI(cos[index].lightYears) + "ly   <br> " + cos[index].notes);//+"lat: "+astromath.latitude);
+          unitsToSI(cos[index].lightYears) + "ly   <br> " + cos[index].notes); //+"lat: "+astromath.latitude);
         // "<br>ra: " + cos[index].raHours + ":" + cos[index].raMinutes + " dec: " + cos[index].decDegrees + ":" + cos[index].decMinutes +
         // "<br> azimuth: " + Math.round(az) + " altitude: " + Math.round(alt) +
         // " HA: " + astromath.radiansToHoursAndMinutes(astromath.hourAngle(astromath.raRadians(cos[index].raHours, cos[index].raMinutes))) +
@@ -365,6 +357,7 @@
         document.getElementById("pageCO").style.display = "none";
         document.getElementById("pageContent").style.display = "block";
       }
+
       showCO = (type) => {
         document.getElementById("listCO").innerHTML = "";
         var numberOfItemsAdded = 0;
@@ -385,7 +378,9 @@
       }
       document.getElementById("pageCO").style.display = "block";
       document.getElementById("pageContent").style.display = "block";
-      showData(index);
+
+      //showData(index);
+
       document.getElementById("buttonBrightStars").addEventListener("click", () => showCO("ST"));
       document.getElementById("buttonPlanets").addEventListener("click", () => showCO("PL"));
       document.getElementById("buttonBrightNebulas").addEventListener("click", () => showCO("NB"));
@@ -408,31 +403,28 @@
       document.getElementById("buttonInfo").addEventListener("click", (e) => {
         window.location.href = "https://bwedgar.github.io/index.html";
       });
+    }//end of ready()
+
+    findCoords = () => {
+      console.log("at find coords")
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition((position) => {
+          coords = position.coords;
+          console.log(`AT GEOLOCATION latitude: ${coords.latitude} longitude: ${coords.longitude}`)
+          astromath.longitude = astromath.radians(coords.longitude); //longitude of observer in degrees East
+          astromath.latitude = astromath.radians(coords.latitude); //latitude of observer in degrees
+          console.log(`astromath: latitude: ${astromath.latitude} longitude: ${astromath.longitude}`)
+          ready();
+        });
+      }
     }
+
     if (document.readyState == 'loading') {
-      document.addEventListener('DOMContentLoaded', ready);
+      document.addEventListener('DOMContentLoaded', findCoords);//ready);
     } else {
       findCoords();
     }
-    findCoords=()=>{
-    // if (navigator.geolocation) {
-//   navigator.geolocation.getCurrentPosition((position) => {
-//     coords = position.coords;
-//     console.log(`AT GEOLOCATION latitude: ${coords.latitude} longitude: ${coords.longitude}`)
-//     astromath.longitude = astromath.radians(coords.longitude); //longitude of observer in degrees East
-//     astromath.latitude = astromath.radians(coords.latitude); //latitude of observer in degrees
-//     console.log(`astromath:  latitude: ${astromath.latitude} longitude: ${astromath.longitude}`)
-//     // var celestialObjects = new CelestialObjects;
-//     // var cos = celestialObjects.makeCelestialObjects();
-//     // let celestialObjects = new CelestialObjects;
-//     // var cos = []
-//     cos = celestialObjects.makeCelestialObjects();
-//     alert(cos[1].name)
-//     ready();
-//   });
-// }
-    }
-    
+
   </script>
 
 </head>
