@@ -104,6 +104,13 @@
       // console.log("dom load");
       // let textName = document.getElementById("textName");
       // console.log(textName);
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition((position) => {
+          var coords=position.coords;
+          console.log(`latitude: ${coords.latitude} longitude: ${coords.longitutde}`)
+}
+          
+      
       let previousSensor = 0;
       let sensor = 0;
       let compass = 0;
