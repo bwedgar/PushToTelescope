@@ -1,6 +1,6 @@
 //let data1="name,raHours,raMinutes,decDegrees,decMinutes,lightYears,absMagnitue,type,notes\
 
-
+var index=0;
 let data = ["47 Tucanae,0,24,-72,5,13000,,GC,30 thousand stars with a dense core which may contain a black hole. Second brightest globular cluster. Not part of the LMC. 12 myo.",
   "Andromeda Galaxy,0,43,41,16,2900000,3.4,GX,Nearest major galaxy to us. one trillion stars. 2X milky way.",
   "Blue Planetary Nebula,11,50,-57,10,4900,,RN,brightest nebula in the south",
@@ -258,11 +258,11 @@ class CelestialObjects {
       );
       celestialObjects.push(celestialObject);
     }
-    for (var i of [0,1,3,4,5,6,7]) { //planets[0], planets[1], planets[3], planets[4], planets[5], planets[6], planets[7]]) {
+    for (var i of [0, 1, 3, 4, 5, 6, 7]) { //planets[0], planets[1], planets[3], planets[4], planets[5], planets[6], planets[7]]) {
       //console.log("i: "+i+" name: "+ planets[i].name)
 
       var ra = radecr(helios(planets[i]), helios(planets[2]))[0];
-//console.log(ra);
+
       var raHours = Math.floor(ra);
       var raMinutes = Math.round((ra - raHours) * 60);
       var dec = radecr(helios(planets[i]), helios(planets[2]))[1];
@@ -270,16 +270,18 @@ class CelestialObjects {
       var decMinutes = Math.round((dec - decDegrees) * 60);
       var distance = radecr(helios(planets[i]), helios(planets[2]))[2] * 0.00001581; //from AU to light Years
       var n = planets[i].name;
-      var co = new CelestialObject(n, raHours, raMinutes, decDegrees, decMinutes, distance,"","PL",""   )
+      var co = new CelestialObject(n, raHours, raMinutes, decDegrees, decMinutes, distance, "", "PL", "")
 
-    celestialObjects.push(co);
+      celestialObjects.push(co);
 
+    }
+    celestialObjects = celestialObjects.sort((f, g) => (f.azimuth < g.azimuth) ? -1 : 1);
+
+    index = celestialObjects.findIndex(co =>
+      co.visible == true & co.type == "ST"
+    );
+    console.log("index at celestialobjects.js is: " + index)
+
+    return celestialObjects;
   }
-  celestialObjects = celestialObjects.sort((f, g) => (f.azimuth < g.azimuth) ? -1 : 1);
-
-
-
-
-  return celestialObjects;
-}
 }

@@ -121,7 +121,7 @@
       let compassRaw = 0;
       let offsetCompass = 0;
       let offsetInclination = 0;
-      let index = 1
+      //let index = 1
       let alt = 0; //altitude of object in degrees
       let altitude = 0; //altitude of telescope in degrees
       let altDev = 0; //difference between alt of object and altitude of telescope in degrees
@@ -380,7 +380,7 @@
       document.getElementById("pageCO").style.display = "block";
       document.getElementById("pageContent").style.display = "block";
 
-      //showData(index);
+      showData(index);
 
       document.getElementById("buttonBrightStars").addEventListener("click", () => showCO("ST"));
       document.getElementById("buttonPlanets").addEventListener("click", () => showCO("PL"));
@@ -404,17 +404,22 @@
       document.getElementById("buttonInfo").addEventListener("click", (e) => {
         window.location.href = "https://bwedgar.github.io/index.html";
       });
-    }//end of ready()
+    } //end of ready()
 
     findCoords = () => {
-       navigator.serviceWorker.register('/PushToTelescope/sw.js', {scope: '/PushToTelescope/'}).then((registration) => {
-            console.log("Service Worker registration successful: ", registration)
-        }, 
-      (err) => {
-            console.log("Registration failed", err)
+      navigator.serviceWorker.register('/PushToTelescope/sw.js', {
+        scope: '/PushToTelescope/'
+      }).then((registration) => {
+          console.log("Service Worker registration successful: ", registration)
+        },
+        (err) => {
+          console.log("Registration failed", err)
         })
-      
+
       console.log("at find coords")
+//       astromath.longitude = astromath.radians(174); //longitude of observer in degrees East
+//       astromath.latitude = astromath.radians(-35); //latitude of observer in degrees
+// ready();
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition((position) => {
           coords = position.coords;
@@ -428,11 +433,10 @@
     }
 
     if (document.readyState == 'loading') {
-      document.addEventListener('DOMContentLoaded', findCoords);//ready);
+      document.addEventListener('DOMContentLoaded', findCoords); //ready);
     } else {
       findCoords();
     }
-
   </script>
 
 </head>
