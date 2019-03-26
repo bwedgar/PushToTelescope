@@ -406,6 +406,13 @@
     }//end of ready()
 
     findCoords = () => {
+       navigator.serviceWorker.register('sw.js').then((registration) => {
+            console.log("Service Worker registration successful: ", registration)
+        }, 
+      (err) => {
+            console.log("Registration failed", err)
+        })
+      
       console.log("at find coords")
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition((position) => {
