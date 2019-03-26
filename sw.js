@@ -1,6 +1,6 @@
 console.log("at sw.js");
 if('serviceWorker' in navigator) {
-    console.log("before add listener);
+    console.log("before add listener");
     window.addEventListener('load', () => {
         navigator.serviceWorker.register('sw.js').then((registration) => {
             console.log("Service Worker registration successful: ", registration)
