@@ -1,3 +1,4 @@
+console.log("at sw.js");
 if('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
         navigator.serviceWorker.register('sw.js').then((registration) => {
@@ -7,6 +8,8 @@ if('serviceWorker' in navigator) {
         })
     })
 }
+    else { console.log("service worker not available") }
+
 
 let cache_name = 'mysite-v1'
 
