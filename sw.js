@@ -14,15 +14,12 @@ if ('serviceWorker' in navigator) {
 
 console.log("after service worker registration attempt");
 
-let cache_name = 'mysite-v1'
+let cache_name = 'mysite-v2'
 
 let urls_to_cache = [
- 'index.html',
- 'astromath.js',
- 'planets.js',
- 'celestialobjects.js',
- 'launch3.png'
-]
+'/PushToTelescope/',
+    '/PushToTelescope/index.html'
+    ]
 
 self.addEventListener('install', (e) => {
  e.waitUntil(caches.open(cache_name).then((cache) => {
