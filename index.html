@@ -373,6 +373,9 @@
           }
         }
         if (numberOfItemsAdded > 0) {
+          // items= Array.from(cos);
+          // indexItems=0;
+          // console.log(items[0].name)
           document.getElementById("pageCO").style.display = "block";
           document.getElementById("pageContent").style.display = "none";
         }
@@ -389,8 +392,10 @@
       document.getElementById("buttonGlobularClusters").addEventListener("click", () => showCO("GC"));
       document.getElementById("buttonGalaxies").addEventListener("click", () => showCO("GX"));
       document.getElementById("buttonPlanetaryNebulas").addEventListener("click", () => showCO("RN"));
+
       let listCO = document.getElementById("listCO")
       listCO.addEventListener("click", (e) => {
+        selectedCos = e.target
         let nameOfCos = e.target.innerHTML
         index = cos.findIndex(x => x.name == nameOfCos.trim());
         showData(index);
@@ -403,6 +408,28 @@
       });
       document.getElementById("buttonInfo").addEventListener("click", (e) => {
         window.location.href = "https://bwedgar.github.io/index.html";
+      });
+
+      document.getElementById("buttonPrevious").addEventListener("click", (e) => {
+        selectedCos=selectedCos.previousSibling
+        if (selectedCos===null) {
+          selectedCos=document.getElementById("listCO").lastChild
+        }
+        let nameOfCos = selectedCos.innerHTML
+        console.log(nameOfCos)
+        index = cos.findIndex(x => x.name == nameOfCos.trim());
+        showData(index);
+      });
+
+      document.getElementById("buttonNext").addEventListener("click", (e) => {
+        selectedCos=selectedCos.nextSibling
+        if (selectedCos===null) {
+          selectedCos=document.getElementById("listCO").firstChild
+        }
+        let nameOfCos = selectedCos.innerHTML
+        console.log(nameOfCos)
+        index = cos.findIndex(x => x.name == nameOfCos.trim());
+        showData(index);
       });
     } //end of ready()
 
@@ -417,19 +444,19 @@
         })
 
       console.log("at find coords")
-//       astromath.longitude = astromath.radians(174); //longitude of observer in degrees East
-//       astromath.latitude = astromath.radians(-35); //latitude of observer in degrees
-// ready();
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition((position) => {
-          coords = position.coords;
-          console.log(`AT GEOLOCATION latitude: ${coords.latitude} longitude: ${coords.longitude}`)
-          astromath.longitude = astromath.radians(coords.longitude); //longitude of observer in degrees East
-          astromath.latitude = astromath.radians(coords.latitude); //latitude of observer in degrees
-          console.log(`astromath: latitude: ${astromath.latitude} longitude: ${astromath.longitude}`)
-          ready();
-        });
-      }
+      astromath.longitude = astromath.radians(174); //longitude of observer in degrees East
+      astromath.latitude = astromath.radians(-35); //latitude of observer in degrees
+      ready();
+      // if (navigator.geolocation) {
+      //   navigator.geolocation.getCurrentPosition((position) => {
+      //     coords = position.coords;
+      //     console.log(`AT GEOLOCATION latitude: ${coords.latitude} longitude: ${coords.longitude}`)
+      //     astromath.longitude = astromath.radians(coords.longitude); //longitude of observer in degrees East
+      //     astromath.latitude = astromath.radians(coords.latitude); //latitude of observer in degrees
+      //     console.log(`astromath: latitude: ${astromath.latitude} longitude: ${astromath.longitude}`)
+      //     ready();
+      //   });
+      // }
     }
 
     if (document.readyState == 'loading') {
@@ -466,6 +493,10 @@
       <button id="buttonBrightNebulas" class="btngroup7">N</button>
       <button id="buttonPlanetaryNebulas" class="btngroup7">R</button>
       <button id="buttonGalaxies" class="btngroup7">X</button>
+    </div>
+    <div>
+      <button id="buttonPrevious" class="btngroup2">Previous</button>
+      <button id="buttonNext" class="btngroup2">Next</button>
     </div>
   </div>
 
