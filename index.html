@@ -226,11 +226,13 @@
         x1 = r * Math.sin(lat) * Math.cos(long)
         y1 = r * Math.sin(lat) * Math.sin(long)
         z1 = r * Math.cos(lat)
-        scale = (type=="ST")? 0.3:((type=="OC")?0.01:0.001)
+        //["GX", "OC", "GC", "ST", "NB", "DS", "RN"]
+        objectScales=[0.00001,0.01,0.1,0.3,0.3,0.3,0.3]
+        scale = objectScales[objectTypes.findIndex(t => t==type)]
         x2D = y1 * scale + 200 //+ canvasWidth / 2
         y2D = x1 * scale + 100 //+ canvasWidth / 2
         z2D = z1 * scale
-        console.log(x2D + "  " + y2D + "  " + z2D)
+        console.log(scale+" "+x2D + "  " + y2D + "  " + z2D)
         drawCircle(x2D, y2D)
         // drawSide(x2D, z2D)
         drawCross()
