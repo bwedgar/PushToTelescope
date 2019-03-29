@@ -127,6 +127,8 @@
       let altDev = 0; //difference between alt of object and altitude of telescope in degrees
       let azDev = 0;
       let az = 0;
+      let galShow = 0;
+      let selectedCos = 0
 
 
 
@@ -218,8 +220,8 @@
 
 
 
-      getCartesian = (lat, long, r, type, rotation,scale) => {
-        console.log(`galacticLatitude: ${lat*360/Math.PI/2} galacticLongitude: ${long*360/Math.PI/2}  distance: ${r}  scale: ${scale}`)
+      getCartesian = (lat, long, r, type, rotation, scale) => {
+        //console.log(`galacticLatitude: ${lat*360/Math.PI/2} galacticLongitude: ${long*360/Math.PI/2}  distance: ${r}  scale: ${scale}`)
         // r=r/10
         lat = Math.PI / 2 - lat
         long = ((long + Math.PI / 2 * 1.0) + rotation) % (Math.PI * 2)
@@ -370,18 +372,6 @@
           }
         }
         if (numberOfItemsAdded > 0) {
-          rotation = 0
-          index = cos.findIndex(x => x.name == selectedCos.innerHTML);
-          scale=50/cos[index].lightYears
-          setInterval(() => {
-            ctx.clearRect(0, 0, canvasWidth, canvasHeight) //clear canvas
-            for (co of cos) {
-              if (co.type == type) {
-                getCartesian(co.galLatitude, co.galLongitude, co.lightYears, co.type, rotation,scale)
-              }
-              rotation = (rotation + 0.0005)
-            }
-          }, 500) //draw galaxy every 2 seconds
 
           document.getElementById("pageCO").style.display = "block";
           document.getElementById("pageContent").style.display = "none";
@@ -389,6 +379,24 @@
       }
       document.getElementById("pageCO").style.display = "block";
       document.getElementById("pageContent").style.display = "block";
+
+      showGalaxy = (type) => {
+        clearInterval(galShow)
+        rotation = 0
+        index = cos.findIndex(x => x.name == selectedCos.innerHTML);
+        scale = 50 / cos[index].lightYears
+
+        galShow = setInterval(() => {
+          ctx.clearRect(0, 0, canvasWidth, canvasHeight) //clear canvas
+          for (co of cos) {
+            if (co.type == type) {
+              getCartesian(co.galLatitude, co.galLongitude, co.lightYears, co.type, rotation, scale)
+            }
+            rotation = (rotation + 0.0005)
+          }
+        }, 500) //draw galaxy every 2 seconds
+      }
+
 
       showCO("ST")
       showData(index);
@@ -406,6 +414,8 @@
         selectedCos = e.target
         let nameOfCos = e.target.innerHTML
         index = cos.findIndex(x => x.name == nameOfCos.trim());
+
+        showGalaxy(cos[index].type)
         showData(index);
       });
       document.getElementById("buttonCalibrate").addEventListener("click", (e) => {
@@ -426,6 +436,7 @@
         let nameOfCos = selectedCos.innerHTML
         console.log(nameOfCos)
         index = cos.findIndex(x => x.name == nameOfCos.trim());
+        showGalaxy(cos[index].type)
         showData(index);
       });
 
@@ -437,6 +448,7 @@
         let nameOfCos = selectedCos.innerHTML
         console.log(nameOfCos)
         index = cos.findIndex(x => x.name == nameOfCos.trim());
+        showGalaxy(cos[index].type)
         showData(index);
       });
     } //end of ready()
