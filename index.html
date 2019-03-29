@@ -127,6 +127,12 @@
       let altDev = 0; //difference between alt of object and altitude of telescope in degrees
       let azDev = 0;
       let az = 0;
+      let galShow = 0;
+      let selectedCos = 0
+
+
+
+
 
       astromath.longitude = astromath.radians(174.76); //longitude of observer in degrees East
       astromath.latitude = astromath.radians(-36.8485); //latitude of observer in degrees
@@ -138,10 +144,11 @@
       offsetInclination = localStorage.getItem("offsetInclination")
       let screenWidth = screen.width;
       let canvasWidth = screenWidth;
-      let canvasHeight = 200
+      let canvasHeight = 250
       document.getElementById('pageCO').style.height = screen.height * 0.5 + "px";
       console.log(screen.height)
       let colorGalaxy = "rgb(60,60,60)"
+
       unitsToSI = (num1) => {
         t = (num1 * 1).toExponential(2).toString()
         ex = /(\d+)$/g.exec(t)[0]
@@ -149,6 +156,13 @@
         n = /^(\S{3})/g.exec(t)[1] * 10 ** (ex % 3)
         return Math.floor(n) + " " + prefix[Math.floor(ex / 3)]
       }
+
+      c = document.getElementById("canvasTop")
+      ctx = c.getContext("2d")
+      ctx.canvas.width = screenWidth
+      ctx.canvas.height = canvasHeight
+
+      //draw a red dot for the object
       drawCircle = (x, y) => {
         ctx.beginPath()
         ctx.arc(x, y, 2, 0, Math.PI * 2, true)
@@ -156,103 +170,81 @@
         ctx.fillStyle = "red"
         ctx.fill()
       }
-      //
-      //   drawSide=(x,z)->
-      //     ctx.beginPath()
-      //     offsetX=canvasWidth/4.1
-      //     offsetY=canvasHeight/2
-      //     ctx.arc(offsetX+x, offsetY-z/2, 2, 0, Math.PI*2, true)
-      //     ctx.closePath()
-      //     ctx.fillStyle="red"
-      //     ctx.fill()
-      //
-      //   drawCross=()->
-      //     ctx.beginPath()
-      //     startX=canvasWidth/14
-      //     startY=canvasHeight/2
-      //     ctx.moveTo(startX,startY)
-      //     lengthCross=10
-      //     ctx.lineWidth=1
-      //     ctx.lineTo(startX+lengthCross,startY)
-      //     ctx.strokeStyle="red"
-      //     ctx.stroke()
-      //     ctx.beginPath()
-      //     lengthCross=10
-      //     ctx.moveTo(startX+lengthCross/2,startY-lengthCross/2)
-      //     ctx.lineTo(startX+lengthCross/2,startY+lengthCross/2)
-      //     ctx.strokeStyle="red"
-      //     ctx.stroke()
-      //
-      //
-      //   drawSideCross=()->
-      //     ctx.beginPath()
-      //     startX=canvasWidth/14+canvasWidth/4.1
-      //     startY=canvasHeight/2
-      //     ctx.moveTo(startX,startY)
-      //     lengthCross=10
-      //     ctx.lineWidth=1
-      //     ctx.lineTo(startX+lengthCross,startY)
-      //     ctx.strokeStyle="red"
-      //     ctx.stroke()
-      //     ctx.beginPath()
-      //     ctx.moveTo(startX+lengthCross/2,startY-lengthCross/2)
-      //     lengthCross=10
-      //     ctx.lineTo(startX+lengthCross/2,startY+lengthCross/2)
-      //     ctx.strokeStyle="red"
-      //     ctx.stroke()
-      //
-      //
-      //   c = document.getElementById("canvasTop")
-      //   ctx = c.getContext("2d")
-      //   ctx.canvas.width=screenWidth
-      //   ctx.canvas.height=200
-      //
-      //
-      //   getCartesian=(lat,long,r)->
-      //     lat=Math.PI/2-lat
-      //     long=(long+Math.PI/2*1.0)%(Math.PI*2)
-      //     x1=r * Math.sin(lat) * Math.cos(long)
-      //     y1 = r * Math.sin(lat) * Math.sin(long)
-      //     z1 = r * Math.cos(lat)
-      //     #alert "x: #{x1} y:#{y1} z: #{z1}"
-      //     scale=0.0018
-      //     x2D= y1*scale+canvasWidth/13
-      //     y2D= x1*scale+ canvasWidth /6
-      //     z2D=z1*scale
-      //     #alert "x2: #{x2D} y2:#{y2D} z2: #{z2D}"
-      //     drawCircle(x2D,y2D)
-      //     drawSide(x2D,z2D)
-      //     drawCross()
-      //     drawSideCross()
-      //
-      //
-      //   showGal=()->
-      //     ctx.clearRect(0,0,canvasWidth,canvasWidth)
-      //     centerOfTopX=canvasWidth/7
-      //     centerOfTopY=canvasHeight/2
-      //     centerOfSideX=canvasWidth/2.5
-      //     ctx.beginPath()
-      //     ctx.arc(centerOfTopX, centerOfTopY, canvasHeight/3, 0, Math.PI*2, true)
-      //     ctx.closePath()
-      //     ctx.fillStyle=colorGalaxy
-      //     ctx.fill()
-      //     ctx.beginPath()
-      //     ctx.arc(centerOfSideX, centerOfTopY, canvasHeight/20, 0, Math.PI*2, true)
-      //     ctx.closePath()
-      //     ctx.fillStyle=colorGalaxy
-      //     ctx.fill()
-      //     ctx.beginPath()
-      //     lengthDisc=150#canvasWidth/6
-      //     ctx.moveTo(centerOfSideX-lengthDisc/2,centerOfTopY)
-      //     ctx.lineTo(centerOfSideX+lengthDisc/2,centerOfTopY)
-      //     ctx.strokeStyle=colorGalaxy
-      //     ctx.lineWidth=5
-      //     ctx.stroke()
-      //
-      //     getCartesian(cos[index].galLatitude, cos[index].galLongitude, cos[index].lightYears)
-      //
-      //
+
+      // drawSide = (x, z) => {
+      //   ctx.beginPath()
+      //   offsetX = canvasWidth / 4.1
+      //   offsetY = canvasHeight / 2
+      //   ctx.arc(offsetX + x, offsetY - z / 2, 2, 0, Math.PI * 2, true)
+      //   ctx.closePath()
+      //   ctx.fillStyle = "red"
+      //   ctx.fill()
+      // }
+      // draw a red cross for the sun's position
+      drawCross = () => {
+        ctx.beginPath()
+        startX = canvasWidth / 2
+        startY = canvasHeight / 2
+        ctx.moveTo(startX, startY)
+        lengthCross = 10
+        ctx.lineWidth = 1
+        ctx.lineTo(startX + lengthCross, startY)
+        ctx.strokeStyle = "red"
+        ctx.stroke()
+        ctx.beginPath()
+        lengthCross = 10
+        ctx.moveTo(startX + lengthCross / 2, startY - lengthCross / 2)
+        ctx.lineTo(startX + lengthCross / 2, startY + lengthCross / 2)
+        ctx.strokeStyle = "red"
+        ctx.stroke()
+      }
+
+      // draw a red cross of the sun's position on the side view
+      // drawSideCross = () => {
+      //   ctx.beginPath()
+      //   startX = canvasWidth / 14 + canvasWidth / 4.1
+      //   startY = canvasHeight / 2
+      //   ctx.moveTo(startX, startY)
+      //   lengthCross = 10
+      //   ctx.lineWidth = 1
+      //   ctx.lineTo(startX + lengthCross, startY)
+      //   ctx.strokeStyle = "red"
+      //   ctx.stroke()
+      //   ctx.beginPath()
+      //   ctx.moveTo(startX + lengthCross / 2, startY - lengthCross / 2)
+      //   lengthCross = 10
+      //   ctx.lineTo(startX + lengthCross / 2, startY + lengthCross / 2)
+      //   ctx.strokeStyle = "red"
+      //   ctx.stroke()
+      // }
+
+
+
+      getCartesian = (lat, long, r, type, rotation, scale) => {
+        //console.log(`galacticLatitude: ${lat*360/Math.PI/2} galacticLongitude: ${long*360/Math.PI/2}  distance: ${r}  scale: ${scale}`)
+        // r=r/10
+        lat = Math.PI / 2 - lat
+        long = ((long + Math.PI / 2 * 1.0) + rotation) % (Math.PI * 2)
+        x1 = r * Math.sin(lat) * Math.cos(long)
+        y1 = r * Math.sin(lat) * Math.sin(long)
+        z1 = r * Math.cos(lat)
+        //["GX", "OC", "GC", "ST", "NB", "DS", "RN"]
+        // objectScales = [0.00001, 0.001, 0.01, 0.1, 0.3, 0.3, 0.3]
+        // scale = objectScales[objectTypes.findIndex(t => t == type)]
+
+        x2D = y1 * scale + 200 //+ canvasWidth / 2
+        y2D = x1 * scale + 100 //+ canvasWidth / 2
+        z2D = z1 * scale + 100
+        //console.log(scale + " " + x2D + "  " + y2D + "  " + z2D)
+        drawCircle(x2D, z2D)
+        // drawSide(x2D, z2D)
+        drawCross()
+        // drawSideCross()
+      }
+
+
       replaceChar = (stro, i, char) => (i === 0) ? t = char + stro.substr(1) : t = stro.substr(0, i) + char + stro.substr(i + 1)
+
       listener = (e) => {
         sensor = -e.accelerationIncludingGravity.x //sensor= 0 when vertical, -6.9 when clockwise 45 degrees, +6.9 when antoclockwise. +/- 10 when horizontal
         sensor = Math.round(sensor * 100) / 100;
@@ -277,6 +269,7 @@
           // )
         }
       }
+
       listener2 = (e2) => {
         compassRaw = Math.round((e2.webkitCompassHeading - 100) % 360)
         compass = Math.round((compassRaw - offsetCompass) % 360)
@@ -337,9 +330,11 @@
       }
       window.addEventListener('devicemotion', listener)
       window.addEventListener('deviceorientation', listener2)
+      // for testing on laptop
+      //listener2(0)
+
 
       showData = (index) => {
-        // console.log("at showdata")
         alt = astromath.altitude(astromath.raRadians(cos[index].raHours, cos[index].raMinutes), astromath.decRadians(cos[index].decDegrees, cos[index].decMinutes))
         az = astromath.azimuth(astromath.raRadians(cos[index].raHours, cos[index].raMinutes), astromath.decRadians(cos[index].decDegrees, cos[index].decMinutes))
         textName.innerHTML = (cos[index].name);
@@ -355,6 +350,9 @@
         // "<br>Hour Angle: " + astromath.radiansToHoursAndMinutes(astromath.hourAngle(astromath.raRadians(cos[index].raHours, cos[index].raMinutes))) +
         // "<br>Latitude: " + astromath.radiansToDegreesAndMinutes(astromath.latitude) + " Longitude: " + astromath.radiansToDegreesAndMinutes(astromath.longitude)
         //    )
+        //draw position on galaxy view
+        //getCartesian(cos[index].galLatitude, cos[index].galLongitude, cos[index].lightYears,cos[index].type)
+
         document.getElementById("pageCO").style.display = "none";
         document.getElementById("pageContent").style.display = "block";
       }
@@ -370,12 +368,11 @@
             node.appendChild(textnode);
             btn = document.getElementById("listCO").appendChild(node);
             btn.classList.add("button");
+            selectedCos = document.getElementById("listCO").firstChild
           }
         }
         if (numberOfItemsAdded > 0) {
-          // items= Array.from(cos);
-          // indexItems=0;
-          // console.log(items[0].name)
+
           document.getElementById("pageCO").style.display = "block";
           document.getElementById("pageContent").style.display = "none";
         }
@@ -383,6 +380,25 @@
       document.getElementById("pageCO").style.display = "block";
       document.getElementById("pageContent").style.display = "block";
 
+      showGalaxy = (type) => {
+        clearInterval(galShow)
+        rotation = 0
+        index = cos.findIndex(x => x.name == selectedCos.innerHTML);
+        scale = 50 / cos[index].lightYears
+
+        galShow = setInterval(() => {
+          ctx.clearRect(0, 0, canvasWidth, canvasHeight) //clear canvas
+          for (co of cos) {
+            if (co.type == type) {
+              getCartesian(co.galLatitude, co.galLongitude, co.lightYears, co.type, rotation, scale)
+            }
+            rotation = (rotation + 0.0005)
+          }
+        }, 500) //draw galaxy every 2 seconds
+      }
+
+
+      showCO("ST")
       showData(index);
 
       document.getElementById("buttonBrightStars").addEventListener("click", () => showCO("ST"));
@@ -398,6 +414,8 @@
         selectedCos = e.target
         let nameOfCos = e.target.innerHTML
         index = cos.findIndex(x => x.name == nameOfCos.trim());
+
+        showGalaxy(cos[index].type)
         showData(index);
       });
       document.getElementById("buttonCalibrate").addEventListener("click", (e) => {
@@ -411,24 +429,26 @@
       });
 
       document.getElementById("buttonPrevious").addEventListener("click", (e) => {
-        selectedCos=selectedCos.previousSibling
-        if (selectedCos===null) {
-          selectedCos=document.getElementById("listCO").lastChild
+        selectedCos = selectedCos.previousSibling
+        if (selectedCos === null) {
+          selectedCos = document.getElementById("listCO").lastChild
         }
         let nameOfCos = selectedCos.innerHTML
         console.log(nameOfCos)
         index = cos.findIndex(x => x.name == nameOfCos.trim());
+        showGalaxy(cos[index].type)
         showData(index);
       });
 
       document.getElementById("buttonNext").addEventListener("click", (e) => {
-        selectedCos=selectedCos.nextSibling
-        if (selectedCos===null) {
-          selectedCos=document.getElementById("listCO").firstChild
+        selectedCos = selectedCos.nextSibling
+        if (selectedCos === null) {
+          selectedCos = document.getElementById("listCO").firstChild
         }
         let nameOfCos = selectedCos.innerHTML
         console.log(nameOfCos)
         index = cos.findIndex(x => x.name == nameOfCos.trim());
+        showGalaxy(cos[index].type)
         showData(index);
       });
     } //end of ready()
@@ -481,7 +501,8 @@
       <div id="textName" class="name"></div>
       <!-- <div id="distance" class="notes">distance</div> -->
       <canvas id="canvasGoTo"></canvas>
-      <!-- <canvas id="canvasTop"></canvas> -->
+
+      <canvas id="canvasTop"></canvas>
       <div id="notes" class="notes"></div>
       <br>
     </div>
