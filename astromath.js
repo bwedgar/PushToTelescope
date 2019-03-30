@@ -4,6 +4,28 @@ astromath = {
 
   latitude: 0,
 
+  unitsToSI: (num1) => {
+    let t = (num1 * 1).toExponential(2).toString()
+    let ex = /(\d+)$/g.exec(t)[0]
+    let prefix = ["", "k", "m", "b"]
+    let n = /^(\S{3})/g.exec(t)[1] * 10 ** (ex % 3)
+    return Math.floor(n) + " " + prefix[Math.floor(ex / 3)]
+  },
+
+  polarToCartesian: (lat, long, r) => {
+    lat = Math.PI / 2 - lat
+    let rotation = 0 // tilting of z axis
+    long = ((long + Math.PI / 2 * 1.0) + rotation) % (Math.PI * 2)
+    let x = r * Math.sin(lat) * Math.cos(long)
+    let y = r * Math.sin(lat) * Math.sin(long)
+    let z = r * Math.cos(lat)
+    return {
+      x,
+      y,
+      z
+    }
+  },
+
   radians: function(degrees) {
     return degrees * 2 * Math.PI / 360;
   },
