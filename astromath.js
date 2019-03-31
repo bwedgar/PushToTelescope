@@ -14,7 +14,7 @@ astromath = {
 
     polarToCartesian: (lat, long, r) => {
       lat = Math.PI / 2 - lat
-      long = (long + Math.PI / 2) % (Math.PI * 2)
+      long = (-long + Math.PI/2 ) % (Math.PI * 2) //+ Math.PI / 2
       let x = r * Math.sin(lat) * Math.cos(long)
           let y = r * Math.sin(lat) * Math.sin(long)
           let z = r * Math.cos(lat)

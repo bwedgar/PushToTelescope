@@ -145,7 +145,7 @@
       // set up canvases
       canvasFinder = document.getElementById("canvasFinder")
       canvasFinder.width = window.innerWidth;
-      canvasFinder.height = window.innerHeight * 10 / 100;
+      canvasFinder.height = window.innerHeight * 15 / 100;
       ctxFinder = canvasFinder.getContext("2d")
       canvasAtlas = document.getElementById("canvasAtlas")
       ctxAtlas = canvasAtlas.getContext("2d")
@@ -253,32 +253,44 @@
       document.getElementById("pageCO").style.display = "block";
       document.getElementById("pageContent").style.display = "block";
 
-      //draw a  dot for the celestial object, white for selected object
       drawCelestialObject = (co, scale, selected) => {
         coords = astromath.polarToCartesian(co.galLatitude, co.galLongitude, co.lightYears)
-        //  scale = canvasAtlas.width / scales[indexScale] / 5 //0.3
         ctxAtlas.beginPath()
         ctxAtlas.closePath()
         if (selected == true) {
           size = 2;
           ctxAtlas.fillStyle = "white"
-          console.log(
-            `gal lat: ${Math.round(co.galLatitude*360/Math.PI/2)} gal long: ${Math.round(co.galLongitude*360/Math.PI/2)} distance: ${co.lightYears} scale: ${scale} x: ${coords.x * scale + canvasAtlas.width / 2} x: ${coords.y * scale + canvasAtlas.height / 2}`
-          )
-          ctxAtlas.arc(coords.x * scale + canvasAtlas.width / 2, coords.y * scale + canvasAtlas.height / 2, size, 0, Math.PI * 2, true)
-          ctxAtlas.fill()
         } else {
           size = 2;
           ctxAtlas.fillStyle = "red"
         }
-        // ctxAtlas.arc(coords.x * scale + canvasAtlas.width / 2, coords.z * scale + canvasAtlas.height / 2, size, 0, Math.PI * 2, true)
-        // ctxAtlas.fill()
+
+        ctxAtlas.arc(coords.x * scale + canvasAtlas.width / 2, (coords.z * scale) / 5 + canvasAtlas.height / 2 + coords.y/2, size, 0, Math.PI * 2, true)
+ctxAtlas.beginPath()
+ctxAtlas.strokeStyle = "blue"
+ctxAtlas.lineWidth = 1
+ctxAtlas.ellipse(canvasAtlas.width/2,canvasAtlas.height/2,canvasAtlas.width/2,canvasAtlas.height/12,0,0,Math.PI*2)
+ctxAtlas.stroke()
+ctxAtlas.beginPath()
+ctxAtlas.strokeStyle = "blue"
+ctxAtlas.lineWidth = 1
+ctxAtlas.ellipse(canvasAtlas.width/2,canvasAtlas.height/2,canvasAtlas.width/3,canvasAtlas.height/17,0,0,Math.PI*2)
+ctxAtlas.stroke()
+
+        ctxAtlas.beginPath()
+        ctxAtlas.moveTo(coords.x * scale + canvasAtlas.width / 2, (coords.z * scale) / 5 + canvasAtlas.height / 2)
+        ctxAtlas.lineTo(coords.x * scale + canvasAtlas.width / 2, (coords.z * scale) / 5 + canvasAtlas.height / 2 + coords.y/2)
+        ctxAtlas.strokeStyle = "red"
+        ctxAtlas.lineWidth = 1
+        ctxAtlas.stroke()
+        ctxAtlas.arc(coords.x * scale + canvasAtlas.width / 2, (coords.z * scale) / 5 + canvasAtlas.height / 2 + coords.y/2, size, 0, Math.PI * 2, true)
+        ctxAtlas.fill()
+
       }
 
-      // draw an orange dot for the Sun
       drawSun = () => {
         ctxAtlas.beginPath()
-        ctxAtlas.arc(canvasAtlas.width / 2, canvasAtlas.height / 2, 1, 0, Math.PI * 2, true)
+        ctxAtlas.arc(canvasAtlas.width / 2, canvasAtlas.height / 2, 2, 0, Math.PI * 2, true)
         ctxAtlas.closePath()
         ctxAtlas.fillStyle = "yellow"
         ctxAtlas.fill()
@@ -292,7 +304,6 @@
         // find the scale for the altas view
         let scales = [0, 0.0005, 12.5, 250, 5000, 50000, 500000, 50000000, 100000000]
         let indexScale = 0
-
         for (let [i, s] of scales.entries()) {
           if (cos[index].lightYears < s) {
             indexScale = i
@@ -300,7 +311,7 @@
           }
         }
         console.log(`distance: ${cos[index].lightYears} indexScale: ${indexScale}`)
-        scale = canvasAtlas.width / scales[indexScale]
+        scale = canvasAtlas.width / scales[indexScale] / 2
         console.log(`indexScale: ${indexScale}  scales: ${scales[indexScale]} to ${scales[indexScale+1]} scale: ${scale}`)
         items = 0
         for (let [i, co] of cos.entries()) {
