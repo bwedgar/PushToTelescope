@@ -265,25 +265,25 @@
           ctxAtlas.fillStyle = "red"
         }
 
-        ctxAtlas.arc(coords.x * scale + canvasAtlas.width / 2, (coords.z * scale) / 5 + canvasAtlas.height / 2 + coords.y/2, size, 0, Math.PI * 2, true)
-ctxAtlas.beginPath()
-ctxAtlas.strokeStyle = "blue"
-ctxAtlas.lineWidth = 1
-ctxAtlas.ellipse(canvasAtlas.width/2,canvasAtlas.height/2,canvasAtlas.width/2,canvasAtlas.height/12,0,0,Math.PI*2)
-ctxAtlas.stroke()
-ctxAtlas.beginPath()
-ctxAtlas.strokeStyle = "blue"
-ctxAtlas.lineWidth = 1
-ctxAtlas.ellipse(canvasAtlas.width/2,canvasAtlas.height/2,canvasAtlas.width/3,canvasAtlas.height/17,0,0,Math.PI*2)
-ctxAtlas.stroke()
+        ctxAtlas.arc(coords.x * scale + canvasAtlas.width / 2, (coords.z * scale) / 5 + canvasAtlas.height / 2 + coords.y / 2, size, 0, Math.PI * 2, true)
+        ctxAtlas.beginPath()
+        ctxAtlas.strokeStyle = "blue"
+        ctxAtlas.lineWidth = 1
+        ctxAtlas.ellipse(canvasAtlas.width / 2, canvasAtlas.height / 2, canvasAtlas.width / 2, canvasAtlas.height / 12, 0, 0, Math.PI * 2)
+        ctxAtlas.stroke()
+        ctxAtlas.beginPath()
+        ctxAtlas.strokeStyle = "blue"
+        ctxAtlas.lineWidth = 1
+        ctxAtlas.ellipse(canvasAtlas.width / 2, canvasAtlas.height / 2, canvasAtlas.width / 3, canvasAtlas.height / 17, 0, 0, Math.PI * 2)
+        ctxAtlas.stroke()
 
         ctxAtlas.beginPath()
-        ctxAtlas.moveTo(coords.x * scale + canvasAtlas.width / 2, (coords.z * scale) / 5 + canvasAtlas.height / 2)
-        ctxAtlas.lineTo(coords.x * scale + canvasAtlas.width / 2, (coords.z * scale) / 5 + canvasAtlas.height / 2 + coords.y/2)
+        ctxAtlas.moveTo(Math.round(coords.x * scale + canvasAtlas.width / 2), Math.round((coords.z * scale) / 5 + canvasAtlas.height / 2))
+        ctxAtlas.lineTo(Math.round(coords.x * scale + canvasAtlas.width / 2), Math.round((coords.z * scale) / 5 + canvasAtlas.height / 2 + coords.y / 2))
         ctxAtlas.strokeStyle = "red"
-        ctxAtlas.lineWidth = 1
+        ctxAtlas.lineWidth = 2
         ctxAtlas.stroke()
-        ctxAtlas.arc(coords.x * scale + canvasAtlas.width / 2, (coords.z * scale) / 5 + canvasAtlas.height / 2 + coords.y/2, size, 0, Math.PI * 2, true)
+        ctxAtlas.arc(Math.round(coords.x * scale + canvasAtlas.width / 2), Math.round((coords.z * scale) / 5 + canvasAtlas.height / 2 + coords.y / 2), size, 0, Math.PI * 2, true)
         ctxAtlas.fill()
 
       }
