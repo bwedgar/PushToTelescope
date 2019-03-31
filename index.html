@@ -129,8 +129,6 @@
       let az = 0;
       let galShow = 0;
       let selectedCos = 0
-      let scales = [0, 12.5, 250, 5000, 50000, 5000000, 5000000, 100000000]
-      let indexScale = 0
 
       astromath.longitude = astromath.radians(174.76); //longitude of observer in degrees East
       astromath.latitude = astromath.radians(-36.8485); //latitude of observer in degrees
@@ -228,16 +226,7 @@
         alt = astromath.altitude(astromath.raRadians(cos[index].raHours, cos[index].raMinutes), astromath.decRadians(cos[index].decDegrees, cos[index].decMinutes))
         az = astromath.azimuth(astromath.raRadians(cos[index].raHours, cos[index].raMinutes), astromath.decRadians(cos[index].decDegrees, cos[index].decMinutes))
         textName.innerHTML = cos[index].name + "<br>" + astromath.unitsToSI(cos[index].lightYears) + "ly   <br> " + cos[index].notes;
-
-        // find the scale for the altas view
-        for (const [i, s] of scales.entries()) {
-          if (cos[index].lightYears > s) {
-            indexScale = i + 1
-          }
-        }
-        console.log(`at setting scale: indexScale: ${indexScale}`)
-        console.log(`indexScale at showData(): ${indexScale}`)
-        showGalaxy(indexScale)
+        showAtlas()
         document.getElementById("pageCO").style.display = "none";
         document.getElementById("pageContent").style.display = "block";
       }
@@ -265,52 +254,67 @@
       document.getElementById("pageContent").style.display = "block";
 
       //draw a  dot for the celestial object, white for selected object
-      drawCelestialObject = (co, selected) => {
+      drawCelestialObject = (co, scale, selected) => {
         coords = astromath.polarToCartesian(co.galLatitude, co.galLongitude, co.lightYears)
-        scale = canvasAtlas.width / scales[indexScale] / 6
-
+        //  scale = canvasAtlas.width / scales[indexScale] / 5 //0.3
         ctxAtlas.beginPath()
         ctxAtlas.closePath()
         if (selected == true) {
           size = 2;
           ctxAtlas.fillStyle = "white"
+          console.log(
+            `gal lat: ${Math.round(co.galLatitude*360/Math.PI/2)} gal long: ${Math.round(co.galLongitude*360/Math.PI/2)} distance: ${co.lightYears} scale: ${scale} x: ${coords.x * scale + canvasAtlas.width / 2} x: ${coords.y * scale + canvasAtlas.height / 2}`
+          )
+          ctxAtlas.arc(coords.x * scale + canvasAtlas.width / 2, coords.y * scale + canvasAtlas.height / 2, size, 0, Math.PI * 2, true)
+          ctxAtlas.fill()
         } else {
           size = 2;
           ctxAtlas.fillStyle = "red"
         }
-        ctxAtlas.arc(coords.x * scale + canvasAtlas.width / 2, coords.y * scale + canvasAtlas.height / 2, size, 0, Math.PI * 2, true)
-        ctxAtlas.fill()
+        // ctxAtlas.arc(coords.x * scale + canvasAtlas.width / 2, coords.z * scale + canvasAtlas.height / 2, size, 0, Math.PI * 2, true)
+        // ctxAtlas.fill()
       }
 
       // draw an orange dot for the Sun
       drawSun = () => {
-        console.log(ctxAtlas.canvas.height + "draw" + ctxAtlas.canvas.width);
         ctxAtlas.beginPath()
-        ctxAtlas.arc(canvasAtlas.width / 2, canvasAtlas.height / 2, 4, 0, Math.PI * 2, true)
+        ctxAtlas.arc(canvasAtlas.width / 2, canvasAtlas.height / 2, 1, 0, Math.PI * 2, true)
         ctxAtlas.closePath()
         ctxAtlas.fillStyle = "yellow"
         ctxAtlas.fill()
       }
 
-      showGalaxy = (indexScale) => {
+      showAtlas = () => {
         ctxAtlas.clearRect(0, 0, canvasAtlas.height, canvasAtlas.width) //clear canvas
-
         // show only those objects whose distance is greater or equal to the
         // smaller scale and less than the next scale
+        //console.log("showAtlas")
+        // find the scale for the altas view
+        let scales = [0, 0.0005, 12.5, 250, 5000, 50000, 500000, 50000000, 100000000]
+        let indexScale = 0
+
+        for (let [i, s] of scales.entries()) {
+          if (cos[index].lightYears < s) {
+            indexScale = i
+            break
+          }
+        }
+        console.log(`distance: ${cos[index].lightYears} indexScale: ${indexScale}`)
+        scale = canvasAtlas.width / scales[indexScale]
+        console.log(`indexScale: ${indexScale}  scales: ${scales[indexScale]} to ${scales[indexScale+1]} scale: ${scale}`)
         items = 0
         for (let [i, co] of cos.entries()) {
-          if (co.lightYears >= scales[indexScale - 1] && co.lightYears < scales[indexScale + 1]) {
-            items++
+          if (co.lightYears >= scales[indexScale - 1] && co.lightYears < scales[indexScale]) {
             selected = false
             if (i == index) {
               selected = true
             } else {
               selected = false
             }
-            drawCelestialObject(co, selected)
+            drawCelestialObject(co, scale, selected)
           }
+          drawSun()
         }
-        drawSun()
       }
 
       // at start
@@ -348,7 +352,7 @@
           selectedCos = document.getElementById("listCO").lastChild
         }
         let nameOfCos = selectedCos.innerHTML
-        console.log(nameOfCos)
+        //console.log(nameOfCos)
         index = cos.findIndex(x => x.name == nameOfCos.trim());
         //showGalaxy(cos[index].type)
         showData(index);
@@ -360,7 +364,7 @@
           selectedCos = document.getElementById("listCO").firstChild
         }
         let nameOfCos = selectedCos.innerHTML
-        console.log(nameOfCos)
+        //console.log(nameOfCos)
         index = cos.findIndex(x => x.name == nameOfCos.trim());
         //showGalaxy(cos[index].type)
         showData(index);
@@ -429,7 +433,7 @@
       <canvas id="canvasAtlas"></canvas>
     </div>
     <div>
-      <button id="buttonBrightStars" class="btngroup7">B</button>
+      <button id="buttonBrightStars" class="btngroup7">S</button>
       <button id="buttonPlanets" class="btngroup7">P</button>
       <button id="buttonOpenClusters" class="btngroup7">O</button>
       <button id="buttonGlobularClusters" class="btngroup7">G</button>
