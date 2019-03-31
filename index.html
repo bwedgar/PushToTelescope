@@ -255,8 +255,7 @@
 
       drawCelestialObject = (co, scale, selected) => {
         coords = astromath.polarToCartesian(co.galLatitude, co.galLongitude, co.lightYears)
-        ctxAtlas.beginPath()
-        ctxAtlas.closePath()
+
         if (selected == true) {
           size = 2;
           ctxAtlas.fillStyle = "white"
@@ -278,13 +277,22 @@
         ctxAtlas.stroke()
 
         ctxAtlas.beginPath()
-        ctxAtlas.moveTo(Math.round(coords.x * scale + canvasAtlas.width / 2), Math.round((coords.z * scale) / 5 + canvasAtlas.height / 2))
-        ctxAtlas.lineTo(Math.round(coords.x * scale + canvasAtlas.width / 2), Math.round((coords.z * scale) / 5 + canvasAtlas.height / 2 + coords.y / 2))
+        ctxAtlas.moveTo(Math.floor(coords.x * scale + canvasAtlas.width / 2), Math.floor((coords.z * scale) / 5 + canvasAtlas.height / 2))
+        ctxAtlas.lineTo(Math.floor(coords.x * scale + canvasAtlas.width / 2), Math.floor((coords.z * scale) / 5 + canvasAtlas.height / 2 + coords.y * scale / 2))
+        if (coords.y > 0) {
+          ctxAtlas.setLineDash([2, 2]);
+        } else {
+          ctxAtlas.setLineDash([]);
+        }
         ctxAtlas.strokeStyle = "red"
         ctxAtlas.lineWidth = 2
         ctxAtlas.stroke()
-        ctxAtlas.arc(Math.round(coords.x * scale + canvasAtlas.width / 2), Math.round((coords.z * scale) / 5 + canvasAtlas.height / 2 + coords.y / 2), size, 0, Math.PI * 2, true)
+
+        ctxAtlas.beginPath()
+        ctxAtlas.arc(Math.floor(coords.x * scale + canvasAtlas.width / 2), Math.floor((coords.z * scale) / 5 + canvasAtlas.height / 2 + coords.y * scale / 2), size, 0, Math.PI * 2, true)
         ctxAtlas.fill()
+        ctxAtlas.closePath()
+
 
       }
 
