@@ -23,7 +23,8 @@ let urls_to_cache = [
     '/astromath.js',
     '/planets.js',
     '/sw.js',
-    '/launch3.png'
+    '/launch3.png',
+    '/manifest.json'
     ]
 
 self.addEventListener('install', (e) => {
