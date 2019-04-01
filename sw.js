@@ -17,8 +17,13 @@ console.log("after service worker registration attempt");
 let cache_name = 'mysite-v2'
 
 let urls_to_cache = [
-'/PushToTelescope/',
-    '/PushToTelescope/index.html'
+    '/',
+    '/index.html',
+    '/celestialObjects.js',
+    '/astromath.js',
+    '/planets.js',
+    '/sw.js',
+    '/launch3.png'
     ]
 
 self.addEventListener('install', (e) => {
