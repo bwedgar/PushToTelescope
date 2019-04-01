@@ -37,10 +37,12 @@ self.addEventListener('install', (e) => {
 
 self.addEventListener('fetch', (e) => {
     e.respondWith(caches.match(e.request).then((response) => {
-     if(response)
+     if(response) {
          console.log("caches made ");
       return response
-     else
+     }
+     else {
       return fetch(e.request)
+     }
     }) )
 })
