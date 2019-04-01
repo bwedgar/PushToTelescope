@@ -1,4 +1,4 @@
-console.log("service worker available?  " + ('serviceWorker' in navigator));
+//console.log("service worker available?  " + ('serviceWorker' in navigator));
 if ('serviceWorker' in navigator) {
     console.log("before add listener");
     window.addEventListener('load', () => {
