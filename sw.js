@@ -17,7 +17,8 @@ console.log("after service worker registration attempt");
 let cache_name = 'mysite-v2'
 
 let urls_to_cache = [
-    '/',
+    '/'
+    /*,
     '/index.html',
     '/celestialObjects.js',
     '/astromath.js',
@@ -25,6 +26,7 @@ let urls_to_cache = [
     '/sw.js',
     '/launch3.png',
     '/manifest.json'
+    */
     ]
 
 
