@@ -472,7 +472,7 @@
     } //end of ready()
 
     findCoords = () => {
-      navigator.serviceWorker.register('/PushToTelescope/sw.js', {
+     /* navigator.serviceWorker.register('/PushToTelescope/sw.js', {
         scope: '/PushToTelescope/'
       }).then((registration) => {
           console.log("Service Worker registration successful: ", registration)
@@ -480,6 +480,7 @@
         (err) => {
           console.log("Registration failed", err)
         })
+        */
 
       console.log("at find coords")
       astromath.longitude = astromath.radians(174); //longitude of observer in degrees East
