@@ -403,11 +403,8 @@
     } //end of ready()
 
     findCoords = () => {
-       /* if (navigator.serviceWorker) {
-    navigator.serviceWorker.register('/PushToTelescope/sw.js', {scope: '/PushToTelescope/'})
-  }
-      alert("registered ");
-      */
+ 
+      /*
       navigator.serviceWorker.register('/PushToTelescope/sw.js', {
         scope: '/PushToTelescope/'
       }).then((registration) => {
@@ -416,22 +413,22 @@
         (err) => {
           console.log("Registration failed (at index.html)", err)
         })
-        
+        */
 
-      console.log("at find coords")
-      astromath.longitude = astromath.radians(174); //longitude of observer in degrees East
-      astromath.latitude = astromath.radians(-35); //latitude of observer in degrees
-      ready();
-      // if (navigator.geolocation) {
-      //   navigator.geolocation.getCurrentPosition((position) => {
-      //     coords = position.coords;
-      //     console.log(`AT GEOLOCATION latitude: ${coords.latitude} longitude: ${coords.longitude}`)
-      //     astromath.longitude = astromath.radians(coords.longitude); //longitude of observer in degrees East
-      //     astromath.latitude = astromath.radians(coords.latitude); //latitude of observer in degrees
-      //     console.log(`astromath: latitude: ${astromath.latitude} longitude: ${astromath.longitude}`)
-      //     ready();
-      //   });
-      // }
+      
+      //astromath.longitude = astromath.radians(174); //longitude of observer in degrees East
+      //astromath.latitude = astromath.radians(-35); //latitude of observer in degrees
+      //ready();
+       if (navigator.geolocation) {
+         navigator.geolocation.getCurrentPosition((position) => {
+           coords = position.coords;
+           console.log(`AT GEOLOCATION latitude: ${coords.latitude} longitude: ${coords.longitude}`)
+           astromath.longitude = astromath.radians(coords.longitude); //longitude of observer in degrees East
+           astromath.latitude = astromath.radians(coords.latitude); //latitude of observer in degrees
+           console.log(`astromath: latitude: ${astromath.latitude} longitude: ${astromath.longitude}`)
+           ready();
+         });
+       }
 
 
 
