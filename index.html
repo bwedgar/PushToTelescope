@@ -474,19 +474,20 @@
     } //end of ready()
 
     findCoords = () => {
-        if (navigator.serviceWorker) {
+       /* if (navigator.serviceWorker) {
     navigator.serviceWorker.register('/PushToTelescope/sw.js', {scope: '/PushToTelescope/'})
   }
       alert("registered ");
-     /* navigator.serviceWorker.register('/PushToTelescope/sw.js', {
+      */
+      navigator.serviceWorker.register('/PushToTelescope/sw.js', {
         scope: '/PushToTelescope/'
       }).then((registration) => {
-          console.log("Service Worker registration successful: ", registration)
+          console.log("Service Worker registration successful (at index.html): ", registration)
         },
         (err) => {
-          console.log("Registration failed", err)
+          console.log("Registration failed (at index.html)", err)
         })
-        */
+        
 
       console.log("at find coords")
       astromath.longitude = astromath.radians(174); //longitude of observer in degrees East
@@ -515,7 +516,7 @@
 
 
 <body>
-v6
+v7
   <div id="pageContent">
     <div>
       <button id="buttonCalibrate" class="btngroup2">cal</button>
