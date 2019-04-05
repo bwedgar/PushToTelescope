@@ -20,7 +20,7 @@ let urls_to_cache = [
 '/PushToTelescope/',
     '/PushToTelescope/index.html',
     '/PushToTelescope/astromath.js',
-    '/PushToTelescope/celestialObjects.js',
+    '/PushToTelescope/celestialobjects.js',
     '/PushToTelescope/planets.js'
     ]
 
