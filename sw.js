@@ -19,7 +19,9 @@ let cache_name = 'mysite-v2'
 let urls_to_cache = [
 '/PushToTelescope/',
     '/PushToTelescope/index.html',
-    '/PushToTelescope/astromath.js'
+    '/PushToTelescope/astromath.js',
+    '/PushToTelescope/celestialObjects.js',
+    '/PushToTelescope/planets.js'
     ]
 
 self.addEventListener('install', (e) => {
