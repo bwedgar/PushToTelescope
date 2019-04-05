@@ -479,8 +479,8 @@
   }
       alert("registered ");
       */
-      navigator.serviceWorker.register('/sw.js', {
-        scope: '/'
+      navigator.serviceWorker.register('/PushToTelescope/sw.js', {
+        scope: '/PushToTelescope/'
       }).then((registration) => {
           console.log("Service Worker registration successful (at index.html): ", registration)
         },
