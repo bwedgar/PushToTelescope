@@ -119,7 +119,7 @@ let data = ["47 Tucanae,0,24,-72,5,13000,,GC,30 thousand stars with a dense core
   "Wild duck cluster,18,51,-6,16,6000,5.8,OC,2900 stars. 250 mlo.",
   "Wishing Well Cluster,11,5,-58,44,1321,,OC,150 stars and 7 red giants.",
   "NGC55,0,12,-39,50,10000000,,GX,Part of sculptor group nearest group of galaxies to our local group.Side on view of spiral galaxy.",
-  "Theta Eridani,2,56,-40,30,0,,ST,Double. 3.4 and 4.4 magnitude 8.5 sec separation.",
+  "Theta Eridani,2,56,-40,30,120,,ST,Double. 3.4 and 4.4 magnitude 8.5 sec separation.",
   "NGC1535,4,12,-12,52,2100,,NB,Planetary Nebula.",
   "Alpha Andromeda    Alpheratz,0,8,29,5,97,2.06,ST,B9",
   "Alpha Phoenix    Ankaa,0,26,-42,18,77,2.4,ST,K0",
@@ -160,7 +160,7 @@ let data = ["47 Tucanae,0,24,-72,5,13000,,GC,30 thousand stars with a dense core
   "Beta Carina    Miaplacidus,9,13,-69,43,111,1.67,ST,A2",
   "Alpha Hydra    Alphard,9,27,-8,40,177,1.99,ST,K3",
   "Alpha Leo    Regulus,10,8,11,58,77,1.36,ST,B7",
-  "Gamma Leo    Algieba,10,19,19,50,125,2,ST,K0; K0",
+  "Gamma Leo    Algieba,10,19,19,50,125,2,ST,K0",
   "Beta Ursa Major    Merak,11,1,56,23,79,2.34,ST,A1V",
   "Alpha Ursa Major    Dubhe,11,3,61,45,123,1.81,ST,K0; F8",
   "Beta Leo    Denebola,11,49,14,34,36,2.14,ST,A3",
@@ -194,9 +194,8 @@ let data = ["47 Tucanae,0,24,-72,5,13000,,GC,30 thousand stars with a dense core
   "Beta Grus,22,42,-46,53,170,2.06,ST,M5",
   "Alpha Piscis Austrinus    Fomalhaut,22,57,-29,37,25,1.17,ST,A3",
   "Alpha Pegasus    Markab,23,4,15,12,139,2.49,ST,B9.5",
-  "Beta Monocerotis,6,26,-7,0,,,ST,Triple star 4.7 and 4.6 sep 7.5sec and 5.6 sep 2.8sec from 4.6.",
-  "Dunlop 30,6,28,-50,12,,,ST,Double star 9th red and 5.3 yellow. Both stars are themselves doubles.",
-  "Gamma Leonis,10,17,20,6,,,ST,Double; 2.6 and 3.8 separated by 4.3sec",
+  "Beta Monocerotis,6,26,-7,0,700,,ST,Triple star 4.7 and 4.6 sep 7.5sec and 5.6 sep 2.8sec from 4.6.",
+  "Gamma Leonis,10,17,20,6,130,,ST,Double; 2.6 and 3.8 separated by 4.3sec",
   "Gem Cluster,10,31,-57,58,1400,,OC,Red supergiant surrounded by blue stars. 8min across."
 ]
 
