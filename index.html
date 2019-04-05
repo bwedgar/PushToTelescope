@@ -172,6 +172,7 @@
         
         compassRaw = Math.round((e2.webkitCompassHeading - 100) % 360)
         compass = Math.round((compassRaw - offsetCompass) % 360)
+        document.getElementById("textName").innerHTML=compass
         az = Math.round(az * 10) / 10
         azDev = ((compass - az) + 540) % 360 - 180
 
