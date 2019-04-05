@@ -2,11 +2,11 @@ var APP_PREFIX = 'PushToTelescope_'
 var VERSION = 'version_03' 
 var CACHE_NAME = APP_PREFIX + VERSION
 var URLS = [
-  '/PushToTelescope/',
-  'PushToTelescope/index.html',
-  '/PushToTelescope/astromath.js',
-  '/PushToTelescope/celestialObjects.js',
-  '/PushToTelescope/planets.js'
+  '../PushToTelescope/',
+  '../PushToTelescope/index.html',
+  '../PushToTelescope/astromath.js',
+  '../PushToTelescope/celestialObjects.js',
+  '../PushToTelescope/planets.js'
 
 ]
 
