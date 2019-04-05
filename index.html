@@ -113,7 +113,7 @@
   <script src="astromath.js"></script>
   <script src="planets.js"></script>
   <script src="celestialobjects.js"></script>
-  <script src="sw.js"></script>
+  <!--<script src="sw.js"></script>-->
 
   <script>
     function ready() {
@@ -132,8 +132,8 @@
       let galShow = 0;
       let selectedCos = 0
 
-      astromath.longitude = astromath.radians(174.76); //longitude of observer in degrees East
-      astromath.latitude = astromath.radians(-36.8485); //latitude of observer in degrees
+      //astromath.longitude = astromath.radians(174.76); //longitude of observer in degrees East
+      //astromath.latitude = astromath.radians(-36.8485); //latitude of observer in degrees
       celestialObjects = new CelestialObjects;
       let cos = celestialObjects.makeCelestialObjects();
       let objectTypes = ["GX", "OC", "GC", "ST", "NB", "DS", "RN"]
@@ -169,6 +169,7 @@
       }
 
       listener2 = (e2) => {
+        
         compassRaw = Math.round((e2.webkitCompassHeading - 100) % 360)
         compass = Math.round((compassRaw - offsetCompass) % 360)
         az = Math.round(az * 10) / 10
@@ -447,7 +448,7 @@
 <body>
   <div id="pageContent">
     <div>
-      <button id="buttonCalibrate" class="btngroup2">cal</button>
+      <button id="buttonCalibrate" class="btngroup2">cal.</button>
       <button id="buttonInfo" class="btngroup2">info</button>
     </div>
     <div id="content">
