@@ -14,7 +14,7 @@ if ('serviceWorker' in navigator) {
 
 console.log("after service worker registration attempt");
 
-let cache_name = 'mysite-v2'
+let cache_name = 'mysite-v3'
 
 let urls_to_cache = [
 '/PushToTelescope/',
