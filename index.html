@@ -156,6 +156,7 @@
 
       // functions for detecting and responding to telescope movement
       listener = (e) => {
+        //ctxFinder.clearRect(0,0,canvasFinder.height,canvasFinder.width)
         sensor = -e.accelerationIncludingGravity.x //sensor= 0 when vertical, -6.9 when clockwise 45 degrees, +6.9 when antoclockwise. +/- 10 when horizontal
         sensor = Math.round(sensor * 100) / 100;
         alt = Math.round(alt * 10) / 10 //alt is the altitude of the object
@@ -175,7 +176,7 @@
         //document.getElementById("textName").innerHTML=compass
         az = Math.round(az * 10) / 10
         azDev = ((compass - az) + 540) % 360 - 180
-ctxFinder.clearRect(0,0,canvasFinder.height,canvasFinder.width)
+ctxFinder.clearRect(0,0,ctxFinder.canvas.height,ctxFinder.canvas.width)
         //horizontal line
         ctxFinder.beginPath()
         ctxFinder.moveTo(50, ctxFinder.canvas.height / 3)
