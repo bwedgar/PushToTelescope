@@ -38,8 +38,11 @@
       color: red;
       font-family: verdana;
       font-size: 7vw;
+      border: 1px solid red;
+
       width: 100%;
-      height: 55px;
+      height: 100px;
+      overflow: scroll;
     }
 
     .notes {
@@ -115,15 +118,12 @@
   <script>
     function ready() {
 
-
-
       let previousSensor = 0;
       let sensor = 0;
       let compass = 0;
       let compassRaw = 0;
       let offsetCompass = 0;
       let offsetInclination = 0;
-      //let index = 1
       let alt = 0; //altitude of object in degrees
       let altitude = 0; //altitude of telescope in degrees
       let altDev = 0; //difference between alt of object and altitude of telescope in degrees
@@ -131,10 +131,6 @@
       let az = 0;
       let galShow = 0;
       let selectedCos = 0
-
-
-
-
 
       astromath.longitude = astromath.radians(174.76); //longitude of observer in degrees East
       astromath.latitude = astromath.radians(-36.8485); //latitude of observer in degrees
@@ -144,117 +140,21 @@
       let objectNames = ["galaxy", "open cluster", "globular cluster", "star", "bright nebula", "double star", "remnant"]
       offsetCompass = localStorage.getItem("offsetCompass")
       offsetInclination = localStorage.getItem("offsetInclination")
-      let screenWidth = screen.width;
-      let canvasWidth = screenWidth;
-      let canvasHeight = 250
+
       document.getElementById('pageCO').style.height = screen.height * 0.5 + "px";
-      console.log(screen.height)
       let colorGalaxy = "rgb(60,60,60)"
 
-      unitsToSI = (num1) => {
-        t = (num1 * 1).toExponential(2).toString()
-        ex = /(\d+)$/g.exec(t)[0]
-        prefix = ["", "k", "m", "b"]
-        n = /^(\S{3})/g.exec(t)[1] * 10 ** (ex % 3)
-        return Math.floor(n) + " " + prefix[Math.floor(ex / 3)]
-      }
+      // set up canvases
+      canvasFinder = document.getElementById("canvasFinder")
+      canvasFinder.width = window.innerWidth;
+      canvasFinder.height = window.innerHeight * 15 / 100;
+      ctxFinder = canvasFinder.getContext("2d")
+      canvasAtlas = document.getElementById("canvasAtlas")
+      ctxAtlas = canvasAtlas.getContext("2d")
+      canvasAtlas.width = window.innerWidth;
+      canvasAtlas.height = window.innerHeight * 50 / 100;
 
-      c = document.getElementById("canvasTop")
-      ctx = c.getContext("2d")
-      ctx.canvas.width = screenWidth
-      ctx.canvas.height = canvasHeight
-
-      //draw a red dot for the object
-      drawCircle = (x, y, selected) => {
-        ctx.beginPath()
-        ctx.arc(x, y, 2, 0, Math.PI * 2, true)
-        ctx.closePath()
-        selected ? ctx.fillStyle = "white" : ctx.fillStyle = "red"
-        ctx.fill()
-      }
-
-      drawSun = (x, y) => {
-        ctx.beginPath()
-        ctx.arc(x, y, 5, 0, Math.PI * 2, true)
-        ctx.closePath()
-      ctx.fillStyle = "orange"
-        ctx.fill()
-      }
-
-      // drawSide = (x, z) => {
-      //   ctx.beginPath()
-      //   offsetX = canvasWidth / 4.1
-      //   offsetY = canvasHeight / 2
-      //   ctx.arc(offsetX + x, offsetY - z / 2, 2, 0, Math.PI * 2, true)
-      //   ctx.closePath()
-      //   ctx.fillStyle = "red"
-      //   ctx.fill()
-      // }
-      // draw a red cross for the sun's position
-      drawCross = () => {
-        ctx.beginPath()
-        startX = canvasWidth / 2
-        startY = canvasHeight / 2
-        ctx.moveTo(startX, startY)
-        lengthCross = 10
-        ctx.lineWidth = 1
-        ctx.lineTo(startX + lengthCross, startY)
-        ctx.strokeStyle = "red"
-        ctx.stroke()
-        ctx.beginPath()
-        lengthCross = 10
-        ctx.moveTo(startX + lengthCross / 2, startY - lengthCross / 2)
-        ctx.lineTo(startX + lengthCross / 2, startY + lengthCross / 2)
-        ctx.strokeStyle = "red"
-        ctx.stroke()
-      }
-
-      // draw a red cross of the sun's position on the side view
-      // drawSideCross = () => {
-      //   ctx.beginPath()
-      //   startX = canvasWidth / 14 + canvasWidth / 4.1
-      //   startY = canvasHeight / 2
-      //   ctx.moveTo(startX, startY)
-      //   lengthCross = 10
-      //   ctx.lineWidth = 1
-      //   ctx.lineTo(startX + lengthCross, startY)
-      //   ctx.strokeStyle = "red"
-      //   ctx.stroke()
-      //   ctx.beginPath()
-      //   ctx.moveTo(startX + lengthCross / 2, startY - lengthCross / 2)
-      //   lengthCross = 10
-      //   ctx.lineTo(startX + lengthCross / 2, startY + lengthCross / 2)
-      //   ctx.strokeStyle = "red"
-      //   ctx.stroke()
-      // }
-
-
-
-      getCartesian = (lat, long, r, type, rotation, scale, selected) => {
-        //console.log(`galacticLatitude: ${lat*360/Math.PI/2} galacticLongitude: ${long*360/Math.PI/2}  distance: ${r}  scale: ${scale}`)
-        lat = Math.PI / 2 - lat
-        long = ((long + Math.PI / 2 * 1.0) + rotation) % (Math.PI * 2)
-        x1 = r * Math.sin(lat) * Math.cos(long)
-        y1 = r * Math.sin(lat) * Math.sin(long)
-        z1 = r * Math.cos(lat)
-        //["GX", "OC", "GC", "ST", "NB", "DS", "RN"]
-        // objectScales = [0.00001, 0.001, 0.01, 0.1, 0.3, 0.3, 0.3]
-        // scale = objectScales[objectTypes.findIndex(t => t == type)]
-
-        x2D = y1 * scale + 200 //+ canvasWidth / 2
-        y2D = x1 * scale + 100 //+ canvasWidth / 2
-        z2D = z1 * scale + 100
-        //console.log(scale + " " + x2D + "  " + y2D + "  " + z2D)
-
-        drawCircle(x2D, z2D, selected)
-        // drawSide(x2D, z2D)
-        drawCross()
-        // drawSideCross()
-      }
-
-
-      replaceChar = (stro, i, char) => (i === 0) ? t = char + stro.substr(1) : t = stro.substr(0, i) + char + stro.substr(i + 1)
-
+      // functions for detecting and responding to telescope movement
       listener = (e) => {
         sensor = -e.accelerationIncludingGravity.x //sensor= 0 when vertical, -6.9 when clockwise 45 degrees, +6.9 when antoclockwise. +/- 10 when horizontal
         sensor = Math.round(sensor * 100) / 100;
@@ -265,18 +165,6 @@
           //adjSensor = //a + b * sensor
           altitude = (sensor + 6.9) * 6.4;
           altDev = altitude - alt - offsetInclination;
-          // document.getElementById("notes").innerHTML = (
-          //   "distance: " + unitsToSI(cos[index].lightYears) + "ly   <br> " + cos[index].notes + "<br>" +
-          //   "<br>ra: "+cos[index].raHours+":"+cos[index].raMinutes+" dec: "+cos[index].decDegrees+":" +cos[index].decMinutes +
-          //   "<br> azimuth: " + Math.round(az) +   " altitude: " + Math.round(alt) +
-          //   " HA: " + astromath.radiansToHoursAndMinutes(astromath.hourAngle(astromath.raRadians(cos[index].raHours, cos[index].raMinutes))) +
-          //   "<br> altitude: " + Math.round(alt) + " telescope altitude: " + Math.round(altitude) + " alt dev: " + Math.round(altDev) +
-          //   "<br> sensor: " + (sensor<0?"":"+") + Math.round(sensor*100)/100 + " inclination offset: " + Math.round(offsetInclination) +
-          //   "<br> azimuth: " + Math.round(az) + " compass: " + Math.round(compass) + " az dev: "+ Math.round(azDev)+" compassOffset: " + Math.round(offsetCompass) +
-          //   "<br>julian date: " + Math.round(astromath.getJulianDate()) + " GST: " + astromath.radiansToHoursAndMinutes(astromath.getGST()) + " LST: " + astromath.radiansToHoursAndMinutes(astromath.getLST() / 24 * 2 * Math.PI) +
-          //   "<br>Hour Angle: " + astromath.radiansToHoursAndMinutes(astromath.hourAngle(astromath.raRadians(cos[index].raHours, cos[index].raMinutes))) +
-          //   "<br>Latitude: " + astromath.radiansToDegreesAndMinutes(astromath.latitude) +  " Longitude: " + astromath.radiansToDegreesAndMinutes(astromath.longitude)
-          // )
         }
       }
 
@@ -285,84 +173,62 @@
         compass = Math.round((compassRaw - offsetCompass) % 360)
         az = Math.round(az * 10) / 10
         azDev = ((compass - az) + 540) % 360 - 180
-        c1 = document.getElementById("canvasGoTo")
-        ctxGoTo = c1.getContext("2d")
-        ctxGoTo.canvas.width = screenWidth
-        ctxGoTo.canvas.height = 100;
+
         //horizontal line
-        ctxGoTo.beginPath()
-        ctxGoTo.moveTo(50, ctxGoTo.canvas.height / 3)
-        ctxGoTo.lineTo(ctxGoTo.canvas.width - 50, ctxGoTo.canvas.height / 3)
-        ctxGoTo.strokeStyle = "red"
-        ctxGoTo.lineWidth = 2
-        ctxGoTo.stroke()
+        ctxFinder.beginPath()
+        ctxFinder.moveTo(50, ctxFinder.canvas.height / 3)
+        ctxFinder.lineTo(ctxFinder.canvas.width - 50, ctxFinder.canvas.height / 3)
+        ctxFinder.strokeStyle = "red"
+        ctxFinder.lineWidth = 2
+        ctxFinder.stroke()
         //cursor 40 units high?
-        ctxGoTo.beginPath()
-        ctxGoTo.moveTo(ctxGoTo.canvas.width / 2.2 + altDev * 10, ctxGoTo.canvas.height / 3 - 20)
-        ctxGoTo.lineTo(ctxGoTo.canvas.width / 2.2 + altDev * 10, ctxGoTo.canvas.height / 3 + 20)
-        ctxGoTo.strokeStyle = "red"
-        ctxGoTo.lineWidth = 2
-        ctxGoTo.stroke()
+        ctxFinder.beginPath()
+        ctxFinder.moveTo(ctxFinder.canvas.width / 2.2 + altDev * 10, ctxFinder.canvas.height / 3 - 20)
+        ctxFinder.lineTo(ctxFinder.canvas.width / 2.2 + altDev * 10, ctxFinder.canvas.height / 3 + 20)
+        ctxFinder.strokeStyle = "red"
+        ctxFinder.lineWidth = 2
+        ctxFinder.stroke()
         //centre drawCircle
-        ctxGoTo.beginPath()
-        ctxGoTo.arc(ctxGoTo.canvas.width / 2.2, ctxGoTo.canvas.height / 3, 15, 0, Math.PI * 2, true)
-        ctxGoTo.stroke()
-        ctxGoTo.fillStyle = "red"
-        ctxGoTo.font = "30px Arial"
+        ctxFinder.beginPath()
+        ctxFinder.arc(ctxFinder.canvas.width / 2.2, ctxFinder.canvas.height / 3, 15, 0, Math.PI * 2, true)
+        ctxFinder.stroke()
+        ctxFinder.fillStyle = "red"
+        ctxFinder.font = "30px Arial"
         //directional pointers
         if (altDev > 0) {
-          ctxGoTo.fillText('\u21D7', 5, ctxGoTo.canvas.height / 3 + 10)
+          ctxFinder.fillText('\u21D7', 5, ctxFinder.canvas.height / 3 + 10)
         }
         if (altDev < 0) {
-          ctxGoTo.fillText('\u21D8', 5, ctxGoTo.canvas.height / 3 + 10)
+          ctxFinder.fillText('\u21D8', 5, ctxFinder.canvas.height / 3 + 10)
         }
-        ctxGoTo.beginPath()
-        ctxGoTo.moveTo(50, ctxGoTo.canvas.height / 3 * 2)
-        ctxGoTo.lineTo(ctxGoTo.canvas.width - 50, ctxGoTo.canvas.height / 3 * 2)
-        ctxGoTo.strokeStyle = "red"
-        ctxGoTo.lineWidth = 2
-        ctxGoTo.stroke()
-        ctxGoTo.beginPath()
-        ctxGoTo.moveTo(ctxGoTo.canvas.width / 2.2 + azDev * 10, ctxGoTo.canvas.height / 3 * 2 - 20)
-        ctxGoTo.lineTo(ctxGoTo.canvas.width / 2.2 + azDev * 10, ctxGoTo.canvas.height / 3 * 2 + 20)
-        ctxGoTo.strokeStyle = "red"
-        ctxGoTo.lineWidth = 2
-        ctxGoTo.stroke()
-        ctxGoTo.beginPath()
-        ctxGoTo.arc(ctxGoTo.canvas.width / 2.2, ctxGoTo.canvas.height / 3 * 2, 15, 0, Math.PI * 2, true)
-        ctxGoTo.stroke()
+        ctxFinder.beginPath()
+        ctxFinder.moveTo(50, ctxFinder.canvas.height / 3 * 2)
+        ctxFinder.lineTo(ctxFinder.canvas.width - 50, ctxFinder.canvas.height / 3 * 2)
+        ctxFinder.strokeStyle = "red"
+        ctxFinder.lineWidth = 2
+        ctxFinder.stroke()
+        ctxFinder.beginPath()
+        ctxFinder.moveTo(ctxFinder.canvas.width / 2.2 + azDev * 10, ctxFinder.canvas.height / 3 * 2 - 20)
+        ctxFinder.lineTo(ctxFinder.canvas.width / 2.2 + azDev * 10, ctxFinder.canvas.height / 3 * 2 + 20)
+        ctxFinder.strokeStyle = "red"
+        ctxFinder.lineWidth = 2
+        ctxFinder.stroke()
+        ctxFinder.beginPath()
+        ctxFinder.arc(ctxFinder.canvas.width / 2.2, ctxFinder.canvas.height / 3 * 2, 15, 0, Math.PI * 2, true)
+        ctxFinder.stroke()
         if (azDev > 0) {
-          ctxGoTo.fillText('\u21BA', 5, ctxGoTo.canvas.height / 3 * 2 + 10)
+          ctxFinder.fillText('\u21BA', 5, ctxFinder.canvas.height / 3 * 2 + 10)
         }
         if (azDev < 0) {
-          ctxGoTo.fillText('\u21BB', 5, ctxGoTo.canvas.height / 3 * 2 + 10)
+          ctxFinder.fillText('\u21BB', 5, ctxFinder.canvas.height / 3 * 2 + 10)
         }
       }
-      window.addEventListener('devicemotion', listener)
-      window.addEventListener('deviceorientation', listener2)
-      // for testing on laptop
-      //listener2(0)
-
 
       showData = (index) => {
         alt = astromath.altitude(astromath.raRadians(cos[index].raHours, cos[index].raMinutes), astromath.decRadians(cos[index].decDegrees, cos[index].decMinutes))
         az = astromath.azimuth(astromath.raRadians(cos[index].raHours, cos[index].raMinutes), astromath.decRadians(cos[index].decDegrees, cos[index].decMinutes))
-        textName.innerHTML = (cos[index].name);
-        document.getElementById("notes").innerHTML = (
-          unitsToSI(cos[index].lightYears) + "ly   <br> " + cos[index].notes); //+"lat: "+astromath.latitude);
-        // "<br>ra: " + cos[index].raHours + ":" + cos[index].raMinutes + " dec: " + cos[index].decDegrees + ":" + cos[index].decMinutes +
-        // "<br> azimuth: " + Math.round(az) + " altitude: " + Math.round(alt) +
-        // " HA: " + astromath.radiansToHoursAndMinutes(astromath.hourAngle(astromath.raRadians(cos[index].raHours, cos[index].raMinutes))) +
-        // "<br> altitude: " + Math.round(alt) + " telescope altitude: " + Math.round(altitude) + " alt dev: " + Math.round(altDev) +
-        // "<br> sensor: " + (sensor < 0 ? "" : "+") + Math.round(sensor * 100) / 100 + " inclination offset: " + Math.round(offsetInclination) +
-        // "<br> azimuth: " + Math.round(az) + " compass: " + Math.round(compass) + " az dev: " + Math.round(azDev) + " compassOffset: " + Math.round(offsetCompass) +
-        // "<br>julian date: " + Math.round(astromath.getJulianDate()) + " GST: " + astromath.radiansToHoursAndMinutes(astromath.getGST()) + " LST: " + astromath.radiansToHoursAndMinutes(astromath.getLST() / 24 * 2 * Math.PI) +
-        // "<br>Hour Angle: " + astromath.radiansToHoursAndMinutes(astromath.hourAngle(astromath.raRadians(cos[index].raHours, cos[index].raMinutes))) +
-        // "<br>Latitude: " + astromath.radiansToDegreesAndMinutes(astromath.latitude) + " Longitude: " + astromath.radiansToDegreesAndMinutes(astromath.longitude)
-        //    )
-        //draw position on galaxy view
-        //getCartesian(cos[index].galLatitude, cos[index].galLongitude, cos[index].lightYears,cos[index].type)
-
+        textName.innerHTML = cos[index].name + "<br>" + astromath.unitsToSI(cos[index].lightYears) + "ly   <br> " + cos[index].notes;
+        showAtlas()
         document.getElementById("pageCO").style.display = "none";
         document.getElementById("pageContent").style.display = "block";
       }
@@ -382,7 +248,6 @@
           }
         }
         if (numberOfItemsAdded > 0) {
-
           document.getElementById("pageCO").style.display = "block";
           document.getElementById("pageContent").style.display = "none";
         }
@@ -390,54 +255,108 @@
       document.getElementById("pageCO").style.display = "block";
       document.getElementById("pageContent").style.display = "block";
 
-      showGalaxy = (type) => {
-        clearInterval(galShow)
-        rotation = 0
-        index = cos.findIndex(x => x.name == selectedCos.innerHTML);
-        indexSelected = index;
-        scale = 50 / cos[index].lightYears
+      drawCelestialObject = (co, scale, selected) => {
+        coords = astromath.polarToCartesian(co.galLatitude, co.galLongitude, co.lightYears)
 
-        galShow = setInterval(() => {
-          ctx.clearRect(0, 0, canvasWidth, canvasHeight) //clear canvas
-  drawSun(200,90)
-          selected=false
-          for (let [i ,co] of cos.entries()) {
-            if (co.type == type) {
-              if (i  == index) {
-                selected = true
-              } else {
-                selected = false
-              }
-              getCartesian(co.galLatitude, co.galLongitude, co.lightYears, co.type, rotation, scale, selected)
-            }
-            rotation = (rotation + 0.0005)
-          }
-        }, 500) //draw galaxy every 2 seconds
+        if (selected == true) {
+          size = 2;
+          ctxAtlas.fillStyle = "white"
+        } else {
+          size = 2;
+          ctxAtlas.fillStyle = "red"
+        }
+
+        ctxAtlas.arc(coords.x * scale + canvasAtlas.width / 2, (coords.z * scale) / 5 + canvasAtlas.height / 2 + coords.y / 2, size, 0, Math.PI * 2, true)
+        ctxAtlas.beginPath()
+        ctxAtlas.strokeStyle = "blue"
+        ctxAtlas.lineWidth = 1
+        ctxAtlas.ellipse(canvasAtlas.width / 2, canvasAtlas.height / 2, canvasAtlas.width / 2, canvasAtlas.height / 12, 0, 0, Math.PI * 2)
+        ctxAtlas.stroke()
+        ctxAtlas.beginPath()
+        ctxAtlas.strokeStyle = "blue"
+        ctxAtlas.lineWidth = 1
+        ctxAtlas.ellipse(canvasAtlas.width / 2, canvasAtlas.height / 2, canvasAtlas.width / 3, canvasAtlas.height / 17, 0, 0, Math.PI * 2)
+        ctxAtlas.stroke()
+
+        ctxAtlas.beginPath()
+        ctxAtlas.moveTo(Math.floor(coords.x * scale + canvasAtlas.width / 2), Math.floor((coords.z * scale) / 5 + canvasAtlas.height / 2))
+        ctxAtlas.lineTo(Math.floor(coords.x * scale + canvasAtlas.width / 2), Math.floor((coords.z * scale) / 5 + canvasAtlas.height / 2 + coords.y * scale / 2))
+        if (coords.y > 0) {
+          ctxAtlas.setLineDash([2, 2]);
+        } else {
+          ctxAtlas.setLineDash([]);
+        }
+        ctxAtlas.strokeStyle = "red"
+        ctxAtlas.lineWidth = 2
+        ctxAtlas.stroke()
+
+        ctxAtlas.beginPath()
+        ctxAtlas.arc(Math.floor(coords.x * scale + canvasAtlas.width / 2), Math.floor((coords.z * scale) / 5 + canvasAtlas.height / 2 + coords.y * scale / 2), size, 0, Math.PI * 2, true)
+        ctxAtlas.fill()
+        ctxAtlas.closePath()
+
 
       }
 
+      drawSun = () => {
+        ctxAtlas.beginPath()
+        ctxAtlas.arc(canvasAtlas.width / 2, canvasAtlas.height / 2, 2, 0, Math.PI * 2, true)
+        ctxAtlas.closePath()
+        ctxAtlas.fillStyle = "yellow"
+        ctxAtlas.fill()
+      }
 
+      showAtlas = () => {
+        ctxAtlas.clearRect(0, 0, canvasAtlas.height, canvasAtlas.width) //clear canvas
+        // show only those objects whose distance is greater or equal to the
+        // smaller scale and less than the next scale
+        //console.log("showAtlas")
+        // find the scale for the altas view
+        let scales = [0, 0.0005, 12.5, 250, 5000, 50000, 500000, 50000000, 100000000]
+        let indexScale = 0
+        for (let [i, s] of scales.entries()) {
+          if (cos[index].lightYears < s) {
+            indexScale = i
+            break
+          }
+        }
+        console.log(`distance: ${cos[index].lightYears} indexScale: ${indexScale}`)
+        scale = canvasAtlas.width / scales[indexScale] / 2
+        console.log(`indexScale: ${indexScale}  scales: ${scales[indexScale]} to ${scales[indexScale+1]} scale: ${scale}`)
+        items = 0
+        for (let [i, co] of cos.entries()) {
+          if (co.lightYears >= scales[indexScale - 1] && co.lightYears < scales[indexScale]) {
+            selected = false
+            if (i == index) {
+              selected = true
+            } else {
+              selected = false
+            }
+            drawCelestialObject(co, scale, selected)
+          }
+          drawSun()
+        }
+      }
+
+      // at start
       showCO("ST")
-      showGalaxy("ST")
       showData(index);
 
-      document.getElementById("buttonBrightStars").addEventListener("click", () => showCO("ST"));
-      document.getElementById("buttonPlanets").addEventListener("click", () => showCO("PL"));
-      document.getElementById("buttonBrightNebulas").addEventListener("click", () => showCO("NB"));
-      document.getElementById("buttonOpenClusters").addEventListener("click", () => showCO("OC"));
-      document.getElementById("buttonGlobularClusters").addEventListener("click", () => showCO("GC"));
-      document.getElementById("buttonGalaxies").addEventListener("click", () => showCO("GX"));
-      document.getElementById("buttonPlanetaryNebulas").addEventListener("click", () => showCO("RN"));
+      // event handlers
+
+      window.addEventListener('devicemotion', listener)
+      window.addEventListener('deviceorientation', listener2)
+      // for testing on laptop
+      listener2(0)
 
       let listCO = document.getElementById("listCO")
       listCO.addEventListener("click", (e) => {
         selectedCos = e.target
         let nameOfCos = e.target.innerHTML
         index = cos.findIndex(x => x.name == nameOfCos.trim());
-
-        showGalaxy(cos[index].type)
         showData(index);
       });
+
       document.getElementById("buttonCalibrate").addEventListener("click", (e) => {
         offsetCompass = compassRaw - az;
         offsetInclination = altitude - alt;
@@ -454,9 +373,9 @@
           selectedCos = document.getElementById("listCO").lastChild
         }
         let nameOfCos = selectedCos.innerHTML
-        console.log(nameOfCos)
+        //console.log(nameOfCos)
         index = cos.findIndex(x => x.name == nameOfCos.trim());
-        showGalaxy(cos[index].type)
+        //showGalaxy(cos[index].type)
         showData(index);
       });
 
@@ -466,11 +385,21 @@
           selectedCos = document.getElementById("listCO").firstChild
         }
         let nameOfCos = selectedCos.innerHTML
-        console.log(nameOfCos)
+        //console.log(nameOfCos)
         index = cos.findIndex(x => x.name == nameOfCos.trim());
-        showGalaxy(cos[index].type)
+        //showGalaxy(cos[index].type)
         showData(index);
       });
+
+      document.getElementById("buttonBrightStars").addEventListener("click", () => showCO("ST"));
+      document.getElementById("buttonPlanets").addEventListener("click", () => showCO("PL"));
+      document.getElementById("buttonBrightNebulas").addEventListener("click", () => showCO("NB"));
+      document.getElementById("buttonOpenClusters").addEventListener("click", () => showCO("OC"));
+      document.getElementById("buttonGlobularClusters").addEventListener("click", () => showCO("GC"));
+      document.getElementById("buttonGalaxies").addEventListener("click", () => showCO("GX"));
+      document.getElementById("buttonPlanetaryNebulas").addEventListener("click", () => showCO("RN"));
+
+
     } //end of ready()
 
     findCoords = () => {
@@ -503,6 +432,9 @@
       //     ready();
       //   });
       // }
+
+
+
     }
 
     if (document.readyState == 'loading') {
@@ -523,17 +455,12 @@ v8
       <button id="buttonInfo" class="btngroup2">info</button>
     </div>
     <div id="content">
-      <br>
+      <canvas id="canvasFinder"></canvas>
       <div id="textName" class="name"></div>
-      <!-- <div id="distance" class="notes">distance</div> -->
-      <canvas id="canvasGoTo"></canvas>
-
-      <canvas id="canvasTop"></canvas>
-      <div id="notes" class="notes"></div>
-      <br>
+      <canvas id="canvasAtlas"></canvas>
     </div>
     <div>
-      <button id="buttonBrightStars" class="btngroup7">B</button>
+      <button id="buttonBrightStars" class="btngroup7">S</button>
       <button id="buttonPlanets" class="btngroup7">P</button>
       <button id="buttonOpenClusters" class="btngroup7">O</button>
       <button id="buttonGlobularClusters" class="btngroup7">G</button>
@@ -546,9 +473,7 @@ v8
       <button id="buttonNext" class="btngroup2">Next</button>
     </div>
   </div>
-
   <div id="pageCO">
-
     <div id="listCO" class="list">
     </div>
     <br>
