@@ -170,7 +170,7 @@
       }
 
       listener2 = (e2) => {
-        
+
         compassRaw = Math.round((e2.webkitCompassHeading - 100) % 360)
         compass = Math.round((compassRaw - offsetCompass) % 360)
         //document.getElementById("textName").innerHTML=compass
@@ -312,6 +312,12 @@
         ctxAtlas.fill()
       }
 
+      writeLegend = (legends,atlas) => {
+        ctxAtlas.font = "20px Arial"
+        ctxAtlas.fillStyle = "red"
+        ctxAtlas.fillText(legends[atlas], 10, 50);
+      }
+
       showAtlas = () => {
         ctxAtlas.clearRect(0, 0, canvasAtlas.height, canvasAtlas.width) //clear canvas
         // show only those objects whose distance is greater or equal to the
@@ -319,6 +325,7 @@
         //console.log("showAtlas")
         // find the scale for the altas view
         let scales = [0, 0.0005, 12.5, 250, 5000, 50000, 500000, 50000000, 100000000]
+        let legends=["The Nearest Stars 12.5 ly","The Solar Neighbourhood 250 ly","The Orion Arm  5,000 ly","The Milky Way Galaxy  50,000 ly","Satellite Galaxies  500,000 ly","The Local Group  5 mly","The Virgo Supercluster 100 mly" ]
         let indexScale = 0
         for (let [i, s] of scales.entries()) {
           if (cos[index].lightYears < s) {
@@ -341,6 +348,7 @@
             drawCelestialObject(co, scale, selected)
           }
           drawSun()
+          writeLegend(legends,indexScale)
         }
       }
 
@@ -353,7 +361,7 @@
       window.addEventListener('devicemotion', listener)
       window.addEventListener('deviceorientation', listener2)
       // for testing on laptop
-      //listener2(0)
+      listener2(0)
 
       let listCO = document.getElementById("listCO")
       listCO.addEventListener("click", (e) => {
@@ -409,7 +417,7 @@
     } //end of ready()
 
     findCoords = () => {
- 
+
       /*
       navigator.serviceWorker.register('/PushToTelescope/sw.js', {
         scope: '/PushToTelescope/'
@@ -421,11 +429,8 @@
         })
         */
 
-      
-      //astromath.longitude = astromath.radians(174); //longitude of observer in degrees East
-      //astromath.latitude = astromath.radians(-35); //latitude of observer in degrees
-      //ready();
-       if (navigator.geolocation) {
+
+       if (false) { //navigator.geolocation) {
          navigator.geolocation.getCurrentPosition((position) => {
            coords = position.coords;
            console.log(`AT GEOLOCATION latitude: ${coords.latitude} longitude: ${coords.longitude}`)
@@ -434,6 +439,12 @@
            console.log(`astromath: latitude: ${astromath.latitude} longitude: ${astromath.longitude}`)
            ready();
          });
+       } else {
+
+         astromath.longitude = astromath.radians(174); //longitude of observer in degrees East
+         astromath.latitude = astromath.radians(-35); //latitude of observer in degrees
+         //listener2();
+         ready()
        }
 
 
