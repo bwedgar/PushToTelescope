@@ -37,9 +37,8 @@
       background-color: black;
       color: red;
       font-family: verdana;
-      font-size: 7vw;
+      font-size: 5vw;
       border: 1px solid red;
-
       width: 100%;
       height: 100px;
       overflow: scroll;
@@ -89,6 +88,26 @@
       padding: 2% 2%;
     }
 
+    .btngroup3 {
+      background-color: black;
+      color: red;
+      font-family: verdana;
+      font-size: 7vw;
+      border: 1px solid red;
+      width: 10%;
+      padding: 2% 2%;
+    }
+
+    .btngroup3L {
+      background-color: black;
+      color: red;
+      font-family: verdana;
+      font-size: 3.5vw;
+      border: 1px solid red;
+      width: 70%;
+      padding: 2% 2%;
+    }
+
     .btngroup7 {
       background-color: black;
       color: red;
@@ -96,6 +115,16 @@
       font-size: 7vw;
       border: 1px solid red;
       width: 12.5%;
+      padding: 2% 2%
+    }
+
+    .btngroup9 {
+      background-color: black;
+      color: red;
+      font-family: verdana;
+      font-size: 7vw;
+      border: 1px solid red;
+      width: 9.6%;
       padding: 2% 2%;
     }
 
@@ -131,6 +160,7 @@
       let az = 0;
       let galShow = 0;
       let selectedCos = 0
+      globalScale = 3
 
       //astromath.longitude = astromath.radians(174.76); //longitude of observer in degrees East
       //astromath.latitude = astromath.radians(-36.8485); //latitude of observer in degrees
@@ -176,10 +206,10 @@
         //document.getElementById("textName").innerHTML=compass
         az = Math.round(az * 10) / 10
         azDev = ((compass - az) + 540) % 360 - 180
-     canvasFinder = document.getElementById("canvasFinder")
-      canvasFinder.width = window.innerWidth;
-      canvasFinder.height = window.innerHeight * 15 / 100;
-      ctxFinder = canvasFinder.getContext("2d")
+        canvasFinder = document.getElementById("canvasFinder")
+        canvasFinder.width = window.innerWidth;
+        canvasFinder.height = window.innerHeight * 15 / 100;
+        ctxFinder = canvasFinder.getContext("2d")
         //horizontal line
         ctxFinder.beginPath()
         ctxFinder.moveTo(50, ctxFinder.canvas.height / 3)
@@ -233,8 +263,8 @@
       showData = (index) => {
         alt = astromath.altitude(astromath.raRadians(cos[index].raHours, cos[index].raMinutes), astromath.decRadians(cos[index].decDegrees, cos[index].decMinutes))
         az = astromath.azimuth(astromath.raRadians(cos[index].raHours, cos[index].raMinutes), astromath.decRadians(cos[index].decDegrees, cos[index].decMinutes))
-        textName.innerHTML = cos[index].name + "<br>" + astromath.unitsToSI(cos[index].lightYears) + "ly   <br> " + cos[index].notes;
-        showAtlas()
+        textName.innerHTML = cos[index].name + "<br>" + astromath.unitsToSI(cos[index].lightYears) + "ly " + cos[index].notes;
+        showAtlas(cos[index].scale)
         document.getElementById("pageCO").style.display = "none";
         document.getElementById("pageContent").style.display = "block";
       }
@@ -263,9 +293,8 @@
 
       drawCelestialObject = (co, scale, selected) => {
         coords = astromath.polarToCartesian(co.galLatitude, co.galLongitude, co.lightYears)
-
         if (selected == true) {
-          size = 2;
+          size = 3;
           ctxAtlas.fillStyle = "white"
         } else {
           size = 2;
@@ -312,43 +341,30 @@
         ctxAtlas.fill()
       }
 
-      writeLegend = (legends,atlas) => {
-        ctxAtlas.font = "20px Arial"
-        ctxAtlas.fillStyle = "red"
-        ctxAtlas.fillText(legends[atlas], 10, 50);
+      writeLegend = (legends, atlas) => {
+        document.getElementById("buttonLegend").innerHTML = legends[atlas]
       }
 
-      showAtlas = () => {
-        ctxAtlas.clearRect(0, 0, canvasAtlas.height, canvasAtlas.width) //clear canvas
+      showAtlas = (indexScale) => {
+        ctxAtlas.clearRect(0, 0, ctxAtlas.canvas.width, ctxAtlas.canvas.height) //clear canvas
         // show only those objects whose distance is greater or equal to the
         // smaller scale and less than the next scale
-        //console.log("showAtlas")
         // find the scale for the altas view
-        let scales = [0, 0.0005, 12.5, 250, 5000, 50000, 500000, 50000000, 100000000]
-        let legends=["The Nearest Stars 12.5 ly","The Solar Neighbourhood 250 ly","The Orion Arm  5,000 ly","The Milky Way Galaxy  50,000 ly","Satellite Galaxies  500,000 ly","The Local Group  5 mly","The Virgo Supercluster 100 mly" ]
-        let indexScale = 0
-        for (let [i, s] of scales.entries()) {
-          if (cos[index].lightYears < s) {
-            indexScale = i
-            break
-          }
-        }
-        console.log(`distance: ${cos[index].lightYears} indexScale: ${indexScale}`)
-        scale = canvasAtlas.width / scales[indexScale] / 2
-        console.log(`indexScale: ${indexScale}  scales: ${scales[indexScale]} to ${scales[indexScale+1]} scale: ${scale}`)
+        cosScale=cos.filter((cos)=>{return cos.scale==indexScale})
+        //console.log(cosScale[12].name)
+        let legends = ["The Solar System 30 AU", "The Nearest Stars 12.5 ly", "The Solar Neighbourhood 250 ly", "The Orion Arm  5,000 ly", "The Milky Way Galaxy  50,000 ly", "Satellite Galaxies  500,000 ly", "The Local Group  5 mly",
+          "The Virgo Supercluster 100 mly"
+        ]
         items = 0
-        for (let [i, co] of cos.entries()) {
-          if (co.lightYears >= scales[indexScale - 1] && co.lightYears < scales[indexScale]) {
-            selected = false
-            if (i == index) {
-              selected = true
-            } else {
-              selected = false
-            }
-            drawCelestialObject(co, scale, selected)
-          }
+        let scales = [0, 0.0005, 12.5, 250, 5000, 50000, 500000, 50000000, 100000000]
+        for (let [i, co] of cosScale.entries()) {
+        //  if (co.scale == indexScale) {
+            scale = canvasAtlas.width / scales[indexScale] / 2
+          selected=(i==indexSelected)?true:false
+            drawCelestialObject(co, scale,selected)
+        //  }
           drawSun()
-          writeLegend(legends,indexScale)
+          writeLegend(legends, globalScale)
         }
       }
 
@@ -405,6 +421,11 @@
         showData(index);
       });
 
+      document.getElementById("buttonAtlasNext").addEventListener("click", (e) => {
+        indexSelected++
+        showData(cos);
+      });
+
       document.getElementById("buttonBrightStars").addEventListener("click", () => showCO("ST"));
       document.getElementById("buttonPlanets").addEventListener("click", () => showCO("PL"));
       document.getElementById("buttonBrightNebulas").addEventListener("click", () => showCO("NB"));
@@ -430,22 +451,22 @@
         */
 
 
-       if (false) { //navigator.geolocation) {
-         navigator.geolocation.getCurrentPosition((position) => {
-           coords = position.coords;
-           console.log(`AT GEOLOCATION latitude: ${coords.latitude} longitude: ${coords.longitude}`)
-           astromath.longitude = astromath.radians(coords.longitude); //longitude of observer in degrees East
-           astromath.latitude = astromath.radians(coords.latitude); //latitude of observer in degrees
-           console.log(`astromath: latitude: ${astromath.latitude} longitude: ${astromath.longitude}`)
-           ready();
-         });
-       } else {
+      if (false) { //navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition((position) => {
+          coords = position.coords;
+          console.log(`AT GEOLOCATION latitude: ${coords.latitude} longitude: ${coords.longitude}`)
+          astromath.longitude = astromath.radians(coords.longitude); //longitude of observer in degrees East
+          astromath.latitude = astromath.radians(coords.latitude); //latitude of observer in degrees
+          console.log(`astromath: latitude: ${astromath.latitude} longitude: ${astromath.longitude}`)
+          ready();
+        });
+      } else {
 
-         astromath.longitude = astromath.radians(174); //longitude of observer in degrees East
-         astromath.latitude = astromath.radians(-35); //latitude of observer in degrees
-         //listener2();
-         ready()
-       }
+        astromath.longitude = astromath.radians(174); //longitude of observer in degrees East
+        astromath.latitude = astromath.radians(-35); //latitude of observer in degrees
+        //listener2();
+        ready()
+      }
 
 
 
@@ -470,27 +491,30 @@
     <div id="content">
       <canvas id="canvasFinder"></canvas>
       <div id="textName" class="name"></div>
-      <canvas id="canvasAtlas"></canvas>
+      <div>
+        <button id="buttonPrevious" class="btngroup9">&#60;</button>
+        <button id="buttonBrightStars" class="btngroup9">S</button>
+        <button id="buttonPlanets" class="btngroup9">P</button>
+        <button id="buttonOpenClusters" class="btngroup9">O</button>
+        <button id="buttonGlobularClusters" class="btngroup9">G</button>
+        <button id="buttonBrightNebulas" class="btngroup9">N</button>
+        <button id="buttonPlanetaryNebulas" class="btngroup9">R</button>
+        <button id="buttonGalaxies" class="btngroup9">X</button>
+        <button id="buttonNext" class="btngroup9">&#62;</button>
+      </div>
+      <div>
+        <button id="buttonAtlasPrevious" class="btngroup3">&#60;</button>
+        <button id="buttonLegend" class="btngroup3L">.</button>
+        <button id="buttonAtlasNext" class="btngroup3">&#62;</button>
+        <canvas id="canvasAtlas"></canvas>
+      </div>
+
     </div>
-    <div>
-      <button id="buttonBrightStars" class="btngroup7">S</button>
-      <button id="buttonPlanets" class="btngroup7">P</button>
-      <button id="buttonOpenClusters" class="btngroup7">O</button>
-      <button id="buttonGlobularClusters" class="btngroup7">G</button>
-      <button id="buttonBrightNebulas" class="btngroup7">N</button>
-      <button id="buttonPlanetaryNebulas" class="btngroup7">R</button>
-      <button id="buttonGalaxies" class="btngroup7">X</button>
+    <div id="pageCO">
+      <div id="listCO" class="list">
+      </div>
+      <br>
     </div>
-    <div>
-      <button id="buttonPrevious" class="btngroup2">Previous</button>
-      <button id="buttonNext" class="btngroup2">Next</button>
-    </div>
-  </div>
-  <div id="pageCO">
-    <div id="listCO" class="list">
-    </div>
-    <br>
-  </div>
 
 
 </html>

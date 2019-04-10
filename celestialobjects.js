@@ -1,6 +1,6 @@
 //let data1="name,raHours,raMinutes,decDegrees,decMinutes,lightYears,absMagnitue,type,notes\
 
-var index=0;
+var index = 0;
 let data = ["47 Tucanae,0,24,-72,5,13000,,GC,30 thousand stars with a dense core which may contain a black hole. Second brightest globular cluster. Not part of the LMC. 12 myo.",
   "Andromeda Galaxy,0,43,41,16,2900000,3.4,GX,Nearest major galaxy to us. one trillion stars. 2X milky way.",
   "Blue Planetary Nebula,11,50,-57,10,4900,,RN,brightest nebula in the south",
@@ -234,6 +234,15 @@ class CelestialObject {
     this.azimuth = astromath.azimuth(astromath.raRadians(this.raHours, this.raMinutes), astromath.decRadians(this.decDegrees, this.decMinutes));
     this.visible =
       astromath.altitude(astromath.raRadians(this.raHours, this.raMinutes), astromath.decRadians(this.decDegrees, this.decMinutes)) > 15 ? true : false;
+    let scales = [0, 0.0005, 12.5, 250, 5000, 50000, 500000, 50000000, 100000000]
+    let indexScale = 0
+    for (let [i, s] of scales.entries()) {
+      if (this.lightYears < s) {
+        this.scale = i
+        //console.log(`name: ${this.name} scale: ${this.scale}`)
+        break
+      }
+    }
   }
 }
 
