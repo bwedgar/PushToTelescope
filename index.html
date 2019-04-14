@@ -108,6 +108,16 @@
       padding: 2% 2%;
     }
 
+    .btngroup4 {
+      background-color: black;
+      color: red;
+      font-family: verdana;
+      font-size: 3.5vw;
+      border: 1px solid red;
+      width: 23%;
+      padding: 2% 2%;
+    }
+
     .btngroup7 {
       background-color: black;
       color: red;
@@ -161,6 +171,13 @@
       let galShow = 0;
       let selectedCos = 0
       globalScale = 3
+      scaleSelected = 1;
+    legends = ["The Solar System 30 AU", "The Nearest Stars 12.5 ly", "The Solar Neighbourhood 250 ly", "The Orion Arm  5,000 ly", "The Milky Way Galaxy  50,000 ly", "Satellite Galaxies  500,000 ly", "The Local Group  5 mly",
+        "The Virgo Supercluster 100 mly"
+      ]
+      items = 0
+      let visibleOnly = true;
+      let scales = [0, 0.0005, 12.5, 250, 5000, 50000, 500000, 50000000, 100000000]
 
       //astromath.longitude = astromath.radians(174.76); //longitude of observer in degrees East
       //astromath.latitude = astromath.radians(-36.8485); //latitude of observer in degrees
@@ -260,7 +277,23 @@
         }
       }
 
-      showData = (index) => {
+      showScale = () => {
+        index=0;
+        console.log(`at showScale  index: ${index} scaleSelected: ${scaleSelected}`)
+          document.getElementById("buttonScale").innerHTML = legends[scaleSelected]
+      //  if (visibleOnly) {
+        //  while (cos[index].scale !== scaleSelected || cos[index].visible !== true) {
+        //    index++
+        //  }
+      //  } else {
+      //    while (cos[index].scale !== scaleSelected) {
+            index++
+        //   }
+        // }
+      }
+
+      showData = () => {
+        console.log(`index: ${index} scaleSelected: ${scaleSelected} object name: ${cos[index].name}`)
         alt = astromath.altitude(astromath.raRadians(cos[index].raHours, cos[index].raMinutes), astromath.decRadians(cos[index].decDegrees, cos[index].decMinutes))
         az = astromath.azimuth(astromath.raRadians(cos[index].raHours, cos[index].raMinutes), astromath.decRadians(cos[index].decDegrees, cos[index].decMinutes))
         textName.innerHTML = cos[index].name + "<br>" + astromath.unitsToSI(cos[index].lightYears) + "ly " + cos[index].notes;
@@ -273,7 +306,7 @@
         document.getElementById("listCO").innerHTML = "";
         var numberOfItemsAdded = 0;
         for (const co of cos) {
-          if (co.type == type && co.visible == true) {
+          if (co.scale == scaleSelected && co.visible == true) {
             numberOfItemsAdded++;
             var node = document.createElement("BUTTON");
             var textnode = document.createTextNode(co.name);
@@ -342,7 +375,7 @@
       }
 
       writeLegend = (legends, atlas) => {
-        document.getElementById("buttonLegend").innerHTML = legends[atlas]
+        document.getElementById("buttonScale").innerHTML = legends[atlas]
       }
 
       showAtlas = (indexScale) => {
@@ -350,19 +383,16 @@
         // show only those objects whose distance is greater or equal to the
         // smaller scale and less than the next scale
         // find the scale for the altas view
-        cosScale=cos.filter((cos)=>{return cos.scale==indexScale})
+        cosScale = cos.filter((cos) => {
+          return cos.scale == indexScale
+        })
         //console.log(cosScale[12].name)
-        let legends = ["The Solar System 30 AU", "The Nearest Stars 12.5 ly", "The Solar Neighbourhood 250 ly", "The Orion Arm  5,000 ly", "The Milky Way Galaxy  50,000 ly", "Satellite Galaxies  500,000 ly", "The Local Group  5 mly",
-          "The Virgo Supercluster 100 mly"
-        ]
-        items = 0
-        let scales = [0, 0.0005, 12.5, 250, 5000, 50000, 500000, 50000000, 100000000]
         for (let [i, co] of cosScale.entries()) {
-        //  if (co.scale == indexScale) {
-            scale = canvasAtlas.width / scales[indexScale] / 2
-          selected=(i==indexSelected)?true:false
-            drawCelestialObject(co, scale,selected)
-        //  }
+          //  if (co.scale == indexScale) {
+          scale = canvasAtlas.width / scales[indexScale] / 2
+          //  selected=(i==indexSelected)?true:false
+          //    drawCelestialObject(co, scale,selected)
+          //  }
           drawSun()
           writeLegend(legends, globalScale)
         }
@@ -397,43 +427,43 @@
         window.location.href = "https://bwedgar.github.io/index.html";
       });
 
-      document.getElementById("buttonPrevious").addEventListener("click", (e) => {
-        selectedCos = selectedCos.previousSibling
-        if (selectedCos === null) {
-          selectedCos = document.getElementById("listCO").lastChild
+      document.getElementById("buttonPreviousObject").addEventListener("click", (e) => {
+        if (visibleOnly) {
+          while (cos[index].scale !== scaleSelected || cos[index].visible !== true) {
+            index--
+          }
+        } else {
+          while (cos[index].scale !== scaleSelected) {
+            index--
+          }
         }
-        let nameOfCos = selectedCos.innerHTML
-        //console.log(nameOfCos)
-        index = cos.findIndex(x => x.name == nameOfCos.trim());
-        //showGalaxy(cos[index].type)
-        showData(index);
+        showData();
       });
 
-      document.getElementById("buttonNext").addEventListener("click", (e) => {
-        selectedCos = selectedCos.nextSibling
-        if (selectedCos === null) {
-          selectedCos = document.getElementById("listCO").firstChild
+      document.getElementById("buttonNextObject").addEventListener("click", (e) => {
+        if (visibleOnly) {
+          while (cos[index].scale !== scaleSelected || cos[index].visible !== true) {
+            index++
+          }
+        } else {
+          while (cos[index].scale !== scaleSelected) {
+            index++
+          }
         }
-        let nameOfCos = selectedCos.innerHTML
-        //console.log(nameOfCos)
-        index = cos.findIndex(x => x.name == nameOfCos.trim());
-        //showGalaxy(cos[index].type)
-        showData(index);
+        showData();
       });
 
-      document.getElementById("buttonAtlasNext").addEventListener("click", (e) => {
-        indexSelected++
-        showData(cos);
+      document.getElementById("buttonScalePrevious").addEventListener("click", (e) => {
+        (scaleSelected > 0) ? scaleSelected-- : 0
+        showScale()
+        showData()
       });
 
-      document.getElementById("buttonBrightStars").addEventListener("click", () => showCO("ST"));
-      document.getElementById("buttonPlanets").addEventListener("click", () => showCO("PL"));
-      document.getElementById("buttonBrightNebulas").addEventListener("click", () => showCO("NB"));
-      document.getElementById("buttonOpenClusters").addEventListener("click", () => showCO("OC"));
-      document.getElementById("buttonGlobularClusters").addEventListener("click", () => showCO("GC"));
-      document.getElementById("buttonGalaxies").addEventListener("click", () => showCO("GX"));
-      document.getElementById("buttonPlanetaryNebulas").addEventListener("click", () => showCO("RN"));
-
+      document.getElementById("buttonScaleNext").addEventListener("click", (e) => {
+        (scaleSelected < 7) ? scaleSelected++ : 8
+        showScale()
+        showData()
+      });
 
     } //end of ready()
 
@@ -488,33 +518,30 @@
       <button id="buttonCalibrate" class="btngroup2">cal.</button>
       <button id="buttonInfo" class="btngroup2">info</button>
     </div>
-    <div id="content">
-      <canvas id="canvasFinder"></canvas>
-      <div id="textName" class="name"></div>
-      <div>
-        <button id="buttonPrevious" class="btngroup9">&#60;</button>
-        <button id="buttonBrightStars" class="btngroup9">S</button>
-        <button id="buttonPlanets" class="btngroup9">P</button>
-        <button id="buttonOpenClusters" class="btngroup9">O</button>
-        <button id="buttonGlobularClusters" class="btngroup9">G</button>
-        <button id="buttonBrightNebulas" class="btngroup9">N</button>
-        <button id="buttonPlanetaryNebulas" class="btngroup9">R</button>
-        <button id="buttonGalaxies" class="btngroup9">X</button>
-        <button id="buttonNext" class="btngroup9">&#62;</button>
-      </div>
-      <div>
-        <button id="buttonAtlasPrevious" class="btngroup3">&#60;</button>
-        <button id="buttonLegend" class="btngroup3L">.</button>
-        <button id="buttonAtlasNext" class="btngroup3">&#62;</button>
-        <canvas id="canvasAtlas"></canvas>
-      </div>
 
+    <div>
+      <button id="buttonScalePrevious" class="btngroup3">&#60;</button>
+      <button id="buttonScale" class="btngroup3L">SCALE</button>
+      <button id="buttonScaleNext" class="btngroup3">&#62;</button>
     </div>
-    <div id="pageCO">
-      <div id="listCO" class="list">
-      </div>
-      <br>
+    <div>
+      <button id="buttonPreviousObject" class="btngroup4">&#60;</button>
+      <button id="buttonVisible" class="btngroup4">Visible</button>
+      <button id="buttonAll" class="btngroup4">All</button>
+      <button id="buttonNextObject" class="btngroup4">&#62;</button>
     </div>
+    <canvas id="canvasFinder"></canvas>
+    <div id="textName" class="name"></div>
+
+
+    <canvas id="canvasAtlas"></canvas>
+  </div>
+
+  <div id="pageCO">
+    <div id="listCO" class="list">
+    </div>
+    <br>
+  </div>
 
 
 </html>
