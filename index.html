@@ -171,18 +171,34 @@
       let galShow = 0;
       let selectedCos = 0
       globalScale = 3
-      scaleSelected = 1;
-    legends = ["The Solar System 30 AU", "The Nearest Stars 12.5 ly", "The Solar Neighbourhood 250 ly", "The Orion Arm  5,000 ly", "The Milky Way Galaxy  50,000 ly", "Satellite Galaxies  500,000 ly", "The Local Group  5 mly",
+      scaleSelected = 2;
+      legends = ["The Solar System 30 AU", "The Nearest Stars 12.5 ly", "The Solar Neighbourhood 250 ly", "The Orion Arm  5,000 ly", "The Milky Way Galaxy  50,000 ly", "Satellite Galaxies  500,000 ly", "The Local Group  5 mly",
         "The Virgo Supercluster 100 mly"
       ]
       items = 0
-      let visibleOnly = true;
+      let visible = true;
+
       let scales = [0, 0.0005, 12.5, 250, 5000, 50000, 500000, 50000000, 100000000]
 
       //astromath.longitude = astromath.radians(174.76); //longitude of observer in degrees East
       //astromath.latitude = astromath.radians(-36.8485); //latitude of observer in degrees
       celestialObjects = new CelestialObjects;
       let cos = celestialObjects.makeCelestialObjects();
+      function filtercos(visible, scale, cos) {
+        if (visible) {
+          cosFiltered = cos.filter(val => {
+            return ((val.visible == true) && (val.scale == scale))
+          })
+        } else {
+          cosFiltered = cos.filter(val => {
+            return (val.scale == scale)
+          })
+        }
+        index = 0
+        return cosFiltered
+      }
+      cosFiltered =   filtercos(visible,scaleSelected,cos)
+
       let objectTypes = ["GX", "OC", "GC", "ST", "NB", "DS", "RN"]
       let objectNames = ["galaxy", "open cluster", "globular cluster", "star", "bright nebula", "double star", "remnant"]
       offsetCompass = localStorage.getItem("offsetCompass")
@@ -278,26 +294,28 @@
       }
 
       showScale = () => {
-        index=0;
-        console.log(`at showScale  index: ${index} scaleSelected: ${scaleSelected}`)
-          document.getElementById("buttonScale").innerHTML = legends[scaleSelected]
-      //  if (visibleOnly) {
+        // index = 0;
+        // console.log(`at showScale  index: ${index} scaleSelected: ${scaleSelected}`)
+        document.getElementById("buttonScale").innerHTML = legends[scaleSelected]
+        //  if (visibleOnly) {
         //  while (cos[index].scale !== scaleSelected || cos[index].visible !== true) {
         //    index++
         //  }
-      //  } else {
-      //    while (cos[index].scale !== scaleSelected) {
-            index++
+        //  } else {
+        //    while (cos[index].scale !== scaleSelected) {
+        index++
         //   }
         // }
       }
 
       showData = () => {
-        console.log(`index: ${index} scaleSelected: ${scaleSelected} object name: ${cos[index].name}`)
-        alt = astromath.altitude(astromath.raRadians(cos[index].raHours, cos[index].raMinutes), astromath.decRadians(cos[index].decDegrees, cos[index].decMinutes))
-        az = astromath.azimuth(astromath.raRadians(cos[index].raHours, cos[index].raMinutes), astromath.decRadians(cos[index].decDegrees, cos[index].decMinutes))
-        textName.innerHTML = cos[index].name + "<br>" + astromath.unitsToSI(cos[index].lightYears) + "ly " + cos[index].notes;
-        showAtlas(cos[index].scale)
+        showScale()
+        // console.log(`index: ${index} scaleSelected: ${scaleSelected} object name: ${cos[index].name}`)
+        // alt = astromath.altitude(astromath.raRadians(cos[index].raHours, cos[index].raMinutes), astromath.decRadians(cos[index].decDegrees, cos[index].decMinutes))
+        // az = astromath.azimuth(astromath.raRadians(cos[index].raHours, cos[index].raMinutes), astromath.decRadians(cos[index].decDegrees, cos[index].decMinutes))
+console.log(`index: ${index} cosF ${cosFiltered[0].name} ${cosFiltered[0].scale}`)
+        textName.innerHTML = cosFiltered[index].name + "<br>" + astromath.unitsToSI(cosFiltered[index].lightYears) + "ly " + cosFiltered[index].notes;
+        showAtlas(cosFiltered[index].scale)
         document.getElementById("pageCO").style.display = "none";
         document.getElementById("pageContent").style.display = "block";
       }
@@ -305,7 +323,7 @@
       showCO = (type) => {
         document.getElementById("listCO").innerHTML = "";
         var numberOfItemsAdded = 0;
-        for (const co of cos) {
+        for (const co of cosFiltered) {
           if (co.scale == scaleSelected && co.visible == true) {
             numberOfItemsAdded++;
             var node = document.createElement("BUTTON");
@@ -394,7 +412,7 @@
           //    drawCelestialObject(co, scale,selected)
           //  }
           drawSun()
-          writeLegend(legends, globalScale)
+          //writeLegend(legends, globalScale)
         }
       }
 
@@ -428,40 +446,52 @@
       });
 
       document.getElementById("buttonPreviousObject").addEventListener("click", (e) => {
-        if (visibleOnly) {
-          while (cos[index].scale !== scaleSelected || cos[index].visible !== true) {
-            index--
-          }
-        } else {
-          while (cos[index].scale !== scaleSelected) {
-            index--
-          }
-        }
+        // if (visibleOnly) {
+        //   while (cos[index].scale !== scaleSelected || cos[index].visible !== true) {
+        //     index--
+        //   }
+        // } else {
+        //   while (cos[index].scale !== scaleSelected) {
+        index--
+        //   }
+        // }
         showData();
       });
 
       document.getElementById("buttonNextObject").addEventListener("click", (e) => {
-        if (visibleOnly) {
-          while (cos[index].scale !== scaleSelected || cos[index].visible !== true) {
-            index++
-          }
-        } else {
-          while (cos[index].scale !== scaleSelected) {
-            index++
-          }
-        }
+        // if (visibleOnly) {
+        //   while (cos[index].scale !== scaleSelected || cos[index].visible !== true) {
+        //     index++
+        //   }
+        // } else {
+        //   while (cos[index].scale !== scaleSelected) {
+        index++
+        //   }
+        // }
         showData();
       });
 
       document.getElementById("buttonScalePrevious").addEventListener("click", (e) => {
         (scaleSelected > 0) ? scaleSelected-- : 0
-        showScale()
+        cosFiltered=filtercos(visible,scaleSelected,cos)
         showData()
       });
 
       document.getElementById("buttonScaleNext").addEventListener("click", (e) => {
         (scaleSelected < 7) ? scaleSelected++ : 8
-        showScale()
+        cosFiltered=filtercos(visible,scaleSelected,cos)
+        showData()
+      });
+
+      document.getElementById("buttonVisible").addEventListener("click", (e) => {
+        visible = true
+        cosFiltered=filtercos(visible,scaleSelected,cos)
+        showData()
+      });
+
+      document.getElementById("buttonAll").addEventListener("click", (e) => {
+        visible = false
+        cosFiltered=filtercos(visible,scaleSelected,cos)
         showData()
       });
 
