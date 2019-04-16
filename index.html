@@ -205,15 +205,13 @@
     let galShow = 0;
 
     scaleSelected = 2;
-    legends = ["The Solar System 30 AU", "The Nearest Stars 12.5 ly", "The Solar Neighbourhood 250 ly", "The Orion Arm  5,000 ly", "The Milky Way Galaxy  50,000 ly", "Satellite Galaxies  500,000 ly", "The Local Group  5 mly",
-      "The Virgo Supercluster 100 mly"
+    legends = ["The Solar System<br/>30 AU", "The Nearest Stars<br/>12.5 ly", "The Solar Neighbourhood<br/>250 ly", "The Orion Arm<br/>5,000 ly", "The Milky Way Galaxy<br/>50,000 ly", "Satellite Galaxies<br/>500,000 ly", "The Local Group<br/>5 mly",
+      "The Virgo Supercluster<br/>100 mly"
     ]
     visibleOnly = true
     index = 0
-    const scales = [0, 0.0005, 12.5, 250, 5000, 50000, 500000, 50000000, 100000000]
+    const scales = [0, 0.0005, 12.5, 250, 5000, 50000, 500000, 50000000]
 
-    astromath.longitude = astromath.radians(174.76); //longitude of observer in degrees East
-    astromath.latitude = astromath.radians(-36.8485); //latitude of observer in degrees
 
     cos = makeCelestialObjects(data, astromath.longitude, astromath.latitude, scales);
     cos.forEach(c => console.log(c.name + "  " + c.lightYears + "   " + c.scale))
@@ -313,13 +311,22 @@
       }
     }
 
+    changeIndex = (index, change, array) => {
+      if (change == "increment") index++
+      if (change == "decrement") index--
+      if (change == "zero") index = 0
+      index = index < 0 ? array.length - 1 : index
+      index = index == array.length ? 0 : index
+      return index
+    }
 
     showData = (index) => {
-      index = index < 0 ? c.length - 1 : index
-      index = index > c.length - 1 ? 0 : index
-      //console.log(`scaleSelected: ${scaleSelected}`)
       document.getElementById("buttonScale").innerHTML = legends[scaleSelected]
-      document.getElementById("textName").innerHTML = c[index].name + "<br>" + c[index].lightYears + "ly " + c[index].notes;
+      if (c.length > 0) {
+        document.getElementById("textName").innerHTML = c[index].name + "<br>" + c[index].lightYears + "ly " + c[index].notes;
+      } else {
+        document.getElementById("textName").innerHTML = ""
+      }
       showAtlas(c[index], scaleSelected)
       document.getElementById("pageCO").style.display = "none";
       document.getElementById("pageContent").style.display = "block";
@@ -417,13 +424,31 @@
       }
     }
 
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition((position) => {
+        coords = position.coords;
+        console.log(`AT GEOLOCATION latitude: ${coords.latitude} longitude: ${coords.longitude}`)
+        astromath.longitude = astromath.radians(coords.longitude); //longitude of observer in degrees East
+        astromath.latitude = astromath.radians(coords.latitude); //latitude of observer in degrees
+        console.log(`astromath: latitude: ${astromath.latitude} longitude: ${astromath.longitude}`)
+      })
+    } else {
+      astromath.longitude = astromath.radians(174.76); //longitude of observer in Auckland in degrees East
+      astromath.latitude = astromath.radians(-36.8485); //latitude of observer  in Auckland  in degrees
+    }
+
+
+    showData(0)
+
 
     // event handlers
 
-    window.addEventListener('devicemotion', listener)
-    window.addEventListener('deviceorientation', listener2)
-    // for testing on laptop
-    listener2(0)
+    if (window.deviceorientation) {
+      window.addEventListener('devicemotion', listener)
+      window.addEventListener('deviceorientation', listener2)
+    } else {
+      listener2(0)
+    }
 
     let listCO = document.getElementById("listCO")
     listCO.addEventListener("click", (e) => {
@@ -439,44 +464,54 @@
       localStorage.setItem("offsetCompass", offsetCompass);
       localStorage.setItem("offsetInclination", offsetInclination);
     });
-    document.getElementById("buttonInfo").addEventListener("click", (e) => {
+    document.getElementById("buttonInfo").addEventListener("click", () => {
       window.location.href = "https://bwedgar.github.io/index.html";
     });
 
-    document.getElementById("buttonPreviousObject").addEventListener("click", (e) => {
-      index--
+    document.getElementById("buttonPreviousObject").addEventListener("click", () => {
+      index = changeIndex(index, "decrement", c)
       showData(index);
     });
 
     document.getElementById("buttonNextObject").addEventListener("click", (e) => {
-      index++
+      index = changeIndex(index, "increment", c)
       showData(index);
     });
 
     document.getElementById("buttonScalePrevious").addEventListener("click", () => {
-      (scaleSelected > 0) ? scaleSelected-- : 0
+      if (scaleSelected > 0) {
+        scaleSelected--
+      } else {
+        scaleSelected = 0
+      }
       c = filterObjects(cos, visibleOnly, scaleSelected)
-      showData(0)
+      index = changeIndex(index, "zero", c)
+      showData(index)
     });
 
     document.getElementById("buttonScaleNext").addEventListener("click", () => {
-      (scaleSelected < 7) ? scaleSelected++ : 8
-      console.log("at next")
+      if (scaleSelected < 7) {
+        scaleSelected++
+      } else {
+        scaleSelected = 7
+      }
       c = filterObjects(cos, visibleOnly, scaleSelected)
-      console.log(`name: ${c[0].name}  scale: ${c[0].scale}`)
-      showData(0)
+      index = changeIndex(index, "zero", c)
+      showData(index)
     });
 
-    document.getElementById("buttonVisible").addEventListener("click", (e) => {
+    document.getElementById("buttonVisible").addEventListener("click", () => {
       visibleOnly = true
       c = filterObjects(cos, visibleOnly, scaleSelected)
-      showData(0)
+      index = changeIndex(index, "zero", c)
+      showData(index)
     });
 
-    document.getElementById("buttonAll").addEventListener("click", (e) => {
+    document.getElementById("buttonAll").addEventListener("click", () => {
       visibleOnly = false
       c = filterObjects(cos, visibleOnly, scaleSelected)
-      showData(0)
+      index = changeIndex(index, "zero", c)
+      showData(index)
     });
 
 
