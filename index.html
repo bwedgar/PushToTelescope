@@ -154,37 +154,72 @@
   <script src="celestialobjects.js"></script>
   <!--<script src="sw.js"></script>-->
 
+
+
+</head>
+
+
+<body>
+  <div id="pageContent">
+    <div>
+      <button id="buttonCalibrate" class="btngroup2">cal.</button>
+      <button id="buttonInfo" class="btngroup2">info</button>
+    </div>
+
+    <div>
+      <button id="buttonScalePrevious" class="btngroup3">&#60;</button>
+      <button id="buttonScale" class="btngroup3L">SCALE</button>
+      <button id="buttonScaleNext" class="btngroup3">&#62;</button>
+    </div>
+    <div>
+      <button id="buttonPreviousObject" class="btngroup4">&#60;</button>
+      <button id="buttonVisible" class="btngroup4">Visible</button>
+      <button id="buttonAll" class="btngroup4">All</button>
+      <button id="buttonNextObject" class="btngroup4">&#62;</button>
+    </div>
+    <canvas id="canvasFinder"></canvas>
+    <div id="textName" class="name"></div>
+
+
+    <canvas id="canvasAtlas"></canvas>
+  </div>
+
+  <div id="pageCO">
+    <div id="listCO" class="list">
+    </div>
+    <br>
+  </div>
+
   <script>
-    function ready() {
+    let previousSensor = 0;
+    let sensor = 0;
+    let compass = 0;
+    let compassRaw = 0;
+    let offsetCompass = 0;
+    let offsetInclination = 0;
+    let alt = 0; //altitude of object in degrees
+    let altitude = 0; //altitude of telescope in degrees
+    let altDev = 0; //difference between alt of object and altitude of telescope in degrees
+    let azDev = 0;
+    let az = 0;
+    let galShow = 0;
+    let selectedCos = 0
+    globalScale = 3
+    scaleSelected = 2;
+    legends = ["The Solar System 30 AU", "The Nearest Stars 12.5 ly", "The Solar Neighbourhood 250 ly", "The Orion Arm  5,000 ly", "The Milky Way Galaxy  50,000 ly", "Satellite Galaxies  500,000 ly", "The Local Group  5 mly",
+      "The Virgo Supercluster 100 mly"
+    ]
+    items = 0
+    let visible = true;
 
-      let previousSensor = 0;
-      let sensor = 0;
-      let compass = 0;
-      let compassRaw = 0;
-      let offsetCompass = 0;
-      let offsetInclination = 0;
-      let alt = 0; //altitude of object in degrees
-      let altitude = 0; //altitude of telescope in degrees
-      let altDev = 0; //difference between alt of object and altitude of telescope in degrees
-      let azDev = 0;
-      let az = 0;
-      let galShow = 0;
-      let selectedCos = 0
-      globalScale = 3
-      scaleSelected = 2;
-      legends = ["The Solar System 30 AU", "The Nearest Stars 12.5 ly", "The Solar Neighbourhood 250 ly", "The Orion Arm  5,000 ly", "The Milky Way Galaxy  50,000 ly", "Satellite Galaxies  500,000 ly", "The Local Group  5 mly",
-        "The Virgo Supercluster 100 mly"
-      ]
-      items = 0
-      let visible = true;
+    const scales = [0, 0.0005, 12.5, 250, 5000, 50000, 500000, 50000000, 100000000]
 
-      let scales = [0, 0.0005, 12.5, 250, 5000, 50000, 500000, 50000000, 100000000]
-
-      //astromath.longitude = astromath.radians(174.76); //longitude of observer in degrees East
-      //astromath.latitude = astromath.radians(-36.8485); //latitude of observer in degrees
-      celestialObjects = new CelestialObjects;
-      let cos = celestialObjects.makeCelestialObjects();
-      function filtercos(visible, scale, cos) {
+    astromath.longitude = astromath.radians(174.76); //longitude of observer in degrees East
+    astromath.latitude = astromath.radians(-36.8485); //latitude of observer in degrees
+    //celestialObjects = new CelestialObjects;
+    cos=makeCelestialObjects(data, astromath.longitude, astromath.latitude, scales);
+console.log(cos[3].name)
+    /*function filtercos(visible, scale, cos) {
         if (visible) {
           cosFiltered = cos.filter(val => {
             return ((val.visible == true) && (val.scale == scale))
@@ -313,7 +348,7 @@
         // console.log(`index: ${index} scaleSelected: ${scaleSelected} object name: ${cos[index].name}`)
         // alt = astromath.altitude(astromath.raRadians(cos[index].raHours, cos[index].raMinutes), astromath.decRadians(cos[index].decDegrees, cos[index].decMinutes))
         // az = astromath.azimuth(astromath.raRadians(cos[index].raHours, cos[index].raMinutes), astromath.decRadians(cos[index].decDegrees, cos[index].decMinutes))
-console.log(`index: ${index} cosF ${cosFiltered[0].name} ${cosFiltered[0].scale}`)
+  console.log(`index: ${index} cosF ${cosFiltered[0].name} ${cosFiltered[0].scale}`)
         textName.innerHTML = cosFiltered[index].name + "<br>" + astromath.unitsToSI(cosFiltered[index].lightYears) + "ly " + cosFiltered[index].notes;
         showAtlas(cosFiltered[index].scale)
         document.getElementById("pageCO").style.display = "none";
@@ -510,68 +545,35 @@ console.log(`index: ${index} cosF ${cosFiltered[0].name} ${cosFiltered[0].scale}
         })
         */
 
+    /*
+        if (false) { //navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition((position) => {
+            coords = position.coords;
+            console.log(`AT GEOLOCATION latitude: ${coords.latitude} longitude: ${coords.longitude}`)
+            astromath.longitude = astromath.radians(coords.longitude); //longitude of observer in degrees East
+            astromath.latitude = astromath.radians(coords.latitude); //latitude of observer in degrees
+            console.log(`astromath: latitude: ${astromath.latitude} longitude: ${astromath.longitude}`)
+            ready();
+          });
+        } else {
 
-      if (false) { //navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition((position) => {
-          coords = position.coords;
-          console.log(`AT GEOLOCATION latitude: ${coords.latitude} longitude: ${coords.longitude}`)
-          astromath.longitude = astromath.radians(coords.longitude); //longitude of observer in degrees East
-          astromath.latitude = astromath.radians(coords.latitude); //latitude of observer in degrees
-          console.log(`astromath: latitude: ${astromath.latitude} longitude: ${astromath.longitude}`)
-          ready();
-        });
-      } else {
+          astromath.longitude = astromath.radians(174); //longitude of observer in degrees East
+          astromath.latitude = astromath.radians(-35); //latitude of observer in degrees
+          //listener2();
+          ready()
+        }
 
-        astromath.longitude = astromath.radians(174); //longitude of observer in degrees East
-        astromath.latitude = astromath.radians(-35); //latitude of observer in degrees
-        //listener2();
-        ready()
+
+
       }
 
-
-
-    }
-
-    if (document.readyState == 'loading') {
-      document.addEventListener('DOMContentLoaded', findCoords); //ready);
-    } else {
-      findCoords();
-    }
+      if (document.readyState == 'loading') {
+        document.addEventListener('DOMContentLoaded', findCoords); //ready);
+      } else {
+        findCoords();
+      }
+      */
   </script>
-
-</head>
-
-
-<body>
-  <div id="pageContent">
-    <div>
-      <button id="buttonCalibrate" class="btngroup2">cal.</button>
-      <button id="buttonInfo" class="btngroup2">info</button>
-    </div>
-
-    <div>
-      <button id="buttonScalePrevious" class="btngroup3">&#60;</button>
-      <button id="buttonScale" class="btngroup3L">SCALE</button>
-      <button id="buttonScaleNext" class="btngroup3">&#62;</button>
-    </div>
-    <div>
-      <button id="buttonPreviousObject" class="btngroup4">&#60;</button>
-      <button id="buttonVisible" class="btngroup4">Visible</button>
-      <button id="buttonAll" class="btngroup4">All</button>
-      <button id="buttonNextObject" class="btngroup4">&#62;</button>
-    </div>
-    <canvas id="canvasFinder"></canvas>
-    <div id="textName" class="name"></div>
-
-
-    <canvas id="canvasAtlas"></canvas>
-  </div>
-
-  <div id="pageCO">
-    <div id="listCO" class="list">
-    </div>
-    <br>
-  </div>
-
+</body>
 
 </html>

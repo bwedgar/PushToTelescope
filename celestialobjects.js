@@ -1,7 +1,4 @@
-//let data1="name,raHours,raMinutes,decDegrees,decMinutes,lightYears,absMagnitue,type,notes\
-
-var index = 0;
-let data = ["47 Tucanae,0,24,-72,5,13000,,GC,30 thousand stars with a dense core which may contain a black hole. Second brightest globular cluster. Not part of the LMC. 12 myo.",
+const data = ["47 Tucanae,0,24,-72,5,13000,,GC,30 thousand stars with a dense core which may contain a black hole. Second brightest globular cluster. Not part of the LMC. 12 myo.",
   "Andromeda Galaxy,0,43,41,16,2900000,3.4,GX,Nearest major galaxy to us. one trillion stars. 2X milky way.",
   "Blue Planetary Nebula,11,50,-57,10,4900,,RN,brightest nebula in the south",
   "Butterfly Cluster,17,40,-32,13,2000,4.2,OC,",
@@ -199,101 +196,94 @@ let data = ["47 Tucanae,0,24,-72,5,13000,,GC,30 thousand stars with a dense core
   "Gem Cluster,10,31,-57,58,1400,,OC,Red supergiant surrounded by blue stars. 8min across."
 ]
 
-class CelestialObject {
-  constructor(
-    name,
-    raHours,
-    raMinutes,
-    decDegrees,
-    decMinutes,
-    lightYears,
-    absMagnitue,
-    type,
-    notes
-  )
+makeCelestialObjects = (data, longitude, latitide, scales) => {
+  o = {}
+  objects = data.map(string => string.split(","))
+    .map(a => o = {
+      "name": a[0],
+      "raHours": a[1],
+      "raMinutes": a[2],
+      "decDegrees": a[3],
+      "decMinutes": a[4],
+      "lightYears": a[5],
+      "absMagnitue": a[6],
+      "type": a[7],
+      "notes": a[8],
+      "galLongitude": astromath.galacticLongitude(
+        astromath.raRadians(a[1], a[2]),
+        astromath.decRadians(a[3], a[4])
+      ),
+      "galLatitude": astromath.galacticLatitude(
+        astromath.raRadians(a[1], a[2]),
+        astromath.decRadians(a[3], a[4])
+      ),
+      "azimuth": astromath.azimuth(
+        astromath.raRadians(a[1], a[2]),
+        astromath.decRadians(a[3], a[4])
+      ),
+      "visible": astromath.altitude(
+        astromath.raRadians(a[1], a[2]),
+        astromath.decRadians(a[3], a[4])
+      ),
+      "scale": scales[2]
+      //     for (let [i, s] of scales.entries()) {
+      //       if (this.lightYears < s) {
+      //         this.scale = i
+      //         //console.log(`name: ${this.name} scale: ${this.scale}`)
+      //         break
 
-  {
-    this.name = name.replace(/M(\d+)/, "Messier $1");;
-    this.raHours = raHours;
-    this.raMinutes = raMinutes;
-    this.decDegrees = decDegrees;
-    this.decMinutes = decMinutes;
-    this.lightYears = lightYears;
-    this.absMagnitue = absMagnitue;
-    this.type = type;
-    this.notes = notes;
-
-    this.galLongitude = astromath.galacticLongitude(
-      astromath.raRadians(this.raHours, this.raMinutes),
-      astromath.decRadians(this.decDegrees, this.decMinutes)
-    );
-    this.galLatitude = astromath.galacticLatitude(
-      astromath.raRadians(this.raHours, this.raMinutes),
-      astromath.decRadians(this.decDegrees, this.decMinutes)
-    );
-    this.azimuth = astromath.azimuth(astromath.raRadians(this.raHours, this.raMinutes), astromath.decRadians(this.decDegrees, this.decMinutes));
-    this.visible =
-      astromath.altitude(astromath.raRadians(this.raHours, this.raMinutes), astromath.decRadians(this.decDegrees, this.decMinutes)) > 15 ? true : false;
-    let scales = [0, 0.0005, 12.5, 250, 5000, 50000, 500000, 50000000, 100000000]
-    let indexScale = 0
-    for (let [i, s] of scales.entries()) {
-      if (this.lightYears < s) {
-        this.scale = i
-        //console.log(`name: ${this.name} scale: ${this.scale}`)
-        break
-      }
-    }
-  }
+    })
+    .sort((f, g) => (f.azimuth < g.azimuth) ? -1 : 1)
+  //console.log(objects[1].name)
+  return objects
 }
 
-class CelestialObjects {
-  constructor() {}
-  makeCelestialObjects() {
-    celestialObjects = [];
-    for (let datum of data) {
-      let c = datum.split(",");
-      //console.log(c);
-      let celestialObject = new CelestialObject(
-        c[0],
-        c[1],
-        c[2],
-        c[3],
-        c[4],
-        c[5],
-        c[6],
-        c[7],
-        c[8]
-      );
-      celestialObjects.push(celestialObject);
-    }
-    for (var i of [0, 1, 3, 4, 5, 6, 7]) { //planets[0], planets[1], planets[3], planets[4], planets[5], planets[6], planets[7]]) {
-      //console.log("i: "+i+" name: "+ planets[i].name)
 
-      var ra = radecr(helios(planets[i]), helios(planets[2]))[0];
-
-      var raHours = Math.floor(ra);
-      var raMinutes = Math.round((ra - raHours) * 60);
-      var dec = radecr(helios(planets[i]), helios(planets[2]))[1];
-      var decDegrees = Math.floor(dec);
-      var decMinutes = Math.round((dec - decDegrees) * 60);
-      var distance = radecr(helios(planets[i]), helios(planets[2]))[2] * 0.00001581; //from AU to light Years
-      var n = planets[i].name;
-      var co = new CelestialObject(n, raHours, raMinutes, decDegrees, decMinutes, distance, "", "PL", "")
-
-      celestialObjects.push(co);
-
-    }
-    celestialObjects = celestialObjects.sort((f, g) => (f.azimuth < g.azimuth) ? -1 : 1);
-
-    index = celestialObjects.findIndex(co =>
-      co.visible == true & co.type == "ST"
-    );
-    console.log("index at celestialobjects.js is: " + index)
-
-    return celestialObjects;
-  }
-
-
-
-
-}
+//   for (var i of [0, 1, 3, 4, 5, 6, 7]) { //planets[0], planets[1], planets[3], planets[4], planets[5], planets[6], planets[7]]) {
+//     //console.log("i: "+i+" name: "+ planets[i].name)
+//
+//     var ra = radecr(helios(planets[i]), helios(planets[2]))[0];
+//
+//     var raHours = Math.floor(ra);
+//     var raMinutes = Math.round((ra - raHours) * 60);
+//     var dec = radecr(helios(planets[i]), helios(planets[2]))[1];
+//     var decDegrees = Math.floor(dec);
+//     var decMinutes = Math.round((dec - decDegrees) * 60);
+//     var distance = radecr(helios(planets[i]), helios(planets[2]))[2] * 0.00001581; //from AU to light Years
+//     var n = planets[i].name;
+//     var co = new CelestialObject(n, raHours, raMinutes, decDegrees, decMinutes, distance, "", "PL", "")
+//
+//     celestialObjects.push(co);
+//
+//   }
+//   celestialObjects = celestialObjects.sort((f, g) => (f.azimuth < g.azimuth) ? -1 : 1);
+//
+//   index = celestialObjects.findIndex(co =>
+//     co.visible == true & co.type == "ST"
+//   );
+//   console.log("index at celestialobjects.js is: " + index)
+//
+//   return celestialObjects;
+// }
+//
+// }
+//
+//
+//
+//
+//
+//
+//       }
+//     }
+//   }
+// }
+//
+// class CelestialObjects {
+//   constructor() {}
+//   makeCelestialObjects() {
+//
+//
+//
+//
+//
+//   }
