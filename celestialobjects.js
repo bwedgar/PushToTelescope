@@ -221,11 +221,15 @@ makeCelestialObjects = (data, longitude, latitide, scales) => {
         astromath.raRadians(a[1], a[2]),
         astromath.decRadians(a[3], a[4])
       ),
-      "visible": astromath.altitude(
+      "altitude": astromath.altitude(
         astromath.raRadians(a[1], a[2]),
         astromath.decRadians(a[3], a[4])
       ),
-      "scale": scales[2]
+      "visible": (astromath.altitude(
+        astromath.raRadians(a[1], a[2]),
+        astromath.decRadians(a[3], a[4])
+      ) > 15*6/360 ? true : false),
+      "scale": 2
       //     for (let [i, s] of scales.entries()) {
       //       if (this.lightYears < s) {
       //         this.scale = i
@@ -236,6 +240,11 @@ makeCelestialObjects = (data, longitude, latitide, scales) => {
     .sort((f, g) => (f.azimuth < g.azimuth) ? -1 : 1)
   //console.log(objects[1].name)
   return objects
+}
+
+filterObjects = (os, visibleOnly, scale) => {
+  f = os.filter(o => (visibleOnly?o.visible:true && o.scale == scale))
+  return f
 }
 
 
@@ -254,36 +263,3 @@ makeCelestialObjects = (data, longitude, latitide, scales) => {
 //     var co = new CelestialObject(n, raHours, raMinutes, decDegrees, decMinutes, distance, "", "PL", "")
 //
 //     celestialObjects.push(co);
-//
-//   }
-//   celestialObjects = celestialObjects.sort((f, g) => (f.azimuth < g.azimuth) ? -1 : 1);
-//
-//   index = celestialObjects.findIndex(co =>
-//     co.visible == true & co.type == "ST"
-//   );
-//   console.log("index at celestialobjects.js is: " + index)
-//
-//   return celestialObjects;
-// }
-//
-// }
-//
-//
-//
-//
-//
-//
-//       }
-//     }
-//   }
-// }
-//
-// class CelestialObjects {
-//   constructor() {}
-//   makeCelestialObjects() {
-//
-//
-//
-//
-//
-//   }
