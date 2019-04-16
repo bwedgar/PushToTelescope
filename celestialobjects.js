@@ -228,22 +228,16 @@ makeCelestialObjects = (data, longitude, latitide, scales) => {
       "visible": (astromath.altitude(
         astromath.raRadians(a[1], a[2]),
         astromath.decRadians(a[3], a[4])
-      ) > 15*6/360 ? true : false),
-      "scale": 2
-      //     for (let [i, s] of scales.entries()) {
-      //       if (this.lightYears < s) {
-      //         this.scale = i
-      //         //console.log(`name: ${this.name} scale: ${this.scale}`)
-      //         break
-
+      ) > 15  ? true : false),
+      "scale": scales.findIndex(s => s > a[5] )-1
     })
     .sort((f, g) => (f.azimuth < g.azimuth) ? -1 : 1)
-  //console.log(objects[1].name)
+  console.log(objects[1].scale)
   return objects
 }
 
 filterObjects = (os, visibleOnly, scale) => {
-  f = os.filter(o => (visibleOnly?o.visible:true && o.scale == scale))
+  f = os.filter(o => (visibleOnly ? (o.visible  && o.scale == scale): (o.scale == scale)))
   return f
 }
 

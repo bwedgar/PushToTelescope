@@ -203,8 +203,7 @@
     let azDev = 0;
     let az = 0;
     let galShow = 0;
-    let selectedCos = 0
-    globalScale = 3
+
     scaleSelected = 2;
     legends = ["The Solar System 30 AU", "The Nearest Stars 12.5 ly", "The Solar Neighbourhood 250 ly", "The Orion Arm  5,000 ly", "The Milky Way Galaxy  50,000 ly", "Satellite Galaxies  500,000 ly", "The Local Group  5 mly",
       "The Virgo Supercluster 100 mly"
@@ -217,8 +216,8 @@
     astromath.latitude = astromath.radians(-36.8485); //latitude of observer in degrees
 
     cos = makeCelestialObjects(data, astromath.longitude, astromath.latitude, scales);
-    cosFiltered = filterObjects(cos, true, 2)
-
+    cos.forEach(c => console.log(c.name + "  " + c.lightYears + "   " + c.scale))
+    let c = filterObjects(cos, visibleOnly, scaleSelected)
 
     let objectTypes = ["GX", "OC", "GC", "ST", "NB", "DS", "RN"]
     let objectNames = ["galaxy", "open cluster", "globular cluster", "star", "bright nebula", "double star", "remnant"]
@@ -316,9 +315,12 @@
 
 
     showData = (index) => {
+      index = index < 0 ? c.length - 1 : index
+      index = index > c.length - 1 ? 0 : index
+      //console.log(`scaleSelected: ${scaleSelected}`)
       document.getElementById("buttonScale").innerHTML = legends[scaleSelected]
-      document.getElementById("textName").innerHTML = cosFiltered[index].name + "<br>" + astromath.unitsToSI(cosFiltered[index].lightYears) + "ly " + cosFiltered[index].notes;
-      showAtlas(cosFiltered[index],scaleSelected)
+      document.getElementById("textName").innerHTML = c[index].name + "<br>" + c[index].lightYears + "ly " + c[index].notes;
+      showAtlas(c[index], scaleSelected)
       document.getElementById("pageCO").style.display = "none";
       document.getElementById("pageContent").style.display = "block";
     }
@@ -415,9 +417,6 @@
       }
     }
 
-    // at start
-    showCO("ST")
-    showData(index);
 
     // event handlers
 
@@ -454,28 +453,30 @@
       showData(index);
     });
 
-    document.getElementById("buttonScalePrevious").addEventListener("click", (e) => {
+    document.getElementById("buttonScalePrevious").addEventListener("click", () => {
       (scaleSelected > 0) ? scaleSelected-- : 0
-      cosFiltered = filterObjects(cos, visibleOnly, scaleSelected)
-      showData(index)
+      c = filterObjects(cos, visibleOnly, scaleSelected)
+      showData(0)
     });
 
-    document.getElementById("buttonScaleNext").addEventListener("click", (e) => {
+    document.getElementById("buttonScaleNext").addEventListener("click", () => {
       (scaleSelected < 7) ? scaleSelected++ : 8
-      cosFiltered = filterObjects(cos, visibleOnly, scaleSelected)
-      showData(index)
+      console.log("at next")
+      c = filterObjects(cos, visibleOnly, scaleSelected)
+      console.log(`name: ${c[0].name}  scale: ${c[0].scale}`)
+      showData(0)
     });
 
     document.getElementById("buttonVisible").addEventListener("click", (e) => {
-      visible = true
-      cosFiltered = filterObjects(cos, true, scaleSelected)
-      showData(index)
+      visibleOnly = true
+      c = filterObjects(cos, visibleOnly, scaleSelected)
+      showData(0)
     });
 
     document.getElementById("buttonAll").addEventListener("click", (e) => {
-      visible = false
-      cosFiltered = filterObjects(cos, false, scaleSelected)
-      showData(index)
+      visibleOnly = false
+      c = filterObjects(cos, visibleOnly, scaleSelected)
+      showData(0)
     });
 
 
