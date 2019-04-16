@@ -205,16 +205,16 @@
     let galShow = 0;
 
     scaleSelected = 2;
-    legends = ["The Solar System<br/>30 AU", "The Nearest Stars<br/>12.5 ly", "The Solar Neighbourhood<br/>250 ly", "The Orion Arm<br/>5,000 ly", "The Milky Way Galaxy<br/>50,000 ly", "Satellite Galaxies<br/>500,000 ly", "The Local Group<br/>5 mly",
+    legends = ["The Solar System<br/>30 AU", "The Nearest Stars<br/>12.5 ly", "The Solar Neighbourhood<br/>250 ly", "The Orion Arm<br/>5,000 ly", "The Milky Way Galaxy<br/>50,000 ly", "Satellite Galaxies<br/>250,000 ly", "The Local Group<br/>5 mly",
       "The Virgo Supercluster<br/>100 mly"
     ]
     visibleOnly = true
     index = 0
-    const scales = [0, 0.0005, 12.5, 250, 5000, 50000, 500000, 50000000]
+    const scales = [0, 0.0005, 12.5, 250, 5000, 50000, 250000, 50000000]
 
 
-    cos = makeCelestialObjects(data, astromath.longitude, astromath.latitude, scales);
-    cos.forEach(c => console.log(c.name + "  " + c.lightYears + "   " + c.scale))
+    cos = getCelestialObjects(data, astromath.longitude, astromath.latitude, scales);
+    //cos.forEach(c => console.log(c.name + "  " + c.lightYears + "   " + c.scale))
     let c = filterObjects(cos, visibleOnly, scaleSelected)
 
     let objectTypes = ["GX", "OC", "GC", "ST", "NB", "DS", "RN"]
@@ -323,11 +323,11 @@
     showData = (index) => {
       document.getElementById("buttonScale").innerHTML = legends[scaleSelected]
       if (c.length > 0) {
-        document.getElementById("textName").innerHTML = c[index].name + "<br>" + c[index].lightYears + "ly " + c[index].notes;
+        document.getElementById("textName").innerHTML = c[index].name + "<br>" + astromath.formatDistance(c[index].lightYears) + c[index].notes;
       } else {
         document.getElementById("textName").innerHTML = ""
       }
-      showAtlas(c[index], scaleSelected)
+      showAtlas(index, c, scaleSelected)
       document.getElementById("pageCO").style.display = "none";
       document.getElementById("pageContent").style.display = "block";
     }
@@ -354,9 +354,9 @@
     document.getElementById("pageCO").style.display = "block";
     document.getElementById("pageContent").style.display = "block";
 
-    drawCelestialObject = (co, scale, selected) => {
+    drawCelestialObject = (co, scale, selectedObject) => {
       coords = astromath.polarToCartesian(co.galLatitude, co.galLongitude, co.lightYears)
-      if (selected == true) {
+      if (selectedObject == true) {
         size = 3;
         ctxAtlas.fillStyle = "white"
       } else {
@@ -404,23 +404,14 @@
       ctxAtlas.fill()
     }
 
-    showAtlas = (indexScale) => {
+    showAtlas = (index, c, scale) => {
       ctxAtlas.clearRect(0, 0, ctxAtlas.canvas.width, ctxAtlas.canvas.height) //clear canvas
-      // show only those objects whose distance is greater or equal to the
-      // smaller scale and less than the next scale
-      // find the scale for the altas view
-      cosScale = cos.filter((cos) => {
-        return cos.scale == indexScale
-      })
-      //console.log(cosScale[12].name)
-      for (let [i, co] of cosScale.entries()) {
-        //  if (co.scale == indexScale) {
-        scale = canvasAtlas.width / scales[indexScale] / 2
-        //  selected=(i==indexSelected)?true:false
-        //    drawCelestialObject(co, scale,selected)
-        //  }
+      drawingScale = canvasAtlas.width / scales[scale+1] / 2 //has to include all off the objects up to the next size
+      console.log(`scale: ${drawingScale}`)
+      for (let [i, co] of c.entries()) {
+        if (i == index) {selectedObject = true }else{selectedObject=false}
+        drawCelestialObject(co, drawingScale, selectedObject)
         drawSun()
-        //writeLegend(legends, globalScale)
       }
     }
 

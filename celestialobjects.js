@@ -1,4 +1,4 @@
-const data = ["47 Tucanae,0,24,-72,5,13000,,GC,30 thousand stars with a dense core which may contain a black hole. Second brightest globular cluster. Not part of the LMC. 12 myo.",
+const dataText = ["47 Tucanae,0,24,-72,5,13000,,GC,30 thousand stars with a dense core which may contain a black hole. Second brightest globular cluster. Not part of the LMC. 12 myo.",
   "Andromeda Galaxy,0,43,41,16,2900000,3.4,GX,Nearest major galaxy to us. one trillion stars. 2X milky way.",
   "Blue Planetary Nebula,11,50,-57,10,4900,,RN,brightest nebula in the south",
   "Butterfly Cluster,17,40,-32,13,2000,4.2,OC,",
@@ -196,10 +196,38 @@ const data = ["47 Tucanae,0,24,-72,5,13000,,GC,30 thousand stars with a dense co
   "Gem Cluster,10,31,-57,58,1400,,OC,Red supergiant surrounded by blue stars. 8min across."
 ]
 
-makeCelestialObjects = (data, longitude, latitide, scales) => {
+dataStars= dataText.map(string => string.split(","))
+
+dataPlanets = []
+
+getPlanets = () => {
+  for (var i of [0, 1, 3, 4, 5, 6, 7]) { //planets[0], planets[1], planets[3], planets[4], planets[5], planets[6], planets[7]]) {
+    console.log("i: " + i + " name: " + planets[i].name)
+
+    var ra = radecr(helios(planets[i]), helios(planets[2]))[0];
+
+    var raHours = Math.floor(ra);
+    var raMinutes = Math.round((ra - raHours) * 60);
+    var dec = radecr(helios(planets[i]), helios(planets[2]))[1];
+    var decDegrees = Math.floor(dec);
+    var decMinutes = Math.round((dec - decDegrees) * 60);
+    var distance = radecr(helios(planets[i]), helios(planets[2]))[2] * 0.00001581; //from AU to light Years
+    var n = planets[i].name;
+    dataPlanets.push([n, raHours, raMinutes, decDegrees, decMinutes, distance, "", "PL", ""])
+  }
+}
+
+getPlanets()
+
+
+data = []
+data=data.concat(dataStars)
+data=data.concat(dataPlanets)
+
+getCelestialObjects = (data, longitude, latitide, scales) => {
   o = {}
-  objects = data.map(string => string.split(","))
-    .map(a => o = {
+
+    objects= data.map(a => o = {
       "name": a[0],
       "raHours": a[1],
       "raMinutes": a[2],
@@ -228,8 +256,8 @@ makeCelestialObjects = (data, longitude, latitide, scales) => {
       "visible": (astromath.altitude(
         astromath.raRadians(a[1], a[2]),
         astromath.decRadians(a[3], a[4])
-      ) > 15  ? true : false),
-      "scale": scales.findIndex(s => s > a[5] )-1
+      ) > 15 ? true : false),
+      "scale": scales.findIndex(s => s > a[5]) - 1
     })
     .sort((f, g) => (f.azimuth < g.azimuth) ? -1 : 1)
   console.log(objects[1].scale)
@@ -237,23 +265,6 @@ makeCelestialObjects = (data, longitude, latitide, scales) => {
 }
 
 filterObjects = (os, visibleOnly, scale) => {
-  f = os.filter(o => (visibleOnly ? (o.visible  && o.scale == scale): (o.scale == scale)))
+  f = os.filter(o => (visibleOnly ? (o.visible && o.scale == scale) : (o.scale == scale)))
   return f
 }
-
-
-//   for (var i of [0, 1, 3, 4, 5, 6, 7]) { //planets[0], planets[1], planets[3], planets[4], planets[5], planets[6], planets[7]]) {
-//     //console.log("i: "+i+" name: "+ planets[i].name)
-//
-//     var ra = radecr(helios(planets[i]), helios(planets[2]))[0];
-//
-//     var raHours = Math.floor(ra);
-//     var raMinutes = Math.round((ra - raHours) * 60);
-//     var dec = radecr(helios(planets[i]), helios(planets[2]))[1];
-//     var decDegrees = Math.floor(dec);
-//     var decMinutes = Math.round((dec - decDegrees) * 60);
-//     var distance = radecr(helios(planets[i]), helios(planets[2]))[2] * 0.00001581; //from AU to light Years
-//     var n = planets[i].name;
-//     var co = new CelestialObject(n, raHours, raMinutes, decDegrees, decMinutes, distance, "", "PL", "")
-//
-//     celestialObjects.push(co);

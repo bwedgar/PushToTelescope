@@ -4,12 +4,12 @@ astromath = {
 
     latitude: 0,
 
-    unitsToSI: (num1) => {
+    formatDistance: (num1) => {
       let t = (num1 * 1).toExponential(2).toString()
       let ex = /(\d+)$/g.exec(t)[0]
       let prefix = ["", "k", "m", "b"]
       let n = /^(\S{3})/g.exec(t)[1] * 10 ** (ex % 3)
-      return Math.floor(n) + " " + prefix[Math.floor(ex / 3)]
+      return Math.floor(n) + " " + prefix[Math.floor(ex / 3)]+" LY"
     },
 
     polarToCartesian: (lat, long, r) => {
