@@ -196,16 +196,13 @@ const dataText = ["47 Tucanae,0,24,-72,5,13000,,GC,30 thousand stars with a dens
   "Gem Cluster,10,31,-57,58,1400,,OC,Red supergiant surrounded by blue stars. 8min across."
 ]
 
-dataStars= dataText.map(string => string.split(","))
+dataStars = dataText.map(string => string.split(","))
 
 dataPlanets = []
 
 getPlanets = () => {
-  for (var i of [0, 1, 3, 4, 5, 6, 7]) { //planets[0], planets[1], planets[3], planets[4], planets[5], planets[6], planets[7]]) {
-    console.log("i: " + i + " name: " + planets[i].name)
-
+  for (var i of [0, 1, 3, 4, 5]) {
     var ra = radecr(helios(planets[i]), helios(planets[2]))[0];
-
     var raHours = Math.floor(ra);
     var raMinutes = Math.round((ra - raHours) * 60);
     var dec = radecr(helios(planets[i]), helios(planets[2]))[1];
@@ -221,13 +218,13 @@ getPlanets()
 
 
 data = []
-data=data.concat(dataStars)
-data=data.concat(dataPlanets)
+data = data.concat(dataStars)
+data = data.concat(dataPlanets)
 
 getCelestialObjects = (data, longitude, latitide, scales) => {
   o = {}
 
-    objects= data.map(a => o = {
+  objects = data.map(a => o = {
       "name": a[0],
       "raHours": a[1],
       "raMinutes": a[2],
@@ -260,7 +257,6 @@ getCelestialObjects = (data, longitude, latitide, scales) => {
       "scale": scales.findIndex(s => s > a[5]) - 1
     })
     .sort((f, g) => (f.azimuth < g.azimuth) ? -1 : 1)
-  console.log(objects[1].scale)
   return objects
 }
 

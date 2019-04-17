@@ -156,7 +156,7 @@
   <script src="astromath.js"></script>
   <script src="planets.js"></script>
   <script src="celestialobjects.js"></script>
-  <!-- <script src="sw.js"></script> -->
+  <script src="sw.js"></script>
 
 
 
@@ -196,7 +196,6 @@
 
   <script>
     ready = () => {
-      console.log("AT READY")
       let previousSensor = 0;
       let sensor = 0;
       let compass = 0;
@@ -218,11 +217,10 @@
       document.getElementById("buttonVisible").classList.add("clicked")
 
       index = 0
-      const scales = [0, 0.0006325, 12.5, 250, 5000, 50000, 250000, 5000000, 100000000]
+      const scales = [0, 0.000158125, 12.5, 250, 5000, 50000, 250000, 5000000, 100000000]
 
 
       cos = getCelestialObjects(data, astromath.longitude, astromath.latitude, scales);
-      //cos.forEach(c => console.log(c.name + "  " + c.lightYears + "   " + c.scale))
       let c = filterObjects(cos, visibleOnly, scaleSelected)
 
       let objectTypes = ["GX", "OC", "GC", "ST", "NB", "DS", "RN"]
@@ -230,10 +228,6 @@
 
       offsetCompass = localStorage.getItem("offsetCompass")
       offsetInclination = localStorage.getItem("offsetInclination")
-
-
-
-
 
       document.getElementById('pageCO').style.height = screen.height * 0.5 + "px";
 
@@ -346,27 +340,25 @@
         document.getElementById("pageContent").style.display = "block";
       }
 
-      showCO = (type) => {
+      showCO = () => {
         document.getElementById("listCO").innerHTML = "";
         var numberOfItemsAdded = 0;
-        for (const co of cosFiltered) {
-          if (co.scale == scaleSelected && co.visible == true) {
-            numberOfItemsAdded++;
-            var node = document.createElement("BUTTON");
-            var textnode = document.createTextNode(co.name);
-            node.appendChild(textnode);
-            btn = document.getElementById("listCO").appendChild(node);
-            btn.classList.add("button");
-            selectedCos = document.getElementById("listCO").firstChild
-          }
+        for (const co of c) {
+
+          numberOfItemsAdded++;
+          var node = document.createElement("BUTTON");
+          var textnode = document.createTextNode(co.name);
+          node.appendChild(textnode);
+          btn = document.getElementById("listCO").appendChild(node);
+          btn.classList.add("button");
+          selectedCos = document.getElementById("listCO").firstChild
+
         }
         if (numberOfItemsAdded > 0) {
           document.getElementById("pageCO").style.display = "block";
           document.getElementById("pageContent").style.display = "none";
         }
       }
-      document.getElementById("pageCO").style.display = "block";
-      document.getElementById("pageContent").style.display = "block";
 
       drawCelestialObject = (co, scale, selectedObject) => {
         coords = astromath.polarToCartesian(co.galLatitude, co.galLongitude, co.lightYears)
@@ -406,8 +398,6 @@
         ctxAtlas.arc(Math.floor(coords.x * scale + canvasAtlas.width / 2), Math.floor((coords.z * scale) / 5 + canvasAtlas.height / 2 + coords.y * scale / 2), size, 0, Math.PI * 2, true)
         ctxAtlas.fill()
         ctxAtlas.closePath()
-
-
       }
 
       drawSun = () => {
@@ -442,7 +432,6 @@
       showAtlas = (index, c, scale) => {
         ctxAtlas.clearRect(0, 0, ctxAtlas.canvas.width, ctxAtlas.canvas.height) //clear canvas
         drawingScale = canvasAtlas.width / scales[scale + 1] / 2 //has to include all off the objects up to the next size
-        console.log(`scale: ${drawingScale}`)
         for (let [i, co] of c.entries()) {
           if (i == index) {
             selectedObject = true
@@ -454,7 +443,6 @@
           drawDistanceBar(scale + 1)
         }
       }
-
 
       // event handlers
 
@@ -469,7 +457,7 @@
       listCO.addEventListener("click", (e) => {
         selectedCos = e.target
         let nameOfCos = e.target.innerHTML
-        index = cos.findIndex(x => x.name == nameOfCos.trim());
+        index = c.findIndex(x => x.name == nameOfCos.trim());
         showData(index);
       });
 
@@ -479,19 +467,11 @@
         localStorage.setItem("offsetCompass", offsetCompass);
         localStorage.setItem("offsetInclination", offsetInclination);
       });
+
       document.getElementById("buttonInfo").addEventListener("click", () => {
         window.location.href = "https://bwedgar.github.io/index.html";
       });
 
-      document.getElementById("buttonPreviousObject").addEventListener("click", () => {
-        index = changeIndex(index, "decrement", c)
-        showData(index);
-      });
-
-      document.getElementById("buttonNextObject").addEventListener("click", (e) => {
-        index = changeIndex(index, "increment", c)
-        showData(index);
-      });
 
       document.getElementById("buttonScalePrevious").addEventListener("click", () => {
         if (scaleSelected > 0) {
@@ -504,6 +484,10 @@
         showData(index)
       });
 
+      document.getElementById("buttonScale").addEventListener("click", () => {
+        showCO()
+      });
+
       document.getElementById("buttonScaleNext").addEventListener("click", () => {
         if (scaleSelected < 7) {
           scaleSelected++
@@ -513,6 +497,16 @@
         c = filterObjects(cos, visibleOnly, scaleSelected)
         index = changeIndex(index, "zero", c)
         showData(index)
+      });
+
+      document.getElementById("buttonPreviousObject").addEventListener("click", () => {
+        index = changeIndex(index, "decrement", c)
+        showData(index);
+      });
+
+      document.getElementById("buttonNextObject").addEventListener("click", (e) => {
+        index = changeIndex(index, "increment", c)
+        showData(index);
       });
 
       document.getElementById("buttonVisible").addEventListener("click", () => {
@@ -532,26 +526,22 @@
         document.getElementById("buttonVisible").classList.remove("clicked")
         showData(index)
       });
+
       showData(0)
 
     } //end ready()
 
     getLocation = () => {
-      console.log("AT GETLOCATION")
-      if (false) {//}(navigator.geolocation) {
+      if (false) { //}(navigator.geolocation) {
         navigator.geolocation.getCurrentPosition((position) => {
           coords = position.coords;
-           console.log(`AT GEOLOCATION latitude: ${coords.latitude} longitude: ${coords.longitude}`)
           astromath.longitude = astromath.radians(coords.longitude); //longitude of observer in degrees East
           astromath.latitude = astromath.radians(coords.latitude); //latitude of observer in degrees
-          console.log(`from geolocation: latitude: ${astromath.latitude} longitude: ${astromath.longitude}`)
           ready()
         })
-
       } else {
         astromath.longitude = astromath.radians(174.76); //longitude of observer in Auckland in degrees East
         astromath.latitude = astromath.radians(-36.8485); //latitude of observer  in Auckland  in degrees
-        console.log(`from set longitude ${astromath.longitude}`)
         ready()
       }
 
