@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+<!-- bwedgar.github.io/PushToTelescope   -->
 
 <head>
 
@@ -10,16 +11,11 @@
   <link rel="manifest" href="manifest.json">
   <link rel="canonical" href="https://bwedgar.github.io/PushToTelescope" />
 
-
   <title>Document</title>
   <meta name="apple-mobile-web-app-title" content="Push To Telescope">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
-
-
-
-
 
   <style>
     body {
@@ -51,7 +47,7 @@
       font-size: 7vw;
       border: 1px solid red;
       width: 100%;
-      height: 200px;
+      height: 250px;
       overflow: scroll;
     }
 
@@ -158,15 +154,14 @@
   <script src="celestialobjects.js"></script>
   <script src="sw.js"></script>
 
-
-
 </head>
 
 
 <body>
+
   <div id="pageContent">
     <div>
-      <button id="buttonCalibrate" class="btngroup2">cal.</button>
+      <button id="buttonCalibrate" class="btngroup2">cal</button>
       <button id="buttonInfo" class="btngroup2">info</button>
     </div>
 
@@ -181,9 +176,10 @@
       <button id="buttonAll" class="btngroup4">All</button>
       <button id="buttonNextObject" class="btngroup4">&#62;</button>
     </div>
-    <canvas id="canvasFinder"></canvas>
-    <div id="textName" class="name"></div>
 
+    <canvas id="canvasFinder"></canvas>
+
+    <div id="textName" class="name"></div>
 
     <canvas id="canvasAtlas"></canvas>
   </div>
@@ -193,6 +189,8 @@
     </div>
     <br>
   </div>
+
+</body>
 
   <script>
     ready = () => {
@@ -344,7 +342,6 @@
         document.getElementById("listCO").innerHTML = "";
         var numberOfItemsAdded = 0;
         for (const co of c) {
-
           numberOfItemsAdded++;
           var node = document.createElement("BUTTON");
           var textnode = document.createTextNode(co.name);
@@ -352,7 +349,6 @@
           btn = document.getElementById("listCO").appendChild(node);
           btn.classList.add("button");
           selectedCos = document.getElementById("listCO").firstChild
-
         }
         if (numberOfItemsAdded > 0) {
           document.getElementById("pageCO").style.display = "block";
@@ -531,6 +527,7 @@
 
     } //end ready()
 
+// need to fix thus with async function perhaps **************************************
     getLocation = () => {
       if (false) { //}(navigator.geolocation) {
         navigator.geolocation.getCurrentPosition((position) => {
@@ -548,16 +545,7 @@
     }
     getLocation()
 
-
-    // navigator.serviceWorker.register('/PushToTelescope/sw.js', {
-    //   scope: '/PushToTelescope/'
-    // }).then((registration) => {
-    //     console.log("in index.html: Service Worker registration successful (at index.html): ", registration)
-    //   },
-    //   (err) => {
-    //     console.log("in index.html:  Registration failed (at index.html)", err)
-    //   })
   </script>
-</body>
+
 
 </html>
