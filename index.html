@@ -458,7 +458,7 @@
 
       // event handlers
 
-      if (window.deviceorientation) {
+      if (window.DeviceOrientationEvent) {
         window.addEventListener('devicemotion', listener)
         window.addEventListener('deviceorientation', listener2)
       } else {
