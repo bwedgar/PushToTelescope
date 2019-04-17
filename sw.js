@@ -4,7 +4,7 @@ if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
         navigator.serviceWorker.register('sw.js').then((registration) => {
             console.log("Service Worker registration successful: ", registration)
-        }, 
+        },
       (err) => {
             console.log("Registration failed", err)
         })
@@ -14,7 +14,7 @@ if ('serviceWorker' in navigator) {
 
 console.log("after service worker registration attempt");
 
-let cache_name = 'mysite-v3'
+let cache_name = 'mysite-v4'
 
 let urls_to_cache = [
 '/PushToTelescope/',
