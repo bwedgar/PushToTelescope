@@ -37,6 +37,7 @@
       border: 1px solid red;
       width: 100%;
       height: 100px;
+      padding: 2% 2%;
       overflow: scroll;
     }
 
@@ -61,6 +62,7 @@
       height: 600px;
       /* height: 80%; */
       overflow: scroll;
+      padding: 2% 2%;
     }
 
     .button {
@@ -192,360 +194,389 @@
 
 </body>
 
-  <script>
-    ready = () => {
-      let previousSensor = 0;
-      let sensor = 0;
-      let compass = 0;
-      let compassRaw = 0;
-      let offsetCompass = 0;
-      let offsetInclination = 0;
-      let alt = 0; //altitude of object in degrees
-      let altitude = 0; //altitude of telescope in degrees
-      let altDev = 0; //difference between alt of object and altitude of telescope in degrees
-      let azDev = 0;
-      let az = 0;
-      let galShow = 0;
+<script>
+  ready = () => {
+    let previousSensor = 0;
+    let sensor = 0;
+    let compass = 0;
+    let compassRaw = 0;
+    let offsetCompass = 0;
+    let offsetInclination = 0;
+    let alt = 0; //altitude of object in degrees
+    let altitude = 0; //altitude of telescope in degrees
+    let altDev = 0; //difference between alt of object and altitude of telescope in degrees
+    let azDev = 0;
+    let az = 0;
+    let galShow = 0;
 
-      scaleSelected = 2;
-      legends = ["Solar System", "Nearest Stars", "Solar Neighbourhood", "Orion Arm", "Milky Way Galaxy", "Satellite Galaxies", "Local Group",
-        "Virgo Supercluster"
-      ]
-      visibleOnly = true
-      document.getElementById("buttonVisible").classList.add("clicked")
+    scaleSelected = 2;
+    legends = ["Solar System", "Nearest Stars", "Solar Neighbourhood", "Orion Arm", "Milky Way Galaxy", "Satellite Galaxies", "Local Group",
+      "Virgo Supercluster"
+    ]
+    visibleOnly = true
+    document.getElementById("buttonVisible").classList.add("clicked")
 
-      index = 0
-      const scales = [0, 0.000158125, 12.5, 250, 5000, 50000, 250000, 5000000, 100000000]
+    index = 0
+    const scales = [0, 0.000158125, 12.5, 250, 5000, 50000, 250000, 5000000, 100000000]
 
 
-      cos = getCelestialObjects(data, astromath.longitude, astromath.latitude, scales);
-      let c = filterObjects(cos, visibleOnly, scaleSelected)
+    cos = getCelestialObjects(data, astromath.longitude, astromath.latitude, scales);
+    let c = filterObjects(cos, visibleOnly, scaleSelected)
 
-      let objectTypes = ["GX", "OC", "GC", "ST", "NB", "DS", "RN"]
-      let objectNames = ["galaxy", "open cluster", "globular cluster", "star", "bright nebula", "double star", "remnant"]
+    let objectTypes = ["GX", "OC", "GC", "ST", "NB", "DS", "RN"]
+    let objectNames = ["galaxy", "open cluster", "globular cluster", "star", "bright nebula", "double star", "remnant"]
+    let types = [{
+        code: "GX",
+        name: "galaxy"
+      }, {
+        code: "OC",
+        name: "open cluster"
+      }, {
+        code: "GC",
+        name: "globular cluster"
+      },
+      {
+        code: "ST",
+        name: "star"
+      }, {
+        code: "NB",
+        name: "bright nebula"
+      }, {
+        code: "RN",
+        name: "remnant"
+      }
+    ]
+    offsetCompass = localStorage.getItem("offsetCompass")
+    offsetInclination = localStorage.getItem("offsetInclination")
 
-      offsetCompass = localStorage.getItem("offsetCompass")
-      offsetInclination = localStorage.getItem("offsetInclination")
+    document.getElementById('pageCO').style.height = screen.height * 0.5 + "px";
 
-      document.getElementById('pageCO').style.height = screen.height * 0.5 + "px";
+    // set up canvases
+    canvasFinder = document.getElementById("canvasFinder")
+    canvasFinder.width = window.innerWidth;
+    canvasFinder.height = window.innerHeight * 15 / 100;
+    ctxFinder = canvasFinder.getContext("2d")
+    canvasAtlas = document.getElementById("canvasAtlas")
+    ctxAtlas = canvasAtlas.getContext("2d")
+    canvasAtlas.width = window.innerWidth;
+    canvasAtlas.height = window.innerHeight * 50 / 100;
 
-      // set up canvases
+    // functions for detecting and responding to telescope movement
+    listener = (e) => {
+      //ctxFinder.clearRect(0,0,canvasFinder.height,canvasFinder.width)
+      sensor = -e.accelerationIncludingGravity.x //sensor= 0 when vertical, -6.9 when clockwise 45 degrees, +6.9 when antoclockwise. +/- 10 when horizontal
+      sensor = Math.round(sensor * 100) / 100;
+      alt = Math.round(alt * 10) / 10 //alt is the altitude of the object
+      if (Math.abs(sensor - previousSensor) > 0.05) { //test if the sensor has changed
+        previousSensor = sensor
+        //when phone is 45 degrees clockwise altitude is 0, when phone is 45 anticlockwise altitude is 90 degrees
+        //adjSensor = //a + b * sensor
+        altitude = (sensor + 6.9) * 6.4;
+        altDev = altitude - alt - offsetInclination;
+      }
+    }
+
+    listener2 = (e2) => {
+
+      compassRaw = Math.round((e2.webkitCompassHeading - 100) % 360)
+      compass = Math.round((compassRaw - offsetCompass) % 360)
+      //document.getElementById("textName").innerHTML=compass
+      az = Math.round(az * 10) / 10
+      azDev = ((compass - az) + 540) % 360 - 180
       canvasFinder = document.getElementById("canvasFinder")
       canvasFinder.width = window.innerWidth;
       canvasFinder.height = window.innerHeight * 15 / 100;
       ctxFinder = canvasFinder.getContext("2d")
-      canvasAtlas = document.getElementById("canvasAtlas")
-      ctxAtlas = canvasAtlas.getContext("2d")
-      canvasAtlas.width = window.innerWidth;
-      canvasAtlas.height = window.innerHeight * 50 / 100;
-
-      // functions for detecting and responding to telescope movement
-      listener = (e) => {
-        //ctxFinder.clearRect(0,0,canvasFinder.height,canvasFinder.width)
-        sensor = -e.accelerationIncludingGravity.x //sensor= 0 when vertical, -6.9 when clockwise 45 degrees, +6.9 when antoclockwise. +/- 10 when horizontal
-        sensor = Math.round(sensor * 100) / 100;
-        alt = Math.round(alt * 10) / 10 //alt is the altitude of the object
-        if (Math.abs(sensor - previousSensor) > 0.05) { //test if the sensor has changed
-          previousSensor = sensor
-          //when phone is 45 degrees clockwise altitude is 0, when phone is 45 anticlockwise altitude is 90 degrees
-          //adjSensor = //a + b * sensor
-          altitude = (sensor + 6.9) * 6.4;
-          altDev = altitude - alt - offsetInclination;
-        }
+      //horizontal line
+      ctxFinder.beginPath()
+      ctxFinder.moveTo(50, ctxFinder.canvas.height / 3)
+      ctxFinder.lineTo(ctxFinder.canvas.width - 50, ctxFinder.canvas.height / 3)
+      ctxFinder.strokeStyle = "red"
+      ctxFinder.lineWidth = 2
+      ctxFinder.stroke()
+      //cursor 40 units high?
+      ctxFinder.beginPath()
+      ctxFinder.moveTo(ctxFinder.canvas.width / 2.2 + altDev * 10, ctxFinder.canvas.height / 3 - 20)
+      ctxFinder.lineTo(ctxFinder.canvas.width / 2.2 + altDev * 10, ctxFinder.canvas.height / 3 + 20)
+      ctxFinder.strokeStyle = "red"
+      ctxFinder.lineWidth = 2
+      ctxFinder.stroke()
+      //centre drawCircle
+      ctxFinder.beginPath()
+      ctxFinder.arc(ctxFinder.canvas.width / 2.2, ctxFinder.canvas.height / 3, 15, 0, Math.PI * 2, true)
+      ctxFinder.stroke()
+      ctxFinder.fillStyle = "red"
+      ctxFinder.font = "30px Arial"
+      //directional pointers
+      if (altDev > 0) {
+        ctxFinder.fillText('\u21D7', 5, ctxFinder.canvas.height / 3 + 10)
       }
-
-      listener2 = (e2) => {
-
-        compassRaw = Math.round((e2.webkitCompassHeading - 100) % 360)
-        compass = Math.round((compassRaw - offsetCompass) % 360)
-        //document.getElementById("textName").innerHTML=compass
-        az = Math.round(az * 10) / 10
-        azDev = ((compass - az) + 540) % 360 - 180
-        canvasFinder = document.getElementById("canvasFinder")
-        canvasFinder.width = window.innerWidth;
-        canvasFinder.height = window.innerHeight * 15 / 100;
-        ctxFinder = canvasFinder.getContext("2d")
-        //horizontal line
-        ctxFinder.beginPath()
-        ctxFinder.moveTo(50, ctxFinder.canvas.height / 3)
-        ctxFinder.lineTo(ctxFinder.canvas.width - 50, ctxFinder.canvas.height / 3)
-        ctxFinder.strokeStyle = "red"
-        ctxFinder.lineWidth = 2
-        ctxFinder.stroke()
-        //cursor 40 units high?
-        ctxFinder.beginPath()
-        ctxFinder.moveTo(ctxFinder.canvas.width / 2.2 + altDev * 10, ctxFinder.canvas.height / 3 - 20)
-        ctxFinder.lineTo(ctxFinder.canvas.width / 2.2 + altDev * 10, ctxFinder.canvas.height / 3 + 20)
-        ctxFinder.strokeStyle = "red"
-        ctxFinder.lineWidth = 2
-        ctxFinder.stroke()
-        //centre drawCircle
-        ctxFinder.beginPath()
-        ctxFinder.arc(ctxFinder.canvas.width / 2.2, ctxFinder.canvas.height / 3, 15, 0, Math.PI * 2, true)
-        ctxFinder.stroke()
-        ctxFinder.fillStyle = "red"
-        ctxFinder.font = "30px Arial"
-        //directional pointers
-        if (altDev > 0) {
-          ctxFinder.fillText('\u21D7', 5, ctxFinder.canvas.height / 3 + 10)
-        }
-        if (altDev < 0) {
-          ctxFinder.fillText('\u21D8', 5, ctxFinder.canvas.height / 3 + 10)
-        }
-        ctxFinder.beginPath()
-        ctxFinder.moveTo(50, ctxFinder.canvas.height / 3 * 2)
-        ctxFinder.lineTo(ctxFinder.canvas.width - 50, ctxFinder.canvas.height / 3 * 2)
-        ctxFinder.strokeStyle = "red"
-        ctxFinder.lineWidth = 2
-        ctxFinder.stroke()
-        ctxFinder.beginPath()
-        ctxFinder.moveTo(ctxFinder.canvas.width / 2.2 + azDev * 10, ctxFinder.canvas.height / 3 * 2 - 20)
-        ctxFinder.lineTo(ctxFinder.canvas.width / 2.2 + azDev * 10, ctxFinder.canvas.height / 3 * 2 + 20)
-        ctxFinder.strokeStyle = "red"
-        ctxFinder.lineWidth = 2
-        ctxFinder.stroke()
-        ctxFinder.beginPath()
-        ctxFinder.arc(ctxFinder.canvas.width / 2.2, ctxFinder.canvas.height / 3 * 2, 15, 0, Math.PI * 2, true)
-        ctxFinder.stroke()
-        if (azDev > 0) {
-          ctxFinder.fillText('\u21BA', 5, ctxFinder.canvas.height / 3 * 2 + 10)
-        }
-        if (azDev < 0) {
-          ctxFinder.fillText('\u21BB', 5, ctxFinder.canvas.height / 3 * 2 + 10)
-        }
+      if (altDev < 0) {
+        ctxFinder.fillText('\u21D8', 5, ctxFinder.canvas.height / 3 + 10)
       }
-
-      changeIndex = (index, change, array) => {
-        if (change == "increment") index++
-        if (change == "decrement") index--
-        if (change == "zero") index = 0
-        index = index < 0 ? array.length - 1 : index
-        index = index == array.length ? 0 : index
-        return index
+      ctxFinder.beginPath()
+      ctxFinder.moveTo(50, ctxFinder.canvas.height / 3 * 2)
+      ctxFinder.lineTo(ctxFinder.canvas.width - 50, ctxFinder.canvas.height / 3 * 2)
+      ctxFinder.strokeStyle = "red"
+      ctxFinder.lineWidth = 2
+      ctxFinder.stroke()
+      ctxFinder.beginPath()
+      ctxFinder.moveTo(ctxFinder.canvas.width / 2.2 + azDev * 10, ctxFinder.canvas.height / 3 * 2 - 20)
+      ctxFinder.lineTo(ctxFinder.canvas.width / 2.2 + azDev * 10, ctxFinder.canvas.height / 3 * 2 + 20)
+      ctxFinder.strokeStyle = "red"
+      ctxFinder.lineWidth = 2
+      ctxFinder.stroke()
+      ctxFinder.beginPath()
+      ctxFinder.arc(ctxFinder.canvas.width / 2.2, ctxFinder.canvas.height / 3 * 2, 15, 0, Math.PI * 2, true)
+      ctxFinder.stroke()
+      if (azDev > 0) {
+        ctxFinder.fillText('\u21BA', 5, ctxFinder.canvas.height / 3 * 2 + 10)
       }
-
-      showData = (index) => {
-        document.getElementById("buttonScale").innerHTML = legends[scaleSelected]
-        if (c.length > 0) {
-          document.getElementById("textName").innerHTML = astromath.formatNames(c[index].name) + "<br>" +
-            astromath.formatDistance(c[index].lightYears) + c[index].notes
-
-        } else {
-          document.getElementById("textName").innerHTML = ""
-        }
-        showAtlas(index, c, scaleSelected)
-        document.getElementById("pageCO").style.display = "none";
-        document.getElementById("pageContent").style.display = "block";
+      if (azDev < 0) {
+        ctxFinder.fillText('\u21BB', 5, ctxFinder.canvas.height / 3 * 2 + 10)
       }
-
-      showCO = () => {
-        document.getElementById("listCO").innerHTML = "";
-        var numberOfItemsAdded = 0;
-        for (const co of c) {
-          numberOfItemsAdded++;
-          var node = document.createElement("BUTTON");
-          var textnode = document.createTextNode(co.name);
-          node.appendChild(textnode);
-          btn = document.getElementById("listCO").appendChild(node);
-          btn.classList.add("button");
-          selectedCos = document.getElementById("listCO").firstChild
-        }
-        if (numberOfItemsAdded > 0) {
-          document.getElementById("pageCO").style.display = "block";
-          document.getElementById("pageContent").style.display = "none";
-        }
-      }
-
-      drawCelestialObject = (co, scale, selectedObject) => {
-        coords = astromath.polarToCartesian(co.galLatitude, co.galLongitude, co.lightYears)
-        if (selectedObject == true) {
-          size = 3;
-          ctxAtlas.fillStyle = "white"
-        } else {
-          size = 2;
-          ctxAtlas.fillStyle = "red"
-        }
-
-        ctxAtlas.arc(coords.x * scale + canvasAtlas.width / 2, (coords.z * scale) / 5 + canvasAtlas.height / 2 + coords.y / 2, size, 0, Math.PI * 2, true)
-        ctxAtlas.beginPath()
-        ctxAtlas.strokeStyle = "blue"
-        ctxAtlas.lineWidth = 1
-        ctxAtlas.ellipse(canvasAtlas.width / 2, canvasAtlas.height / 2, canvasAtlas.width / 2, canvasAtlas.height / 12, 0, 0, Math.PI * 2)
-        ctxAtlas.stroke()
-        ctxAtlas.beginPath()
-        ctxAtlas.strokeStyle = "blue"
-        ctxAtlas.lineWidth = 1
-        ctxAtlas.ellipse(canvasAtlas.width / 2, canvasAtlas.height / 2, canvasAtlas.width / 3, canvasAtlas.height / 17, 0, 0, Math.PI * 2)
-        ctxAtlas.stroke()
-
-        ctxAtlas.beginPath()
-        ctxAtlas.moveTo(Math.floor(coords.x * scale + canvasAtlas.width / 2), Math.floor((coords.z * scale) / 5 + canvasAtlas.height / 2))
-        ctxAtlas.lineTo(Math.floor(coords.x * scale + canvasAtlas.width / 2), Math.floor((coords.z * scale) / 5 + canvasAtlas.height / 2 + coords.y * scale / 2))
-        if (coords.y > 0) {
-          ctxAtlas.setLineDash([2, 2]);
-        } else {
-          ctxAtlas.setLineDash([]);
-        }
-        ctxAtlas.strokeStyle = "red"
-        ctxAtlas.lineWidth = 2
-        ctxAtlas.stroke()
-
-        ctxAtlas.beginPath()
-        ctxAtlas.arc(Math.floor(coords.x * scale + canvasAtlas.width / 2), Math.floor((coords.z * scale) / 5 + canvasAtlas.height / 2 + coords.y * scale / 2), size, 0, Math.PI * 2, true)
-        ctxAtlas.fill()
-        ctxAtlas.closePath()
-      }
-
-      drawSun = () => {
-        ctxAtlas.beginPath()
-        ctxAtlas.arc(canvasAtlas.width / 2, canvasAtlas.height / 2, 2, 0, Math.PI * 2, true)
-        ctxAtlas.closePath()
-        ctxAtlas.fillStyle = "yellow"
-        ctxAtlas.fill()
-      }
-
-      drawDistanceBar = (scale) => {
-        fromTop = ctxAtlas.canvas.height / 3 * 2
-        ctxAtlas.beginPath()
-        ctxAtlas.moveTo(0, fromTop)
-        ctxAtlas.lineTo(ctxAtlas.canvas.width / 3, fromTop)
-        ctxAtlas.strokeStyle = "red"
-        ctxAtlas.lineWidth = 2
-        ctxAtlas.stroke()
-        ctxAtlas.beginPath()
-        ctxAtlas.moveTo(ctxAtlas.canvas.width * 2 / 3, fromTop)
-        ctxAtlas.lineTo(ctxAtlas.canvas.width - 20, fromTop)
-        ctxAtlas.strokeStyle = "red"
-        ctxAtlas.lineWidth = 2
-        ctxAtlas.stroke()
-        ctxAtlas.font = '18px serif';
-        ctxAtlas.fillStyle = "red"
-        ctxAtlas.fillText('<', 0, fromTop + 5);
-        ctxAtlas.fillText('>', ctxAtlas.canvas.width - 20, fromTop + 5);
-        ctxAtlas.fillText(astromath.formatDistance(scales[scale]), ctxAtlas.canvas.width / 3 + 20, fromTop + 7);
-      }
-
-      showAtlas = (index, c, scale) => {
-        ctxAtlas.clearRect(0, 0, ctxAtlas.canvas.width, ctxAtlas.canvas.height) //clear canvas
-        drawingScale = canvasAtlas.width / scales[scale + 1] / 2 //has to include all off the objects up to the next size
-        for (let [i, co] of c.entries()) {
-          if (i == index) {
-            selectedObject = true
-          } else {
-            selectedObject = false
-          }
-          drawCelestialObject(co, drawingScale, selectedObject)
-          drawSun()
-          drawDistanceBar(scale + 1)
-        }
-      }
-
-      // event handlers
-
-      if (window.DeviceOrientationEvent) {
-        window.addEventListener('devicemotion', listener)
-        window.addEventListener('deviceorientation', listener2)
-      } else {
-        listener2(0)
-      }
-
-      let listCO = document.getElementById("listCO")
-      listCO.addEventListener("click", (e) => {
-        selectedCos = e.target
-        let nameOfCos = e.target.innerHTML
-        index = c.findIndex(x => x.name == nameOfCos.trim());
-        showData(index);
-      });
-
-      document.getElementById("buttonCalibrate").addEventListener("click", (e) => {
-        offsetCompass = compassRaw - az;
-        offsetInclination = altitude - alt;
-        localStorage.setItem("offsetCompass", offsetCompass);
-        localStorage.setItem("offsetInclination", offsetInclination);
-      });
-
-      document.getElementById("buttonInfo").addEventListener("click", () => {
-        window.location.href = "https://bwedgar.github.io/index.html";
-      });
-
-
-      document.getElementById("buttonScalePrevious").addEventListener("click", () => {
-        if (scaleSelected > 0) {
-          scaleSelected--
-        } else {
-          scaleSelected = 0
-        }
-        c = filterObjects(cos, visibleOnly, scaleSelected)
-        index = changeIndex(index, "zero", c)
-        showData(index)
-      });
-
-      document.getElementById("buttonScale").addEventListener("click", () => {
-        showCO()
-      });
-
-      document.getElementById("buttonScaleNext").addEventListener("click", () => {
-        if (scaleSelected < 7) {
-          scaleSelected++
-        } else {
-          scaleSelected = 7
-        }
-        c = filterObjects(cos, visibleOnly, scaleSelected)
-        index = changeIndex(index, "zero", c)
-        showData(index)
-      });
-
-      document.getElementById("buttonPreviousObject").addEventListener("click", () => {
-        index = changeIndex(index, "decrement", c)
-        showData(index);
-      });
-
-      document.getElementById("buttonNextObject").addEventListener("click", (e) => {
-        index = changeIndex(index, "increment", c)
-        showData(index);
-      });
-
-      document.getElementById("buttonVisible").addEventListener("click", () => {
-        visibleOnly = true
-        c = filterObjects(cos, visibleOnly, scaleSelected)
-        index = changeIndex(index, "zero", c)
-        document.getElementById("buttonVisible").classList.add("clicked")
-        document.getElementById("buttonAll").classList.remove("clicked")
-        showData(index)
-      });
-
-      document.getElementById("buttonAll").addEventListener("click", () => {
-        visibleOnly = false
-        c = filterObjects(cos, visibleOnly, scaleSelected)
-        index = changeIndex(index, "zero", c)
-        document.getElementById("buttonAll").classList.add("clicked")
-        document.getElementById("buttonVisible").classList.remove("clicked")
-        showData(index)
-      });
-
-      showData(0)
-
-    } //end ready()
-
-// need to fix thus with async function perhaps **************************************
-    getLocation = () => {
-      if (false) { //}(navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition((position) => {
-          coords = position.coords;
-          astromath.longitude = astromath.radians(coords.longitude); //longitude of observer in degrees East
-          astromath.latitude = astromath.radians(coords.latitude); //latitude of observer in degrees
-          ready()
-        })
-      } else {
-        astromath.longitude = astromath.radians(174.76); //longitude of observer in Auckland in degrees East
-        astromath.latitude = astromath.radians(-36.8485); //latitude of observer  in Auckland  in degrees
-        ready()
-      }
-
     }
-    getLocation()
 
-  </script>
+    changeIndex = (index, change, array) => {
+      if (change == "increment") index++
+      if (change == "decrement") index--
+      if (change == "zero") index = 0
+      index = index < 0 ? array.length - 1 : index
+      index = index == array.length ? 0 : index
+      return index
+    }
+
+    showData = (index) => {
+      document.getElementById("buttonScale").innerHTML = legends[scaleSelected]
+      d = ""
+      if (c.length > 0) {
+        types.forEach((v) => {
+          if (v.code == [c[index].type]) d = (v.name)
+        })
+        document.getElementById("textName").innerHTML = astromath.formatNames(c[index].name) + "<br>" +
+          d + " " + astromath.formatDistance(c[index].lightYears) + "<br/>" + c[index].notes
+
+      } else {
+        document.getElementById("textName").innerHTML = ""
+      }
+      showAtlas(index, c, scaleSelected)
+      document.getElementById("pageCO").style.display = "none";
+      document.getElementById("pageContent").style.display = "block";
+    }
+
+    showCO = () => {
+      document.getElementById("listCO").innerHTML = "";
+      var numberOfItemsAdded = 0;
+      for (const co of c) {
+        numberOfItemsAdded++;
+        var node = document.createElement("BUTTON");
+        var textnode = document.createTextNode(co.name);
+        node.appendChild(textnode);
+        // var htmlnode = document.createElement('span');
+        // htmlnode.innerHTML=co.name
+        node.appendChild(textnode);
+
+        btn = document.getElementById("listCO").appendChild(node);
+        btn.classList.add("button");
+        selectedCos = document.getElementById("listCO").firstChild
+      }
+      if (numberOfItemsAdded > 0) {
+        document.getElementById("pageCO").style.display = "block";
+        document.getElementById("pageContent").style.display = "none";
+      }
+    }
+
+    drawCelestialObject = (co, scale, selectedObject) => {
+      coords = astromath.polarToCartesian(co.galLatitude, co.galLongitude, co.lightYears)
+      if (selectedObject == true) {
+        size = 3;
+        ctxAtlas.fillStyle = "white"
+      } else {
+        size = 2;
+        ctxAtlas.fillStyle = "red"
+      }
+
+      ctxAtlas.arc(coords.x * scale + canvasAtlas.width / 2, (coords.z * scale) / 5 + canvasAtlas.height / 2 + coords.y / 2, size, 0, Math.PI * 2, true)
+      ctxAtlas.beginPath()
+      ctxAtlas.strokeStyle = "blue"
+      ctxAtlas.lineWidth = 1
+      ctxAtlas.ellipse(canvasAtlas.width / 2, canvasAtlas.height / 2, canvasAtlas.width / 2, canvasAtlas.height / 12, 0, 0, Math.PI * 2)
+      ctxAtlas.stroke()
+      ctxAtlas.beginPath()
+      ctxAtlas.strokeStyle = "blue"
+      ctxAtlas.lineWidth = 1
+      ctxAtlas.ellipse(canvasAtlas.width / 2, canvasAtlas.height / 2, canvasAtlas.width / 3, canvasAtlas.height / 17, 0, 0, Math.PI * 2)
+      ctxAtlas.stroke()
+
+      ctxAtlas.beginPath()
+      ctxAtlas.moveTo(Math.floor(coords.x * scale + canvasAtlas.width / 2), Math.floor((coords.z * scale) / 5 + canvasAtlas.height / 2))
+      ctxAtlas.lineTo(Math.floor(coords.x * scale + canvasAtlas.width / 2), Math.floor((coords.z * scale) / 5 + canvasAtlas.height / 2 + coords.y * scale / 2))
+      if (coords.y > 0) {
+        ctxAtlas.setLineDash([2, 2]);
+      } else {
+        ctxAtlas.setLineDash([]);
+      }
+      ctxAtlas.strokeStyle = "red"
+      ctxAtlas.lineWidth = 2
+      ctxAtlas.stroke()
+
+      ctxAtlas.beginPath()
+      ctxAtlas.arc(Math.floor(coords.x * scale + canvasAtlas.width / 2), Math.floor((coords.z * scale) / 5 + canvasAtlas.height / 2 + coords.y * scale / 2), size, 0, Math.PI * 2, true)
+      ctxAtlas.fill()
+      ctxAtlas.closePath()
+    }
+
+    drawSun = () => {
+      ctxAtlas.beginPath()
+      ctxAtlas.arc(canvasAtlas.width / 2, canvasAtlas.height / 2, 2, 0, Math.PI * 2, true)
+      ctxAtlas.closePath()
+      ctxAtlas.fillStyle = "yellow"
+      ctxAtlas.fill()
+    }
+
+    drawDistanceBar = (scale) => {
+      fromTop = ctxAtlas.canvas.height / 3 * 2
+      ctxAtlas.beginPath()
+      ctxAtlas.moveTo(0, fromTop)
+      ctxAtlas.lineTo(ctxAtlas.canvas.width / 3, fromTop)
+      ctxAtlas.strokeStyle = "red"
+      ctxAtlas.lineWidth = 2
+      ctxAtlas.stroke()
+      ctxAtlas.beginPath()
+      ctxAtlas.moveTo(ctxAtlas.canvas.width * 2 / 3, fromTop)
+      ctxAtlas.lineTo(ctxAtlas.canvas.width - 20, fromTop)
+      ctxAtlas.strokeStyle = "red"
+      ctxAtlas.lineWidth = 2
+      ctxAtlas.stroke()
+      ctxAtlas.font = '18px serif';
+      ctxAtlas.fillStyle = "red"
+      ctxAtlas.fillText('<', 0, fromTop + 5);
+      ctxAtlas.fillText('>', ctxAtlas.canvas.width - 20, fromTop + 5);
+      ctxAtlas.fillText(astromath.formatDistance(scales[scale]), ctxAtlas.canvas.width / 3 + 20, fromTop + 7);
+    }
+
+    showAtlas = (index, c, scale) => {
+      ctxAtlas.clearRect(0, 0, ctxAtlas.canvas.width, ctxAtlas.canvas.height) //clear canvas
+      drawingScale = canvasAtlas.width / scales[scale + 1] / 2 //has to include all off the objects up to the next size
+      for (let [i, co] of c.entries()) {
+        if (i == index) {
+          selectedObject = true
+        } else {
+          selectedObject = false
+        }
+        drawCelestialObject(co, drawingScale, selectedObject)
+        drawSun()
+        drawDistanceBar(scale + 1)
+      }
+    }
+
+    // event handlers
+
+    if (window.DeviceOrientationEvent) {
+      window.addEventListener('devicemotion', listener)
+      window.addEventListener('deviceorientation', listener2)
+    } else {
+      listener2(0)
+    }
+
+    let listCO = document.getElementById("listCO")
+    listCO.addEventListener("click", (e) => {
+      selectedCos = e.target
+      //*************************************  find the span inner html **************
+      console.log(selectedCos)
+      let nameOfCos = e.target.innerHTML
+      index = c.findIndex(x => x.name == nameOfCos.trim());
+      showData(index);
+    });
+
+    document.getElementById("buttonCalibrate").addEventListener("click", (e) => {
+      offsetCompass = compassRaw - az;
+      offsetInclination = altitude - alt;
+      localStorage.setItem("offsetCompass", offsetCompass);
+      localStorage.setItem("offsetInclination", offsetInclination);
+    });
+
+    document.getElementById("buttonInfo").addEventListener("click", () => {
+      window.location.href = "https://bwedgar.github.io/index.html";
+    });
+
+
+    document.getElementById("buttonScalePrevious").addEventListener("click", () => {
+      if (scaleSelected > 0) {
+        scaleSelected--
+      } else {
+        scaleSelected = 0
+      }
+      c = filterObjects(cos, visibleOnly, scaleSelected)
+      index = changeIndex(index, "zero", c)
+      showData(index)
+    });
+
+    document.getElementById("buttonScale").addEventListener("click", () => {
+      showCO()
+    });
+
+    document.getElementById("buttonScaleNext").addEventListener("click", () => {
+      if (scaleSelected < 7) {
+        scaleSelected++
+      } else {
+        scaleSelected = 7
+      }
+      c = filterObjects(cos, visibleOnly, scaleSelected)
+      index = changeIndex(index, "zero", c)
+      showData(index)
+    });
+
+    document.getElementById("buttonPreviousObject").addEventListener("click", () => {
+      index = changeIndex(index, "decrement", c)
+      showData(index);
+    });
+
+    document.getElementById("buttonNextObject").addEventListener("click", (e) => {
+      index = changeIndex(index, "increment", c)
+      showData(index);
+    });
+
+    document.getElementById("buttonVisible").addEventListener("click", () => {
+      visibleOnly = true
+      c = filterObjects(cos, visibleOnly, scaleSelected)
+      index = changeIndex(index, "zero", c)
+      document.getElementById("buttonVisible").classList.add("clicked")
+      document.getElementById("buttonAll").classList.remove("clicked")
+      showData(index)
+    });
+
+    document.getElementById("buttonAll").addEventListener("click", () => {
+      visibleOnly = false
+      c = filterObjects(cos, visibleOnly, scaleSelected)
+      index = changeIndex(index, "zero", c)
+      document.getElementById("buttonAll").classList.add("clicked")
+      document.getElementById("buttonVisible").classList.remove("clicked")
+      showData(index)
+    });
+
+    showData(0)
+
+  } //end ready()
+
+  // need to fix thus with async function perhaps **************************************
+  getLocation = () => {
+    if (false) { //}(navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition((position) => {
+        coords = position.coords;
+        astromath.longitude = astromath.radians(coords.longitude); //longitude of observer in degrees East
+        astromath.latitude = astromath.radians(coords.latitude); //latitude of observer in degrees
+        ready()
+      })
+    } else {
+      astromath.longitude = astromath.radians(174.76); //longitude of observer in Auckland in degrees East
+      astromath.latitude = astromath.radians(-36.8485); //latitude of observer  in Auckland  in degrees
+      ready()
+    }
+
+  }
+  getLocation()
+</script>
 
 
 </html>

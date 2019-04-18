@@ -224,8 +224,17 @@ data = data.concat(dataPlanets)
 getCelestialObjects = (data, longitude, latitide, scales) => {
   o = {}
 
+  toGreekSymbols = (str) => {
+    return str.replace("Alpha ", "\u03b1").replace("Beta ", "\u03b2").replace("Gamma ", "\u03b3").replace("Delta ", "\u03b4").replace("Epsilon ", "\u03b5")
+      .replace("Zeta ", "\u03b6").replace("Eta ", "\u03b7").replace("Theta ", "\u03b8").replace("Iota ", "\u03b9")
+      .replace("Kappa ", "\u03ba").replace("Lambda ", "\u03bb").replace("Mu ", "\u03bc").replace("Nu ", "\u03bd")
+      .replace("Xi ", "\u03be").replace("Omicron ", "\u03bf").replace("Pi ", "\u03c0").replace("Rho ", "\u03c1")
+      .replace("Sigma ", "\u03c3").replace("Tau ", "\u03c4").replace("Upsilon ", "\u03c5").replace("Phi ", "\u03c6")
+      .replace("Chi ", "\u03c7").replace("Psi ", "\u03c8").replace("Omega ", "\u03c9")
+  }
+
   objects = data.map(a => o = {
-      "name": a[0],
+      "name": toGreekSymbols(a[0]),
       "raHours": a[1],
       "raMinutes": a[2],
       "decDegrees": a[3],
