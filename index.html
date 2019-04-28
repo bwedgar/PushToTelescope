@@ -223,29 +223,42 @@
     cos = getCelestialObjects(data, astromath.longitude, astromath.latitude, scales);
     let c = filterObjects(cos, visibleOnly, scaleSelected)
 
-    let objectTypes = ["GX", "OC", "GC", "ST", "NB", "DS", "RN"]
-    let objectNames = ["galaxy", "open cluster", "globular cluster", "star", "bright nebula", "double star", "remnant"]
-    let types = [{
-        code: "GX",
-        name: "galaxy"
-      }, {
-        code: "OC",
-        name: "open cluster"
-      }, {
-        code: "GC",
-        name: "globular cluster"
-      },
-      {
-        code: "ST",
-        name: "star"
-      }, {
-        code: "NB",
-        name: "bright nebula"
-      }, {
-        code: "RN",
-        name: "remnant"
-      }
-    ]
+    //  let objectTypes = ["GX", "OC", "GC", "ST", "NBj", "DS", "RN"]
+    //  let objectNames = ["galaxy", "open cluster", "globular cluster", "star", "bright nebula", "double star", "remnant"]
+    let types = new Map([
+      ["GX", "galaxy"],
+      ["OC", "open cluster"],
+      ["GC", "globular cluster"],
+      ["ST", "star"],
+      ["NB", "bright nebula"],
+      ["RN", "remnant"]
+    ]);
+
+    console.log(types.get("GC"))
+
+    // let types = [{
+    //     code: "GX",
+    //     name: "galaxy"
+    //   }, {
+    //     code: "OC",
+    //     name: "open cluster"
+    //   }, {
+    //     code: "GC",
+    //     name: "globular cluster"
+    //   },
+    //   {
+    //     code: "ST",
+    //     name: "star"
+    //   }, {
+    //     code: "NBk",
+    //     name: "bright nebula"
+    //   }, {
+    //     code: "RN",
+    //     name: "remnant"
+    //   }
+    // ]
+
+
     offsetCompass = localStorage.getItem("offsetCompass")
     offsetInclination = localStorage.getItem("offsetInclination")
 
@@ -256,7 +269,8 @@
     canvasFinder.width = window.innerWidth;
     canvasFinder.height = window.innerHeight * 15 / 100;
     ctxFinder = canvasFinder.getContext("2d")
-    canvasAtlas = document.getElementById("canvasAtlas")
+    canvasAtlas = document.getElementById(
+      "canvasAtlas")
     ctxAtlas = canvasAtlas.getContext("2d")
     canvasAtlas.width = window.innerWidth;
     canvasAtlas.height = window.innerHeight * 50 / 100;
@@ -387,7 +401,12 @@
     }
 
     drawCelestialObject = (co, scale, selectedObject) => {
-      coords = astromath.polarToCartesian(co.galLatitude, co.galLongitude, co.lightYears)
+
+      if (co.type == "PL") {
+        coords = astromath.polarToCartesian(co.galLatitude - (63+9) * Math.PI * 2 / 360, co.galLongitude, co.lightYears)
+      } else {
+        coords = astromath.polarToCartesian(co.galLatitude, co.galLongitude, co.lightYears)
+      }
       if (selectedObject == true) {
         size = 3;
         ctxAtlas.fillStyle = "white"

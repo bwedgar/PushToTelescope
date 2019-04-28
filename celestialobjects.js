@@ -201,7 +201,7 @@ dataStars = dataText.map(string => string.split(","))
 dataPlanets = []
 
 getPlanets = () => {
-  for (var i of [0, 1, 3, 4, 5]) {
+  for (var i of [0, 1, 2,3, 4, 5]) {
     var ra = radecr(helios(planets[i]), helios(planets[2]))[0];
     var raHours = Math.floor(ra);
     var raMinutes = Math.round((ra - raHours) * 60);
