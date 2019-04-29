@@ -201,75 +201,77 @@ dataStars = dataText.map(string => string.split(","))
 dataPlanets = []
 
 getPlanets = () => {
-  for (var i of [0, 1, 2,3, 4, 5]) {
-    var ra = radecr(helios(planets[i]), helios(planets[2]))[0];
-    var raHours = Math.floor(ra);
-    var raMinutes = Math.round((ra - raHours) * 60);
-    var dec = radecr(helios(planets[i]), helios(planets[2]))[1];
-    var decDegrees = Math.floor(dec);
-    var decMinutes = Math.round((dec - decDegrees) * 60);
-    var distance = radecr(helios(planets[i]), helios(planets[2]))[2] * 0.00001581; //from AU to light Years
-    var n = planets[i].name;
-    dataPlanets.push([n, raHours, raMinutes, decDegrees, decMinutes, distance, "", "PL", ""])
-  }
-}
+    for (var i of [0, 1, 2, 3, 4, 5]) {
+      var ra = radecr(helios(planets[i]), helios(planets[2]))[0];
+      var raHours = Math.floor(ra);
+      var raMinutes = Math.round((ra - raHours) * 60);
+      var dec = radecr(helios(planets[i]), helios(planets[2]))[1];
+      var decDegrees = Math.floor(dec);
+      var decMinutes = Math.round((dec - decDegrees) * 60);
+      var distance = radecr(helios(planets[i]), helios(planets[2]))[2] * 0.00001581; //from AU to light Years
+      var n = planets[i].name;
+      //console.log("at get planets"+helios(planets[i]))
+      dataPlanets.push([n, raHours, raMinutes, decDegrees, decMinutes, distance, "", "PL", "", helios(planets[i])])
+      }
+    }
 
-getPlanets()
+    getPlanets()
 
 
-data = []
-data = data.concat(dataStars)
-data = data.concat(dataPlanets)
+    data = []
+    data = data.concat(dataStars)
+    data = data.concat(dataPlanets)
 
-getCelestialObjects = (data, longitude, latitide, scales) => {
-  o = {}
+    getCelestialObjects = (data, longitude, latitide, scales) => {
+      o = {}
 
-  toGreekSymbols = (str) => {
-    return str.replace("Alpha ", "\u03b1").replace("Beta ", "\u03b2").replace("Gamma ", "\u03b3").replace("Delta ", "\u03b4").replace("Epsilon ", "\u03b5")
-      .replace("Zeta ", "\u03b6").replace("Eta ", "\u03b7").replace("Theta ", "\u03b8").replace("Iota ", "\u03b9")
-      .replace("Kappa ", "\u03ba").replace("Lambda ", "\u03bb").replace("Mu ", "\u03bc").replace("Nu ", "\u03bd")
-      .replace("Xi ", "\u03be").replace("Omicron ", "\u03bf").replace("Pi ", "\u03c0").replace("Rho ", "\u03c1")
-      .replace("Sigma ", "\u03c3").replace("Tau ", "\u03c4").replace("Upsilon ", "\u03c5").replace("Phi ", "\u03c6")
-      .replace("Chi ", "\u03c7").replace("Psi ", "\u03c8").replace("Omega ", "\u03c9")
-  }
+      toGreekSymbols = (str) => {
+        return str.replace("Alpha ", "\u03b1").replace("Beta ", "\u03b2").replace("Gamma ", "\u03b3").replace("Delta ", "\u03b4").replace("Epsilon ", "\u03b5")
+          .replace("Zeta ", "\u03b6").replace("Eta ", "\u03b7").replace("Theta ", "\u03b8").replace("Iota ", "\u03b9")
+          .replace("Kappa ", "\u03ba").replace("Lambda ", "\u03bb").replace("Mu ", "\u03bc").replace("Nu ", "\u03bd")
+          .replace("Xi ", "\u03be").replace("Omicron ", "\u03bf").replace("Pi ", "\u03c0").replace("Rho ", "\u03c1")
+          .replace("Sigma ", "\u03c3").replace("Tau ", "\u03c4").replace("Upsilon ", "\u03c5").replace("Phi ", "\u03c6")
+          .replace("Chi ", "\u03c7").replace("Psi ", "\u03c8").replace("Omega ", "\u03c9")
+      }
 
-  objects = data.map(a => o = {
-      "name": toGreekSymbols(a[0]),
-      "raHours": a[1],
-      "raMinutes": a[2],
-      "decDegrees": a[3],
-      "decMinutes": a[4],
-      "lightYears": a[5],
-      "absMagnitue": a[6],
-      "type": a[7],
-      "notes": a[8],
-      "galLongitude": astromath.galacticLongitude(
-        astromath.raRadians(a[1], a[2]),
-        astromath.decRadians(a[3], a[4])
-      ),
-      "galLatitude": astromath.galacticLatitude(
-        astromath.raRadians(a[1], a[2]),
-        astromath.decRadians(a[3], a[4])
-      ),
-      "azimuth": astromath.azimuth(
-        astromath.raRadians(a[1], a[2]),
-        astromath.decRadians(a[3], a[4])
-      ),
-      "altitude": astromath.altitude(
-        astromath.raRadians(a[1], a[2]),
-        astromath.decRadians(a[3], a[4])
-      ),
-      "visible": (astromath.altitude(
-        astromath.raRadians(a[1], a[2]),
-        astromath.decRadians(a[3], a[4])
-      ) > 15 ? true : false),
-      "scale": scales.findIndex(s => s > a[5]) - 1
-    })
-    .sort((f, g) => (f.azimuth < g.azimuth) ? -1 : 1)
-  return objects
-}
+      objects = data.map(a => o = {
+          "name": toGreekSymbols(a[0]),
+          "raHours": a[1],
+          "raMinutes": a[2],
+          "decDegrees": a[3],
+          "decMinutes": a[4],
+          "lightYears": a[5],
+          "absMagnitue": a[6],
+          "type": a[7],
+          "notes": a[8],
+          "helios":a[9],
+          "galLongitude": astromath.galacticLongitude(
+            astromath.raRadians(a[1], a[2]),
+            astromath.decRadians(a[3], a[4])
+          ),
+          "galLatitude": astromath.galacticLatitude(
+            astromath.raRadians(a[1], a[2]),
+            astromath.decRadians(a[3], a[4])
+          ),
+          "azimuth": astromath.azimuth(
+            astromath.raRadians(a[1], a[2]),
+            astromath.decRadians(a[3], a[4])
+          ),
+          "altitude": astromath.altitude(
+            astromath.raRadians(a[1], a[2]),
+            astromath.decRadians(a[3], a[4])
+          ),
+          "visible": (astromath.altitude(
+            astromath.raRadians(a[1], a[2]),
+            astromath.decRadians(a[3], a[4])
+          ) > 15 ? true : false),
+          "scale": scales.findIndex(s => s > a[5]) - 1
+        })
+        .sort((f, g) => (f.azimuth < g.azimuth) ? -1 : 1)
+      return objects
+    }
 
-filterObjects = (os, visibleOnly, scale) => {
-  f = os.filter(o => (visibleOnly ? (o.visible && o.scale == scale) : (o.scale == scale)))
-  return f
-}
+    filterObjects = (os, visibleOnly, scale) => {
+      f = os.filter(o => (visibleOnly ? (o.visible && o.scale == scale) : (o.scale == scale)))
+      return f
+    }

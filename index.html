@@ -403,7 +403,9 @@
     drawCelestialObject = (co, scale, selectedObject) => {
 
       if (co.type == "PL") {
-        coords = astromath.polarToCartesian(co.galLatitude - (63+9) * Math.PI * 2 / 360, co.galLongitude, co.lightYears)
+        console.log(co.helios[0])
+        coords = {x:co.helios[0],y:co.helios[1],z:helios[2]}
+        //astromath.polarToCartesian(co.galLatitude - (63+9) * Math.PI * 2 / 360, co.galLongitude, co.lightYears)
       } else {
         coords = astromath.polarToCartesian(co.galLatitude, co.galLongitude, co.lightYears)
       }
