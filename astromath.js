@@ -1,8 +1,8 @@
 astromath = {
-
-  longitude: 0,
-
-  latitude: 0,
+  // 
+  // longitude: 0,
+  //
+  // latitude: 0,
 
   formatDistance: (num1) => {
     if (num1 < 0.001) { //planets show AU
