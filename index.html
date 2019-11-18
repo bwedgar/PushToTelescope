@@ -249,6 +249,7 @@
     offsetCompass = localStorage.getItem("offsetCompass")
     offsetInclination = localStorage.getItem("offsetInclination")
 
+
     document.getElementById('pageCO').style.height = screen.height * 0.5 + "px";
 
     // set up canvases
@@ -264,7 +265,8 @@
     // functions for detecting and responding to telescope movement
     listener = (e) => {
       //ctxFinder.clearRect(0,0,canvasFinder.height,canvasFinder.width)
-      sensor = -e.accelerationIncludingGravity.x //sensor= 0 when vertical, -6.9 when clockwise 45 degrees, +6.9 when antoclockwise. +/- 10 when horizontal
+
+        sensor = -e.accelerationIncludingGravity.x //sensor= 0 when vertical, -6.9 when clockwise 45 degrees, +6.9 when antoclockwise. +/- 10 when horizontal
       sensor = Math.round(sensor * 100) / 100;
       alt = Math.round(alt * 10) / 10 //alt is the altitude of the object
       if (Math.abs(sensor - previousSensor) > 0.05) { //test if the sensor has changed
@@ -471,13 +473,21 @@
     }
 
     // event handlers
+    DeviceOrientationEvent.requestPermission()
+    .then(response => {
+      if (response == 'granted') {
+        window.addEventListener('deviceorientation', listener2)
+        window.addEventListener('devicemotion', listener)
 
-    if (window.DeviceOrientationEvent) {
-      window.addEventListener('devicemotion', listener)
-      window.addEventListener('deviceorientation', listener2)
-    } else {
-      listener2(0)
-    }
+      }
+    })
+    .catch(console.error)
+    // if (window.DeviceOrientationEvent) {
+    //   window.addEventListener('devicemotion', listener)
+    //   window.addEventListener('deviceorientation', listener2)
+    // } else {
+    //   listener2(0)
+    // }
 
     let listCO = document.getElementById("listCO")
     listCO.addEventListener("click", (e) => {
