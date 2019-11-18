@@ -492,7 +492,16 @@
     });
 
     document.getElementById("buttonCalibrate").addEventListener("click", (e) => {
-      offsetCompass = compassRaw - az;
+      DeviceOrientationEvent.requestPermission()
+        .then(response => {
+          if (response == 'granted') {
+            window.addEventListener('deviceorientation', listener2)
+            window.addEventListener('devicemotion', listener)
+
+          }
+        })
+        .catch(console.error)
+        offsetCompass = compassRaw - az;
       offsetInclination = altitude - alt;
       localStorage.setItem("offsetCompass", offsetCompass);
       localStorage.setItem("offsetInclination", offsetInclination);
@@ -578,15 +587,7 @@
 
   }
   getLocation()
-  DeviceOrientationEvent.requestPermission()
-    .then(response => {
-      if (response == 'granted') {
-        window.addEventListener('deviceorientation', listener2)
-        window.addEventListener('devicemotion', listener)
 
-      }
-    })
-    .catch(console.error)
 </script>
 
 
