@@ -208,7 +208,7 @@
     let azDev = 0;
     let az = 0;
     let galShow = 0;
-
+nameOfCos=""
     scaleSelected = 2;
     legends = ["Solar System", "Nearest Stars", "Solar Neighbourhood", "Orion Arm", "Milky Way Galaxy", "Satellite Galaxies", "Local Group",
       "Virgo Supercluster"
@@ -353,6 +353,7 @@
       d = ""
       if (c.length > 0) {
         types.forEach((v) => {
+          console.log(c[index])
           if (v.code == [c[index].type]) d = (v.name)
         })
         az=c[index].azimuth
@@ -486,9 +487,10 @@
 
     let listCO = document.getElementById("listCO")
     listCO.addEventListener("click", (e) => {
-      selectedCos = e.target
+      selectedCos = e.target.innerHTML
       //*************************************  find the span inner html **************
       console.log(selectedCos)
+
       index = c.findIndex(x => x.name == nameOfCos.trim());
       showData(index);
     });
