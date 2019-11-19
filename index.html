@@ -72,7 +72,7 @@
       font-size: 7vw;
       border: 1px solid red;
       padding: 2% 2%;
-      width: 99%;
+      width: 97%;
       text-align: left;
     }
 
@@ -82,7 +82,7 @@
       font-family: verdana;
       font-size: 7vw;
       border: 1px solid red;
-      width: 48%;
+      width: 46%;
       padding: 2% 2%;
     }
 
@@ -92,7 +92,7 @@
       font-family: verdana;
       font-size: 6vw;
       border: 1px solid red;
-      width: 10%;
+      width: 9%;
       padding: 2% 2%;
     }
 
@@ -102,7 +102,7 @@
       font-family: verdana;
       font-size: 6vw;
       border: 1px solid red;
-      width: 75%;
+      width: 72%;
       padding: 2% 2%;
     }
 
@@ -112,7 +112,7 @@
       font-family: verdana;
       font-size: 6vw;
       border: 1px solid red;
-      width: 23.5%;
+      width: 21%;
       padding: 2% 2%;
     }
 
@@ -122,7 +122,7 @@
       font-family: verdana;
       font-size: 7vw;
       border: 1px solid red;
-      width: 12.5%;
+      width: 12 %;
       padding: 2% 2%
     }
 
@@ -132,7 +132,7 @@
       font-family: verdana;
       font-size: 7vw;
       border: 1px solid red;
-      width: 9.6%;
+      width: 9%;
       padding: 2% 2%;
     }
 
@@ -208,7 +208,7 @@
     let azDev = 0;
     let az = 0;
     let galShow = 0;
-
+nameOfCos=""
     scaleSelected = 2;
     legends = ["Solar System", "Nearest Stars", "Solar Neighbourhood", "Orion Arm", "Milky Way Galaxy", "Satellite Galaxies", "Local Group",
       "Virgo Supercluster"
@@ -263,6 +263,7 @@
     offsetCompass = localStorage.getItem("offsetCompass")
     offsetInclination = localStorage.getItem("offsetInclination")
 
+
     document.getElementById('pageCO').style.height = screen.height * 0.5 + "px";
 
     // set up canvases
@@ -279,6 +280,7 @@
     // functions for detecting and responding to telescope movement
     listener = (e) => {
       //ctxFinder.clearRect(0,0,canvasFinder.height,canvasFinder.width)
+
       sensor = -e.accelerationIncludingGravity.x //sensor= 0 when vertical, -6.9 when clockwise 45 degrees, +6.9 when antoclockwise. +/- 10 when horizontal
       sensor = Math.round(sensor * 100) / 100;
       alt = Math.round(alt * 10) / 10 //alt is the altitude of the object
@@ -366,10 +368,14 @@
       d = ""
       if (c.length > 0) {
         types.forEach((v) => {
+          console.log(c[index])
           if (v.code == [c[index].type]) d = (v.name)
         })
+        az=c[index].azimuth
+        alt=c[index].altitude
+
         document.getElementById("textName").innerHTML = astromath.formatNames(c[index].name) + "<br>" +
-          d + " " + astromath.formatDistance(c[index].lightYears) + "<br/>" + c[index].notes
+          d + " " + astromath.formatDistance(c[index].lightYears) + "<br/>" + c[index].notes//+" az:  "+az
 
       } else {
         document.getElementById("textName").innerHTML = ""
@@ -494,24 +500,25 @@
 
     // event handlers
 
-    if (window.DeviceOrientationEvent) {
-      window.addEventListener('devicemotion', listener)
-      window.addEventListener('deviceorientation', listener2)
-    } else {
-      listener2(0)
-    }
+    // if (window.DeviceOrientationEvent) {
+    //   window.addEventListener('devicemotion', listener)
+    //   window.addEventListener('deviceorientation', listener2)
+    // } else {
+    //   listener2(0)
+    // }
 
     let listCO = document.getElementById("listCO")
     listCO.addEventListener("click", (e) => {
-      selectedCos = e.target
+      selectedCos = e.target.innerHTML
       //*************************************  find the span inner html **************
       console.log(selectedCos)
-      let nameOfCos = e.target.innerHTML
+
       index = c.findIndex(x => x.name == nameOfCos.trim());
       showData(index);
     });
 
     document.getElementById("buttonCalibrate").addEventListener("click", (e) => {
+
       DeviceOrientationEvent.requestPermission()
       .then(response => {
         if (response == 'granted') {
@@ -520,6 +527,7 @@
         }
       })
       .catch(console.error)
+
       offsetCompass = compassRaw - az;
       offsetInclination = altitude - alt;
       localStorage.setItem("offsetCompass", offsetCompass);
@@ -527,7 +535,16 @@
     });
 
     document.getElementById("buttonInfo").addEventListener("click", () => {
-      window.location.href = "https://bwedgar.github.io/index.html";
+      DeviceOrientationEvent.requestPermission()
+        .then(response => {
+          if (response == 'granted') {
+            window.addEventListener('deviceorientation', listener2)
+            window.addEventListener('devicemotion', listener)
+
+          }
+        })
+        .catch(console.error)
+        window.location.href = "https://bwedgar.github.io/index.html";
     });
 
 
