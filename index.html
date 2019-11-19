@@ -217,8 +217,9 @@
     document.getElementById("buttonVisible").classList.add("clicked")
 
     index = 0
-    const scales = [0, 0.000158125, 12.5, 250, 5000, 50000, 250000, 5000000, 100000000]
+    const scales = [0, 0.0002, 12.5, 250, 5000, 50000, 250000, 5000000, 100000000]
 
+    //const scales = [0, 0.000158125, 12.5, 250, 5000, 50000, 250000, 5000000, 100000000]
 
     cos = getCelestialObjects(data, astromath.longitude, astromath.latitude, scales);
     let c = filterObjects(cos, visibleOnly, scaleSelected)
@@ -511,6 +512,14 @@
     });
 
     document.getElementById("buttonCalibrate").addEventListener("click", (e) => {
+      DeviceOrientationEvent.requestPermission()
+      .then(response => {
+        if (response == 'granted') {
+          window.addEventListener('deviceorientation', listener2)
+          window.addEventListener('devicemotion', listener)
+        }
+      })
+      .catch(console.error)
       offsetCompass = compassRaw - az;
       offsetInclination = altitude - alt;
       localStorage.setItem("offsetCompass", offsetCompass);
