@@ -217,35 +217,49 @@ nameOfCos=""
     document.getElementById("buttonVisible").classList.add("clicked")
 
     index = 0
-    const scales = [0, 0.000158125, 12.5, 250, 5000, 50000, 250000, 5000000, 100000000]
+    const scales = [0, 0.0002, 12.5, 250, 5000, 50000, 250000, 5000000, 100000000]
 
+    //const scales = [0, 0.000158125, 12.5, 250, 5000, 50000, 250000, 5000000, 100000000]
 
     cos = getCelestialObjects(data, astromath.longitude, astromath.latitude, scales);
     let c = filterObjects(cos, visibleOnly, scaleSelected)
 
-    let objectTypes = ["GX", "OC", "GC", "ST", "NB", "DS", "RN"]
-    let objectNames = ["galaxy", "open cluster", "globular cluster", "star", "bright nebula", "double star", "remnant"]
-    let types = [{
-        code: "GX",
-        name: "galaxy"
-      }, {
-        code: "OC",
-        name: "open cluster"
-      }, {
-        code: "GC",
-        name: "globular cluster"
-      },
-      {
-        code: "ST",
-        name: "star"
-      }, {
-        code: "NB",
-        name: "bright nebula"
-      }, {
-        code: "RN",
-        name: "remnant"
-      }
-    ]
+    //  let objectTypes = ["GX", "OC", "GC", "ST", "NBj", "DS", "RN"]
+    //  let objectNames = ["galaxy", "open cluster", "globular cluster", "star", "bright nebula", "double star", "remnant"]
+    let types = new Map([
+      ["GX", "galaxy"],
+      ["OC", "open cluster"],
+      ["GC", "globular cluster"],
+      ["ST", "star"],
+      ["NB", "bright nebula"],
+      ["RN", "remnant"]
+    ]);
+
+    console.log(types.get("GC"))
+
+    // let types = [{
+    //     code: "GX",
+    //     name: "galaxy"
+    //   }, {
+    //     code: "OC",
+    //     name: "open cluster"
+    //   }, {
+    //     code: "GC",
+    //     name: "globular cluster"
+    //   },
+    //   {
+    //     code: "ST",
+    //     name: "star"
+    //   }, {
+    //     code: "NBk",
+    //     name: "bright nebula"
+    //   }, {
+    //     code: "RN",
+    //     name: "remnant"
+    //   }
+    // ]
+
+
     offsetCompass = localStorage.getItem("offsetCompass")
     offsetInclination = localStorage.getItem("offsetInclination")
 
@@ -257,7 +271,8 @@ nameOfCos=""
     canvasFinder.width = window.innerWidth;
     canvasFinder.height = window.innerHeight * 15 / 100;
     ctxFinder = canvasFinder.getContext("2d")
-    canvasAtlas = document.getElementById("canvasAtlas")
+    canvasAtlas = document.getElementById(
+      "canvasAtlas")
     ctxAtlas = canvasAtlas.getContext("2d")
     canvasAtlas.width = window.innerWidth;
     canvasAtlas.height = window.innerHeight * 50 / 100;
@@ -393,7 +408,14 @@ nameOfCos=""
     }
 
     drawCelestialObject = (co, scale, selectedObject) => {
-      coords = astromath.polarToCartesian(co.galLatitude, co.galLongitude, co.lightYears)
+
+      if (co.type == "PL") {
+        console.log(co.helios[0])
+        coords = {x:co.helios[0],y:co.helios[1],z:helios[2]}
+        //astromath.polarToCartesian(co.galLatitude - (63+9) * Math.PI * 2 / 360, co.galLongitude, co.lightYears)
+      } else {
+        coords = astromath.polarToCartesian(co.galLatitude, co.galLongitude, co.lightYears)
+      }
       if (selectedObject == true) {
         size = 3;
         ctxAtlas.fillStyle = "white"
@@ -496,6 +518,15 @@ nameOfCos=""
     });
 
     document.getElementById("buttonCalibrate").addEventListener("click", (e) => {
+
+      DeviceOrientationEvent.requestPermission()
+      .then(response => {
+        if (response == 'granted') {
+          window.addEventListener('deviceorientation', listener2)
+          window.addEventListener('devicemotion', listener)
+        }
+      })
+      .catch(console.error)
 
       offsetCompass = compassRaw - az;
       offsetInclination = altitude - alt;
