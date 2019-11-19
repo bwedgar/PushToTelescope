@@ -102,7 +102,7 @@
       font-family: verdana;
       font-size: 6vw;
       border: 1px solid red;
-      width: 75%;
+      width: 72%;
       padding: 2% 2%;
     }
 
@@ -112,7 +112,7 @@
       font-family: verdana;
       font-size: 6vw;
       border: 1px solid red;
-      width: 23.5%;
+      width: 21%;
       padding: 2% 2%;
     }
 
@@ -122,7 +122,7 @@
       font-family: verdana;
       font-size: 7vw;
       border: 1px solid red;
-      width: 12.5%;
+      width: 12 %;
       padding: 2% 2%
     }
 
@@ -132,7 +132,7 @@
       font-family: verdana;
       font-size: 7vw;
       border: 1px solid red;
-      width: 9.6%;
+      width: 9%;
       padding: 2% 2%;
     }
 
@@ -355,8 +355,11 @@
         types.forEach((v) => {
           if (v.code == [c[index].type]) d = (v.name)
         })
+        az=c[index].azimuth
+        alt=c[index].altitude
+
         document.getElementById("textName").innerHTML = astromath.formatNames(c[index].name) + "<br>" +
-          d + " " + astromath.formatDistance(c[index].lightYears) + "<br/>" + c[index].notes
+          d + " " + astromath.formatDistance(c[index].lightYears) + "<br/>" + c[index].notes//+" az:  "+az
 
       } else {
         document.getElementById("textName").innerHTML = ""
@@ -486,12 +489,19 @@
       selectedCos = e.target
       //*************************************  find the span inner html **************
       console.log(selectedCos)
-      let nameOfCos = e.target.innerHTML
       index = c.findIndex(x => x.name == nameOfCos.trim());
       showData(index);
     });
 
     document.getElementById("buttonCalibrate").addEventListener("click", (e) => {
+
+      offsetCompass = compassRaw - az;
+      offsetInclination = altitude - alt;
+      localStorage.setItem("offsetCompass", offsetCompass);
+      localStorage.setItem("offsetInclination", offsetInclination);
+    });
+
+    document.getElementById("buttonInfo").addEventListener("click", () => {
       DeviceOrientationEvent.requestPermission()
         .then(response => {
           if (response == 'granted') {
@@ -501,14 +511,7 @@
           }
         })
         .catch(console.error)
-        offsetCompass = compassRaw - az;
-      offsetInclination = altitude - alt;
-      localStorage.setItem("offsetCompass", offsetCompass);
-      localStorage.setItem("offsetInclination", offsetInclination);
-    });
-
-    document.getElementById("buttonInfo").addEventListener("click", () => {
-      window.location.href = "https://bwedgar.github.io/index.html";
+        window.location.href = "https://bwedgar.github.io/index.html";
     });
 
 
@@ -587,7 +590,6 @@
 
   }
   getLocation()
-
 </script>
 
 
