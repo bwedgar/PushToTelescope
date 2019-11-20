@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html>
 <!-- bwedgar.github.io/PushToTelescope   -->
@@ -24,11 +26,9 @@
       font-family: verdana;
       font-size: 120%;
     }
-
     h1 {
       font-size: 120%;
     }
-
     .name {
       background-color: black;
       color: red;
@@ -40,7 +40,6 @@
       padding: 2% 2%;
       overflow: scroll;
     }
-
     .notes {
       background-color: black;
       color: red;
@@ -51,7 +50,6 @@
       height: 250px;
       overflow: scroll;
     }
-
     .list {
       background-color: black;
       color: red;
@@ -64,7 +62,6 @@
       overflow: scroll;
       padding: 2% 2%;
     }
-
     .button {
       background-color: black;
       color: red;
@@ -75,7 +72,6 @@
       width: 97%;
       text-align: left;
     }
-
     .btngroup2 {
       background-color: black;
       color: red;
@@ -85,7 +81,6 @@
       width: 46%;
       padding: 2% 2%;
     }
-
     .btngroup3 {
       background-color: black;
       color: red;
@@ -95,7 +90,6 @@
       width: 9%;
       padding: 2% 2%;
     }
-
     .btngroup3L {
       background-color: black;
       color: red;
@@ -105,7 +99,6 @@
       width: 72%;
       padding: 2% 2%;
     }
-
     .btngroup4 {
       background-color: black;
       color: red;
@@ -115,7 +108,6 @@
       width: 21%;
       padding: 2% 2%;
     }
-
     .btngroup7 {
       background-color: black;
       color: red;
@@ -125,7 +117,6 @@
       width: 12 %;
       padding: 2% 2%
     }
-
     .btngroup9 {
       background-color: black;
       color: red;
@@ -135,7 +126,6 @@
       width: 9%;
       padding: 2% 2%;
     }
-
     .listCO {
       background-color: black;
       color: red;
@@ -145,7 +135,6 @@
       width: 12.5%;
       padding: 2% 2%;
     }
-
     .clicked {
       background-color: #660000;
     }
@@ -215,15 +204,11 @@ nameOfCos=""
     ]
     visibleOnly = true
     document.getElementById("buttonVisible").classList.add("clicked")
-
     index = 0
     const scales = [0, 0.0002, 12.5, 250, 5000, 50000, 250000, 5000000, 100000000]
-
     //const scales = [0, 0.000158125, 12.5, 250, 5000, 50000, 250000, 5000000, 100000000]
-
     cos = getCelestialObjects(data, astromath.longitude, astromath.latitude, scales);
     let c = filterObjects(cos, visibleOnly, scaleSelected)
-
     //  let objectTypes = ["GX", "OC", "GC", "ST", "NBj", "DS", "RN"]
     //  let objectNames = ["galaxy", "open cluster", "globular cluster", "star", "bright nebula", "double star", "remnant"]
     let types = new Map([
@@ -234,9 +219,7 @@ nameOfCos=""
       ["NB", "bright nebula"],
       ["RN", "remnant"]
     ]);
-
     console.log(types.get("GC"))
-
     // let types = [{
     //     code: "GX",
     //     name: "galaxy"
@@ -258,14 +241,9 @@ nameOfCos=""
     //     name: "remnant"
     //   }
     // ]
-
-
     offsetCompass = localStorage.getItem("offsetCompass")
     offsetInclination = localStorage.getItem("offsetInclination")
-
-
     document.getElementById('pageCO').style.height = screen.height * 0.5 + "px";
-
     // set up canvases
     canvasFinder = document.getElementById("canvasFinder")
     canvasFinder.width = window.innerWidth;
@@ -276,11 +254,9 @@ nameOfCos=""
     ctxAtlas = canvasAtlas.getContext("2d")
     canvasAtlas.width = window.innerWidth;
     canvasAtlas.height = window.innerHeight * 50 / 100;
-
     // functions for detecting and responding to telescope movement
     listener = (e) => {
       //ctxFinder.clearRect(0,0,canvasFinder.height,canvasFinder.width)
-
       sensor = -e.accelerationIncludingGravity.x //sensor= 0 when vertical, -6.9 when clockwise 45 degrees, +6.9 when antoclockwise. +/- 10 when horizontal
       sensor = Math.round(sensor * 100) / 100;
       alt = Math.round(alt * 10) / 10 //alt is the altitude of the object
@@ -292,9 +268,7 @@ nameOfCos=""
         altDev = altitude - alt - offsetInclination;
       }
     }
-
     listener2 = (e2) => {
-
       compassRaw = Math.round((e2.webkitCompassHeading - 100) % 360)
       compass = Math.round((compassRaw - offsetCompass) % 360)
       //document.getElementById("textName").innerHTML=compass
@@ -353,7 +327,6 @@ nameOfCos=""
         ctxFinder.fillText('\u21BB', 5, ctxFinder.canvas.height / 3 * 2 + 10)
       }
     }
-
     changeIndex = (index, change, array) => {
       if (change == "increment") index++
       if (change == "decrement") index--
@@ -362,7 +335,6 @@ nameOfCos=""
       index = index == array.length ? 0 : index
       return index
     }
-
     showData = (index) => {
       document.getElementById("buttonScale").innerHTML = legends[scaleSelected]
       d = ""
@@ -373,10 +345,8 @@ nameOfCos=""
         })
         az=c[index].azimuth
         alt=c[index].altitude
-
         document.getElementById("textName").innerHTML = astromath.formatNames(c[index].name) + "<br>" +
           d + " " + astromath.formatDistance(c[index].lightYears) + "<br/>" + c[index].notes//+" az:  "+az
-
       } else {
         document.getElementById("textName").innerHTML = ""
       }
@@ -384,7 +354,6 @@ nameOfCos=""
       document.getElementById("pageCO").style.display = "none";
       document.getElementById("pageContent").style.display = "block";
     }
-
     showCO = () => {
       document.getElementById("listCO").innerHTML = "";
       var numberOfItemsAdded = 0;
@@ -396,7 +365,6 @@ nameOfCos=""
         // var htmlnode = document.createElement('span');
         // htmlnode.innerHTML=co.name
         node.appendChild(textnode);
-
         btn = document.getElementById("listCO").appendChild(node);
         btn.classList.add("button");
         selectedCos = document.getElementById("listCO").firstChild
@@ -406,9 +374,7 @@ nameOfCos=""
         document.getElementById("pageContent").style.display = "none";
       }
     }
-
     drawCelestialObject = (co, scale, selectedObject) => {
-
       if (co.type == "PL") {
         console.log(co.helios[0])
         coords = {x:co.helios[0],y:co.helios[1],z:helios[2]}
@@ -423,7 +389,6 @@ nameOfCos=""
         size = 2;
         ctxAtlas.fillStyle = "red"
       }
-
       ctxAtlas.arc(coords.x * scale + canvasAtlas.width / 2, (coords.z * scale) / 5 + canvasAtlas.height / 2 + coords.y / 2, size, 0, Math.PI * 2, true)
       ctxAtlas.beginPath()
       ctxAtlas.strokeStyle = "blue"
@@ -435,7 +400,6 @@ nameOfCos=""
       ctxAtlas.lineWidth = 1
       ctxAtlas.ellipse(canvasAtlas.width / 2, canvasAtlas.height / 2, canvasAtlas.width / 3, canvasAtlas.height / 17, 0, 0, Math.PI * 2)
       ctxAtlas.stroke()
-
       ctxAtlas.beginPath()
       ctxAtlas.moveTo(Math.floor(coords.x * scale + canvasAtlas.width / 2), Math.floor((coords.z * scale) / 5 + canvasAtlas.height / 2))
       ctxAtlas.lineTo(Math.floor(coords.x * scale + canvasAtlas.width / 2), Math.floor((coords.z * scale) / 5 + canvasAtlas.height / 2 + coords.y * scale / 2))
@@ -447,13 +411,11 @@ nameOfCos=""
       ctxAtlas.strokeStyle = "red"
       ctxAtlas.lineWidth = 2
       ctxAtlas.stroke()
-
       ctxAtlas.beginPath()
       ctxAtlas.arc(Math.floor(coords.x * scale + canvasAtlas.width / 2), Math.floor((coords.z * scale) / 5 + canvasAtlas.height / 2 + coords.y * scale / 2), size, 0, Math.PI * 2, true)
       ctxAtlas.fill()
       ctxAtlas.closePath()
     }
-
     drawSun = () => {
       ctxAtlas.beginPath()
       ctxAtlas.arc(canvasAtlas.width / 2, canvasAtlas.height / 2, 2, 0, Math.PI * 2, true)
@@ -461,7 +423,6 @@ nameOfCos=""
       ctxAtlas.fillStyle = "yellow"
       ctxAtlas.fill()
     }
-
     drawDistanceBar = (scale) => {
       fromTop = ctxAtlas.canvas.height / 3 * 2
       ctxAtlas.beginPath()
@@ -482,7 +443,6 @@ nameOfCos=""
       ctxAtlas.fillText('>', ctxAtlas.canvas.width - 20, fromTop + 5);
       ctxAtlas.fillText(astromath.formatDistance(scales[scale]), ctxAtlas.canvas.width / 3 + 20, fromTop + 7);
     }
-
     showAtlas = (index, c, scale) => {
       ctxAtlas.clearRect(0, 0, ctxAtlas.canvas.width, ctxAtlas.canvas.height) //clear canvas
       drawingScale = canvasAtlas.width / scales[scale + 1] / 2 //has to include all off the objects up to the next size
@@ -497,28 +457,22 @@ nameOfCos=""
         drawDistanceBar(scale + 1)
       }
     }
-
     // event handlers
-
     // if (window.DeviceOrientationEvent) {
     //   window.addEventListener('devicemotion', listener)
     //   window.addEventListener('deviceorientation', listener2)
     // } else {
     //   listener2(0)
     // }
-
     let listCO = document.getElementById("listCO")
     listCO.addEventListener("click", (e) => {
       selectedCos = e.target.innerHTML
       //*************************************  find the span inner html **************
       console.log(selectedCos)
-
       index = c.findIndex(x => x.name == nameOfCos.trim());
       showData(index);
     });
-
     document.getElementById("buttonCalibrate").addEventListener("click", (e) => {
-
       DeviceOrientationEvent.requestPermission()
       .then(response => {
         if (response == 'granted') {
@@ -527,27 +481,22 @@ nameOfCos=""
         }
       })
       .catch(console.error)
-
       offsetCompass = compassRaw - az;
       offsetInclination = altitude - alt;
       localStorage.setItem("offsetCompass", offsetCompass);
       localStorage.setItem("offsetInclination", offsetInclination);
     });
-
     document.getElementById("buttonInfo").addEventListener("click", () => {
       DeviceOrientationEvent.requestPermission()
         .then(response => {
           if (response == 'granted') {
             window.addEventListener('deviceorientation', listener2)
             window.addEventListener('devicemotion', listener)
-
           }
         })
         .catch(console.error)
         window.location.href = "https://bwedgar.github.io/index.html";
     });
-
-
     document.getElementById("buttonScalePrevious").addEventListener("click", () => {
       if (scaleSelected > 0) {
         scaleSelected--
@@ -558,11 +507,9 @@ nameOfCos=""
       index = changeIndex(index, "zero", c)
       showData(index)
     });
-
     document.getElementById("buttonScale").addEventListener("click", () => {
       showCO()
     });
-
     document.getElementById("buttonScaleNext").addEventListener("click", () => {
       if (scaleSelected < 7) {
         scaleSelected++
@@ -573,17 +520,14 @@ nameOfCos=""
       index = changeIndex(index, "zero", c)
       showData(index)
     });
-
     document.getElementById("buttonPreviousObject").addEventListener("click", () => {
       index = changeIndex(index, "decrement", c)
       showData(index);
     });
-
     document.getElementById("buttonNextObject").addEventListener("click", (e) => {
       index = changeIndex(index, "increment", c)
       showData(index);
     });
-
     document.getElementById("buttonVisible").addEventListener("click", () => {
       visibleOnly = true
       c = filterObjects(cos, visibleOnly, scaleSelected)
@@ -592,7 +536,6 @@ nameOfCos=""
       document.getElementById("buttonAll").classList.remove("clicked")
       showData(index)
     });
-
     document.getElementById("buttonAll").addEventListener("click", () => {
       visibleOnly = false
       c = filterObjects(cos, visibleOnly, scaleSelected)
@@ -601,11 +544,8 @@ nameOfCos=""
       document.getElementById("buttonVisible").classList.remove("clicked")
       showData(index)
     });
-
     showData(0)
-
   } //end ready()
-
   // need to fix thus with async function perhaps **************************************
   getLocation = () => {
     if (false) { //}(navigator.geolocation) {
@@ -620,7 +560,6 @@ nameOfCos=""
       astromath.latitude = astromath.radians(-36.8485); //latitude of observer  in Auckland  in degrees
       ready()
     }
-
   }
   getLocation()
 </script>
