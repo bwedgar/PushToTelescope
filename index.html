@@ -208,7 +208,7 @@
     let azDev = 0;
     let az = 0;
     let galShow = 0;
-nameOfCos=""
+    nameOfCos = ""
     scaleSelected = 2;
     legends = ["Solar System", "Nearest Stars", "Neighbours", "Orion Arm", "Milky Way Galaxy", "Satellite Galaxies", "Local Group",
       "Virgo Supercluster"
@@ -353,14 +353,16 @@ nameOfCos=""
       d = ""
       if (c.length > 0) {
         types.forEach((v) => {
-          console.log(index,c[index])
+          console.log(index, c[index])
           if (v.code == [c[index].type]) d = (v.name)
         })
-        az=c[index].azimuth
-        alt=c[index].altitude
+        az = c[index].azimuth
+        alt = c[index].altitude
 
         document.getElementById("textName").innerHTML = astromath.formatNames(c[index].name) + "<br>" +
-          d + " " + astromath.formatDistance(c[index].lightYears) + "<br/>" + c[index].notes//+" az:  "+az
+          d + " " + astromath.formatDistance(c[index].lightYears) + "<br/>" + c[index].notes +
+          //" az:  "+ astromath.radiansToHoursAndMinutes(az)+" alt "+astromath.radiansToDegreesAndMinutes(alt)
+          " az:  "+ astromath.radiansToDegreesAndMinutes(astromath.radians(az))+" alt "+astromath.radiansToDegreesAndMinutes(astromath.radians(alt))
 
       } else {
         document.getElementById("textName").innerHTML = ""
@@ -489,7 +491,7 @@ nameOfCos=""
     listCO.addEventListener("click", (e) => {
       nameOfCos = e.target.innerHTML
       //*************************************  find the span inner html **************
-      console.log(nameOfCos+"  "+selectedCos)
+      console.log(nameOfCos + "  " + selectedCos)
 
       index = c.findIndex(x => x.name == nameOfCos.trim());
       showData(index);
@@ -513,7 +515,7 @@ nameOfCos=""
           }
         })
         .catch(console.error)
-        window.location.href = "https://bwedgar.github.io/index.html";
+      window.location.href = "https://bwedgar.github.io/index.html";
     });
 
 
