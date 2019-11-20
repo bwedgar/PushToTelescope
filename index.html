@@ -353,7 +353,7 @@ nameOfCos=""
       d = ""
       if (c.length > 0) {
         types.forEach((v) => {
-          console.log(c[index])
+          console.log(index,c[index])
           if (v.code == [c[index].type]) d = (v.name)
         })
         az=c[index].azimuth
@@ -487,9 +487,9 @@ nameOfCos=""
 
     let listCO = document.getElementById("listCO")
     listCO.addEventListener("click", (e) => {
-      selectedCos = e.target.innerHTML
+      nameOfCos = e.target.innerHTML
       //*************************************  find the span inner html **************
-      console.log(selectedCos)
+      console.log(nameOfCos+"  "+selectedCos)
 
       index = c.findIndex(x => x.name == nameOfCos.trim());
       showData(index);
