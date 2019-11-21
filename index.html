@@ -289,8 +289,8 @@
         offsetInclination = 45 - altitude
       }
       compass = Math.round((compassRaw + altitude + offsetCompass) % 360) //Math.round((compassRaw - offsetCompass) % 360)
-      document.getElementById("textName").innerHTML = "raw " + compassRaw + " offsetCompass " + offsetCompass + " compass " + compass +
-        "<br/> altitude " + Math.round(altitude) + "offsetInclination " + Math.round(offsetInclination)
+    //  document.getElementById("textName").innerHTML = "raw " + compassRaw + " offsetCompass " + offsetCompass + " compass " + compass +
+      //  "<br/> altitude " + Math.round(altitude) + "offsetInclination " + Math.round(offsetInclination)
 
       //  `altitude ${Math.round(altitude)} compass ${Math.round(compass)} beta ${Math.round(e2.beta)} `
       az = Math.round(az * 10) / 10
@@ -577,7 +577,7 @@
       showData(index)
     });
 
-    if (confirm("PushToTelescope v4.14")) {
+    if (confirm("PushToTelescope v4.15 Point scope to 270 W at 45 inclination and press OK")) {
       DeviceOrientationEvent.requestPermission()
         .then(response => {
           if (response == 'granted') {
