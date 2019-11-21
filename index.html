@@ -286,9 +286,9 @@
       compass = Math.round((compassRaw - offsetCompass) % 360)
       //console.log(compass,altitude)
       //document.getElementById("textName").innerHTML =
-    //  `altitude ${Math.round(altitude)} compass ${Math.round(compass)} beta ${Math.round(e2.beta)} `
+      //  `altitude ${Math.round(altitude)} compass ${Math.round(compass)} beta ${Math.round(e2.beta)} `
       az = Math.round(az * 10) / 10
-      azDev = ((compass - az+ altitude) + 540) % 360 - 180  //had to add altitude 11/19 to stop compass changing
+      azDev = ((compass - az + altitude) + 540) % 360 - 180 //had to add altitude 11/19 to stop compass changing
       canvasFinder = document.getElementById("canvasFinder")
       canvasFinder.width = window.innerWidth;
       canvasFinder.height = window.innerHeight * 15 / 100;
@@ -366,7 +366,7 @@
         document.getElementById("textName").innerHTML = astromath.formatNames(c[index].name) + "<br>" +
           d + " " + astromath.formatDistance(c[index].lightYears) + "<br/>" + c[index].notes +
           //" az:  "+ astromath.radiansToHoursAndMinutes(az)+" alt "+astromath.radiansToDegreesAndMinutes(alt)
-          " az:  "+ astromath.radiansToDegreesAndMinutes(astromath.radians(az))+" alt "+astromath.radiansToDegreesAndMinutes(astromath.radians(alt))
+          " az:  " + astromath.radiansToDegreesAndMinutes(astromath.radians(az)) + " alt " + astromath.radiansToDegreesAndMinutes(astromath.radians(alt))
 
       } else {
         document.getElementById("textName").innerHTML = ""
@@ -503,21 +503,14 @@
 
     document.getElementById("buttonCalibrate").addEventListener("click", (e) => {
 
-      offsetCompass = compassRaw - az+ altitude;
+      offsetCompass = compassRaw - az + altitude;
       offsetInclination = altitude - alt;
       localStorage.setItem("offsetCompass", offsetCompass);
       localStorage.setItem("offsetInclination", offsetInclination);
     });
 
     document.getElementById("buttonInfo").addEventListener("click", () => {
-      DeviceOrientationEvent.requestPermission()
-        .then(response => {
-          if (response == 'granted') {
-            window.addEventListener('devicemotion', listener)
-            window.addEventListener('deviceorientation', listener2)
-          }
-        })
-        .catch(console.error)
+
       window.location.href = "https://bwedgar.github.io/index.html";
     });
 
@@ -576,6 +569,18 @@
       showData(index)
     });
 
+    if (confirm("ENTER v4.1")) {
+      DeviceOrientationEvent.requestPermission()
+        .then(response => {
+          if (response == 'granted') {
+            window.addEventListener('devicemotion', listener)
+            window.addEventListener('deviceorientation', listener2)
+
+          }
+        })
+        .catch(console.error)
+
+    }
     showData(0)
 
   } //end ready()
