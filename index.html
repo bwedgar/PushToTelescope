@@ -285,7 +285,9 @@
       compassRaw = Math.round((e2.webkitCompassHeading - 100) % 360)
       compass = Math.round((compassRaw - offsetCompass) % 360)
       //console.log(compass,altitude)
-      //document.getElementById("textName").innerHTML =
+      document.getElementById("textName").innerHTML =
+      "compass " + Math.round(compassRaw) + "altitude " + Math.round(alt)
+
       //  `altitude ${Math.round(altitude)} compass ${Math.round(compass)} beta ${Math.round(e2.beta)} `
       az = Math.round(az * 10) / 10
       azDev = ((compass - az + altitude) + 540) % 360 - 180 //had to add altitude 11/19 to stop compass changing
@@ -365,8 +367,7 @@
 
         document.getElementById("textName").innerHTML = astromath.formatNames(c[index].name) + "<br>" +
           d + " " + astromath.formatDistance(c[index].lightYears) + "<br/>" + c[index].notes +
-          " az:  " + astromath.radiansToDegreesAndMinutes(astromath.radians(az)) + " alt " + astromath.radiansToDegreesAndMinutes(astromath.radians(alt))+
-          "compass "+Math.round(compassRaw)+"altitude "+Math.round(alt)
+          " az:  " + astromath.radiansToDegreesAndMinutes(astromath.radians(az)) + " alt " + astromath.radiansToDegreesAndMinutes(astromath.radians(alt))
 
       } else {
         document.getElementById("textName").innerHTML = ""
