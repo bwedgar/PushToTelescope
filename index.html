@@ -282,11 +282,11 @@
 
     listener2 = (e2) => {
 
-      compassRaw = Math.round((e2.webkitCompassHeading - 100) % 360)
+      compassRaw = Math.round((e2.webkitCompassHeading) % 360)
       compass = Math.round((compassRaw+altitude- offsetCompass+145)%360) //Math.round((compassRaw - offsetCompass) % 360)
       //console.log(compass,altitude)
-      //document.getElementById("textName").innerHTML =
-    //  "compass " + compass + " altitude " + Math.round(altitude)
+      document.getElementById("textName").innerHTML =
+      “raw “+compassRaw+" compass " + compass + " altitude " + Math.round(altitude)
 
       //  `altitude ${Math.round(altitude)} compass ${Math.round(compass)} beta ${Math.round(e2.beta)} `
       az = Math.round(az * 10) / 10
