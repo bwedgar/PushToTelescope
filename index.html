@@ -282,10 +282,15 @@
 
     listener2 = (e2) => {
 
+
       compassRaw = Math.round((e2.webkitCompassHeading) % 360)
-      compass = Math.round((compassRaw+altitude- offsetCompass+145)%360) //Math.round((compassRaw - offsetCompass) % 360)
+  if (offsetCompass==0) {
+    offsetCompass=270-compassRaw
+    offsetInclination=45-galLatitude}
+      compass = Math.round((compassRaw+altitude- offsetCompass)%360) //Math.round((compassRaw - offsetCompass) % 360)
       //console.log(compass,altitude)
-      document.getElementById("textName").innerHTML =“raw “+compassRaw+" compass " + compass + " altitude " + Math.round(altitude)
+      document.getElementById("textName").innerHTML ="raw "+compassRaw+" offsetCompass "+offsetCompass+" compass " + compass +
+       "<br/> altitude " + Math.round(altitude)+"offsetInclination " + Math.round(offsetInclination)
 
       //  `altitude ${Math.round(altitude)} compass ${Math.round(compass)} beta ${Math.round(e2.beta)} `
       az = Math.round(az * 10) / 10
@@ -572,7 +577,7 @@ azDev = ((compass - az ) + 540) % 360 - 180
       showData(index)
     });
 
-    if (confirm("PushToTelescope v4.11")) {
+    if (confirm("PushToTelescope v4.12")) {
       DeviceOrientationEvent.requestPermission()
         .then(response => {
           if (response == 'granted') {
