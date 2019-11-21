@@ -207,6 +207,7 @@
     let altDev = 0; //difference between alt of object and altitude of telescope in degrees
     let azDev = 0;
     let az = 0;
+    //let azimuth=0; //azimuth of object in degrees
     let galShow = 0;
     nameOfCos = ""
     scaleSelected = 2;
@@ -273,6 +274,7 @@
         previousSensor = sensor
         //when phone is 45 degrees clockwise altitude is 0, when phone is 45 anticlockwise altitude is 90 degrees
         //adjSensor = //a + b * sensor
+
         altitude = (sensor + 6.9) * 6.4;
         altDev = altitude - alt - offsetInclination;
       }
@@ -282,6 +284,8 @@
 
       compassRaw = Math.round((e2.webkitCompassHeading - 100) % 360)
       compass = Math.round((compassRaw - offsetCompass) % 360)
+      console.log(compass,altitude)
+      document.getElementById("textName").innerHTML = compass+"  "+altitude
       //document.getElementById("textName").innerHTML=compass
       az = Math.round(az * 10) / 10
       azDev = ((compass - az) + 540) % 360 - 180
@@ -509,9 +513,8 @@
       DeviceOrientationEvent.requestPermission()
         .then(response => {
           if (response == 'granted') {
-            window.addEventListener('deviceorientation', listener2)
             window.addEventListener('devicemotion', listener)
-
+            window.addEventListener('deviceorientation', listener2)
           }
         })
         .catch(console.error)
