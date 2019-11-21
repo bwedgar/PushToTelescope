@@ -284,12 +284,12 @@
 
       compassRaw = Math.round((e2.webkitCompassHeading - 100) % 360)
       compass = Math.round((compassRaw - offsetCompass) % 360)
-      console.log(compass,altitude)
+      //console.log(compass,altitude)
       document.getElementById("textName").innerHTML =
       `altitude ${Math.round(altitude)} compass ${Math.round(compass)} beta ${Math.round(e2.beta)} `
       //document.getElementById("textName").innerHTML=compass
       az = Math.round(az * 10) / 10
-      azDev = ((compass - az) + 540) % 360 - 180
+      azDev = ((compass - az+ altitude) + 540) % 360 - 180
       canvasFinder = document.getElementById("canvasFinder")
       canvasFinder.width = window.innerWidth;
       canvasFinder.height = window.innerHeight * 15 / 100;
