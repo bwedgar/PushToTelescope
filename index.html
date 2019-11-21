@@ -285,7 +285,7 @@
 
       compassRaw = Math.round((e2.webkitCompassHeading) % 360)
       if (offsetCompass == 0) {
-        offsetCompass = 270 - compassRaw
+        offsetCompass = 270 - compassRaw - altitude
         offsetInclination = 45 - altitude
       }
       compass = Math.round((compassRaw + altitude + offsetCompass) % 360) //Math.round((compassRaw - offsetCompass) % 360)
@@ -577,7 +577,7 @@
       showData(index)
     });
 
-    if (confirm("PushToTelescope v4.13")) {
+    if (confirm("PushToTelescope v4.14")) {
       DeviceOrientationEvent.requestPermission()
         .then(response => {
           if (response == 'granted') {
