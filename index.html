@@ -512,7 +512,7 @@
     document.getElementById("buttonCalibrate").addEventListener("click", (e) => {
 
       offsetCompass = az - compassRaw - altitude//compass - az + altitude;
-      offsetInclination = offsetInclination = alt - altitude//altitude - alt;
+      offsetInclination = alt - altitude//altitude - alt;
       //localStorage.setItem("offsetCompass", offsetCompass);
       //localStorage.setItem("offsetInclination", offsetInclination);
     });
@@ -577,7 +577,7 @@
       showData(index)
     });
 
-    if (confirm("PushToTelescope v4.16 Point scope to 270 W at 45 inclination and press OK")) {
+    if (confirm("PushToTelescope v4.17 Point scope to 270 W at 45 inclination and press OK")) {
       DeviceOrientationEvent.requestPermission()
         .then(response => {
           if (response == 'granted') {
