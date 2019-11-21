@@ -286,7 +286,7 @@
       compass = Math.round((compassRaw - offsetCompass) % 360)
       console.log(compass,altitude)
       document.getElementById("textName").innerHTML =
-      `altitude ${altitude%1} compass ${compass%1} beta ${e2.beta%1} `
+      `altitude ${Math.round(altitude)} compass ${Math.round(compass)} beta ${Math.round(e2.beta)} `
       //document.getElementById("textName").innerHTML=compass
       az = Math.round(az * 10) / 10
       azDev = ((compass - az) + 540) % 360 - 180
