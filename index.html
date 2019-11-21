@@ -247,8 +247,8 @@
         name: "remnant"
       }
     ]
-    offsetCompass = localStorage.getItem("offsetCompass")
-    offsetInclination = localStorage.getItem("offsetInclination")
+    //offsetCompass = localStorage.getItem("offsetCompass")
+    //offsetInclination = localStorage.getItem("offsetInclination")
 
 
     document.getElementById('pageCO').style.height = screen.height * 0.5 + "px";
@@ -283,7 +283,7 @@
     listener2 = (e2) => {
 
       compassRaw = Math.round((e2.webkitCompassHeading - 100) % 360)
-      compass = Math.round((compassRaw+altitude- offsetCompass+145+180)%360) //Math.round((compassRaw - offsetCompass) % 360)
+      compass = Math.round((compassRaw+altitude- offsetCompass+145)%360) //Math.round((compassRaw - offsetCompass) % 360)
       //console.log(compass,altitude)
       //document.getElementById("textName").innerHTML =
     //  "compass " + compass + " altitude " + Math.round(altitude)
@@ -507,10 +507,10 @@ azDev = ((compass - az ) + 540) % 360 - 180
 
     document.getElementById("buttonCalibrate").addEventListener("click", (e) => {
 
-      offsetCompass = 0//compassRaw - az + altitude;
-      offsetInclination = 0//altitude - alt;
-      localStorage.setItem("offsetCompass", offsetCompass);
-      localStorage.setItem("offsetInclination", offsetInclination);
+      offsetCompass = compassRaw - az + altitude;
+      offsetInclination = altitude - alt;
+      //localStorage.setItem("offsetCompass", offsetCompass);
+      //localStorage.setItem("offsetInclination", offsetInclination);
     });
 
     document.getElementById("buttonInfo").addEventListener("click", () => {
