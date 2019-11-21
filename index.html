@@ -507,8 +507,8 @@ azDev = ((compass - az ) + 540) % 360 - 180
 
     document.getElementById("buttonCalibrate").addEventListener("click", (e) => {
 
-      offsetCompass = compassRaw - az + altitude;
-      offsetInclination = altitude - alt;
+      offsetCompass = 0//compassRaw - az + altitude;
+      offsetInclination = 0//altitude - alt;
       localStorage.setItem("offsetCompass", offsetCompass);
       localStorage.setItem("offsetInclination", offsetInclination);
     });
@@ -573,7 +573,7 @@ azDev = ((compass - az ) + 540) % 360 - 180
       showData(index)
     });
 
-    if (confirm("PushToTelescope v4.8")) {
+    if (confirm("PushToTelescope v4.9")) {
       DeviceOrientationEvent.requestPermission()
         .then(response => {
           if (response == 'granted') {
