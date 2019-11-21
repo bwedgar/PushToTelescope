@@ -284,19 +284,19 @@
 
 
       compassRaw = Math.round((e2.webkitCompassHeading) % 360)
-  if (offsetCompass==0) {
-    offsetCompass=270-compassRaw
-    offsetInclination=45-galLatitude}
-      compass = Math.round((compassRaw+altitude- offsetCompass)%360) //Math.round((compassRaw - offsetCompass) % 360)
-      //console.log(compass,altitude)
-      document.getElementById("textName").innerHTML ="raw "+compassRaw+" offsetCompass "+offsetCompass+" compass " + compass +
-       "<br/> altitude " + Math.round(altitude)+"offsetInclination " + Math.round(offsetInclination)
+      if (offsetCompass == 0) {
+        offsetCompass = 270 - compassRaw
+        offsetInclination = 45 - altitude
+      }
+      compass = Math.round((compassRaw + altitude + offsetCompass) % 360) //Math.round((compassRaw - offsetCompass) % 360)
+      document.getElementById("textName").innerHTML = "raw " + compassRaw + " offsetCompass " + offsetCompass + " compass " + compass +
+        "<br/> altitude " + Math.round(altitude) + "offsetInclination " + Math.round(offsetInclination)
 
       //  `altitude ${Math.round(altitude)} compass ${Math.round(compass)} beta ${Math.round(e2.beta)} `
       az = Math.round(az * 10) / 10
-azDev = ((compass - az ) + 540) % 360 - 180
+      azDev = ((compass - az) + 540) % 360 - 180
 
-    //  azDev = ((compass - az + altitude) + 540) % 360 - 180 //had to add altitude 11/19 to stop compass changing
+      //  azDev = ((compass - az + altitude) + 540) % 360 - 180 //had to add altitude 11/19 to stop compass changing
       canvasFinder = document.getElementById("canvasFinder")
       canvasFinder.width = window.innerWidth;
       canvasFinder.height = window.innerHeight * 15 / 100;
@@ -373,7 +373,7 @@ azDev = ((compass - az ) + 540) % 360 - 180
 
         document.getElementById("textName").innerHTML = astromath.formatNames(c[index].name) + "<br>" +
           d + " " + astromath.formatDistance(c[index].lightYears) + "<br/>" + c[index].notes +
-          " az:  " + astromath.radiansToDegreesAndMinutes(astromath.radians(az)) + " alt " + astromath.radiansToDegreesAndMinutes(astromath.radians(alt))+
+          " az:  " + astromath.radiansToDegreesAndMinutes(astromath.radians(az)) + " alt " + astromath.radiansToDegreesAndMinutes(astromath.radians(alt)) +
           "<br/>compass " + compass + " altitude " + Math.round(altitude)
 
       } else {
@@ -511,7 +511,7 @@ azDev = ((compass - az ) + 540) % 360 - 180
 
     document.getElementById("buttonCalibrate").addEventListener("click", (e) => {
 
-      offsetCompass = compass- az + altitude;
+      offsetCompass = compass - az + altitude;
       offsetInclination = altitude - alt;
       //localStorage.setItem("offsetCompass", offsetCompass);
       //localStorage.setItem("offsetInclination", offsetInclination);
@@ -577,7 +577,7 @@ azDev = ((compass - az ) + 540) % 360 - 180
       showData(index)
     });
 
-    if (confirm("PushToTelescope v4.12")) {
+    if (confirm("PushToTelescope v4.13")) {
       DeviceOrientationEvent.requestPermission()
         .then(response => {
           if (response == 'granted') {
