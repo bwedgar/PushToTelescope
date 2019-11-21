@@ -286,7 +286,7 @@
       compass = Math.round((compassRaw - offsetCompass) % 360)
       //console.log(compass,altitude)
       document.getElementById("textName").innerHTML =
-      "compass " + Math.round(compassRaw) + "altitude " + Math.round(altitude)
+      "compass " + Math.round((compassRaw+altitude+145)%360) + " altitude " + Math.round(altitude)
 
       //  `altitude ${Math.round(altitude)} compass ${Math.round(compass)} beta ${Math.round(e2.beta)} `
       az = Math.round(az * 10) / 10
@@ -570,7 +570,7 @@
       showData(index)
     });
 
-    if (confirm("PushToTelescope v4.3")) {
+    if (confirm("PushToTelescope v4.4")) {
       DeviceOrientationEvent.requestPermission()
         .then(response => {
           if (response == 'granted') {
