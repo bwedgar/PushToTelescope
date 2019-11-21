@@ -365,8 +365,8 @@
 
         document.getElementById("textName").innerHTML = astromath.formatNames(c[index].name) + "<br>" +
           d + " " + astromath.formatDistance(c[index].lightYears) + "<br/>" + c[index].notes +
-          //" az:  "+ astromath.radiansToHoursAndMinutes(az)+" alt "+astromath.radiansToDegreesAndMinutes(alt)
-          " az:  " + astromath.radiansToDegreesAndMinutes(astromath.radians(az)) + " alt " + astromath.radiansToDegreesAndMinutes(astromath.radians(alt))
+          " az:  " + astromath.radiansToDegreesAndMinutes(astromath.radians(az)) + " alt " + astromath.radiansToDegreesAndMinutes(astromath.radians(alt))+
+          "compass "+Math.round(compassRaw)+"altitude "+Math.round(alt)
 
       } else {
         document.getElementById("textName").innerHTML = ""
@@ -569,7 +569,7 @@
       showData(index)
     });
 
-    if (confirm("ENTER v4.1")) {
+    if (confirm("PushToTelescope v4.1")) {
       DeviceOrientationEvent.requestPermission()
         .then(response => {
           if (response == 'granted') {
