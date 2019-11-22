@@ -261,7 +261,9 @@
           if (response == 'granted') {
             window.addEventListener('devicemotion', listener)
             window.addEventListener('deviceorientation', listener2)
+              document.getElementById("textName").removeEventListener("click", (e) => startMotion())
           }
+
         })
         .catch(console.error)
     }
