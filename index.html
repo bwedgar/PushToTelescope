@@ -224,8 +224,8 @@
     cos = getCelestialObjects(data, astromath.longitude, astromath.latitude, scales);
     let c = filterObjects(cos, visibleOnly, scaleSelected)
 
-    let objectTypes = ["GX", "OC", "GC", "ST", "NB", "DS", "RN"]
-    let objectNames = ["galaxy", "open cluster", "globular cluster", "star", "bright nebula", "double star", "remnant"]
+    let objectTypes = ["GX", "OC", "GC", "ST", "DS","NB", "DS", "RN"]
+    let objectNames = ["galaxy", "open cluster", "globular cluster", "star", "double star","bright nebula", "double star", "remnant"]
     let types = [{
         code: "GX",
         name: "galaxy"
@@ -239,7 +239,12 @@
       {
         code: "ST",
         name: "star"
-      }, {
+      },
+      {
+        code: "DS",
+        name: "double star"
+      },
+       {
         code: "NB",
         name: "bright nebula"
       }, {
