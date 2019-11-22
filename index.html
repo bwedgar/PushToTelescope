@@ -224,9 +224,9 @@
     cos = getCelestialObjects(data, astromath.longitude, astromath.latitude, scales);
     let c = filterObjects(cos, visibleOnly, scaleSelected)
 
-    let objectTypes = ["GX", "OC", "GC", "ST", "DS","NB", "RN"]
-    let objectNames = ["galaxy", "open cluster", "globular cluster", "star", "double star","bright nebula",  "remnant"]
-let objectCodes=["\u2295","\u2234","","\u8270","\u8273","\u2601",""]
+    let objectTypes = ["GX", "OC", "GC", "ST", "DS", "NB", "RN"]
+    let objectNames = ["galaxy", "open cluster", "globular cluster", "star", "double star", "bright nebula", "remnant"]
+    //let objectCodes=["\u2295","\u2234","","\u8270","\u8273","\u2601",""]
     let types = [{
         code: "GX",
         name: "galaxy"
@@ -245,7 +245,7 @@ let objectCodes=["\u2295","\u2234","","\u8270","\u8273","\u2601",""]
         code: "DS",
         name: "double star"
       },
-       {
+      {
         code: "NB",
         name: "bright nebula"
       }, {
@@ -256,6 +256,16 @@ let objectCodes=["\u2295","\u2234","","\u8270","\u8273","\u2601",""]
     //offsetCompass = localStorage.getItem("offsetCompass")
     //offsetInclination = localStorage.getItem("offsetInclination")
 
+    startMotion = () => {
+      DeviceOrientationEvent.requestPermission()
+        .then(response => {
+          if (response == 'granted') {
+            window.addEventListener('devicemotion', listener)
+            window.addEventListener('deviceorientation', listener2)
+          }
+        })
+        .catch(console.error)
+    }
 
     document.getElementById('pageCO').style.height = screen.height * 0.5 + "px";
 
@@ -295,7 +305,7 @@ let objectCodes=["\u2295","\u2234","","\u8270","\u8273","\u2601",""]
         offsetInclination = 45 - altitude
       }
       compass = Math.round((compassRaw + altitude + offsetCompass) % 360) //Math.round((compassRaw - offsetCompass) % 360)
-    //  document.getElementById("textName").innerHTML = "raw " + compassRaw + " offsetCompass " + offsetCompass + " compass " + compass +
+      //  document.getElementById("textName").innerHTML = "raw " + compassRaw + " offsetCompass " + offsetCompass + " compass " + compass +
       //  "<br/> altitude " + Math.round(altitude) + "offsetInclination " + Math.round(offsetInclination)
 
       //  `altitude ${Math.round(altitude)} compass ${Math.round(compass)} beta ${Math.round(e2.beta)} `
@@ -397,8 +407,8 @@ let objectCodes=["\u2295","\u2234","","\u8270","\u8273","\u2601",""]
         numberOfItemsAdded++;
         var node = document.createElement("BUTTON");
 
-      //  var textnode = document.createTextNode(co.name+" (\u2295 )");
-        var textnode = document.createTextNode(co.name+" ("+co.type+")");
+        //  var textnode = document.createTextNode(co.name+" (\u2295 )");
+        var textnode = document.createTextNode(co.name + " (" + co.type + ")");
 
         node.appendChild(textnode);
         // var htmlnode = document.createElement('span');
@@ -511,7 +521,7 @@ let objectCodes=["\u2295","\u2234","","\u8270","\u8273","\u2601",""]
     let listCO = document.getElementById("listCO")
     listCO.addEventListener("click", (e) => {
       nameOfCos = e.target.innerHTML
-      nameOfCos=nameOfCos.slice(0,nameOfCos.length-5)
+      nameOfCos = nameOfCos.slice(0, nameOfCos.length - 5)
       //*************************************  find the span inner html **************
       console.log(nameOfCos + "  " + selectedCos)
 
@@ -520,8 +530,8 @@ let objectCodes=["\u2295","\u2234","","\u8270","\u8273","\u2601",""]
     });
 
     document.getElementById("buttonCalibrate").addEventListener("click", (e) => {
-
-      offsetCompass = az - compassRaw - altitude//compass - az + altitude;
+startMotion()
+      offsetCompass = az - compassRaw - altitude //compass - az + altitude;
       offsetInclination = altitude - alt;
       //localStorage.setItem("offsetCompass", offsetCompass);
       //localStorage.setItem("offsetInclination", offsetInclination);
@@ -587,18 +597,11 @@ let objectCodes=["\u2295","\u2234","","\u8270","\u8273","\u2601",""]
       showData(index)
     });
 
-    if (confirm("PushToTelescope v4.21 Point scope to 270 W at 45 inclination and press OK")) {
-      DeviceOrientationEvent.requestPermission()
-        .then(response => {
-          if (response == 'granted') {
-            window.addEventListener('devicemotion', listener)
-            window.addEventListener('deviceorientation', listener2)
-          }
-        })
-        .catch(console.error)
 
-    }
-    showData(0)
+  //  if (confirm("PushToTelescope v4.21 Point scope to 270 W at 45 inclination and press OK")) {
+
+  //  }
+//    showData(0)
 
   } //end ready()
 
