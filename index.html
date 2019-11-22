@@ -373,8 +373,8 @@
 
         document.getElementById("textName").innerHTML = astromath.formatNames(c[index].name) + "<br>" +
           d + " " + astromath.formatDistance(c[index].lightYears) + "<br/>" + c[index].notes +
-          " az:  " + astromath.radiansToDegreesAndMinutes(astromath.radians(az)) + " alt " + astromath.radiansToDegreesAndMinutes(astromath.radians(alt)) +
-          "<br/>compass " + compass + " altitude " + Math.round(altitude)
+          " az:  " + astromath.radiansToDegreesAndMinutes(astromath.radians(az)) + " alt " + astromath.radiansToDegreesAndMinutes(astromath.radians(alt)) //+
+        //  "<br/>compass " + compass + " altitude " + Math.round(altitude)
 
       } else {
         document.getElementById("textName").innerHTML = ""
@@ -390,7 +390,7 @@
       for (const co of c) {
         numberOfItemsAdded++;
         var node = document.createElement("BUTTON");
-        var textnode = document.createTextNode(co.name);
+        var textnode = document.createTextNode(co.name+" "+co.type);
         node.appendChild(textnode);
         // var htmlnode = document.createElement('span');
         // htmlnode.innerHTML=co.name
@@ -577,13 +577,12 @@
       showData(index)
     });
 
-    if (confirm("PushToTelescope v4.18 Point scope to 270 W at 45 inclination and press OK")) {
+    if (confirm("PushToTelescope v4.19 Point scope to 270 W at 45 inclination and press OK")) {
       DeviceOrientationEvent.requestPermission()
         .then(response => {
           if (response == 'granted') {
             window.addEventListener('devicemotion', listener)
             window.addEventListener('deviceorientation', listener2)
-
           }
         })
         .catch(console.error)
