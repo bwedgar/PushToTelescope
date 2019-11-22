@@ -181,8 +181,7 @@
 
     <canvas id="canvasFinder"></canvas>
 
-    <div id="textName" class="name"></div>
-
+    <div id="textName" class="name">PushToTelescope v4.22 Point scope to 270 W at 45 inclination and click here</div>
     <canvas id="canvasAtlas"></canvas>
   </div>
 
@@ -278,7 +277,7 @@
     ctxAtlas = canvasAtlas.getContext("2d")
     canvasAtlas.width = window.innerWidth;
     canvasAtlas.height = window.innerHeight * 50 / 100;
-
+//sensorsActivated=false
     // functions for detecting and responding to telescope movement
     listener = (e) => {
       //ctxFinder.clearRect(0,0,canvasFinder.height,canvasFinder.width)
