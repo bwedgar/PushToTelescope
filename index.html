@@ -224,8 +224,9 @@
     cos = getCelestialObjects(data, astromath.longitude, astromath.latitude, scales);
     let c = filterObjects(cos, visibleOnly, scaleSelected)
 
-    let objectTypes = ["GX", "OC", "GC", "ST", "DS","NB", "DS", "RN"]
-    let objectNames = ["galaxy", "open cluster", "globular cluster", "star", "double star","bright nebula", "double star", "remnant"]
+    let objectTypes = ["GX", "OC", "GC", "ST", "DS","NB", "RN"]
+    let objectNames = ["galaxy", "open cluster", "globular cluster", "star", "double star","bright nebula",  "remnant"]
+let objectCodes=["\u2295","\u2234","","\u8270","\u8273","\u2601",""]
     let types = [{
         code: "GX",
         name: "galaxy"
@@ -395,7 +396,10 @@
       for (const co of c) {
         numberOfItemsAdded++;
         var node = document.createElement("BUTTON");
+
+      //  var textnode = document.createTextNode(co.name+" (\u2295 )");
         var textnode = document.createTextNode(co.name+" ("+co.type+")");
+
         node.appendChild(textnode);
         // var htmlnode = document.createElement('span');
         // htmlnode.innerHTML=co.name
