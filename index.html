@@ -390,7 +390,7 @@
       for (const co of c) {
         numberOfItemsAdded++;
         var node = document.createElement("BUTTON");
-        var textnode = document.createTextNode(co.name+" "+co.type);
+        var textnode = document.createTextNode(co.name+" ("+co.type+")");
         node.appendChild(textnode);
         // var htmlnode = document.createElement('span');
         // htmlnode.innerHTML=co.name
@@ -502,6 +502,7 @@
     let listCO = document.getElementById("listCO")
     listCO.addEventListener("click", (e) => {
       nameOfCos = e.target.innerHTML
+      nameOfCos=nameOfCos.slice(0,nameOfCos.length-5)
       //*************************************  find the span inner html **************
       console.log(nameOfCos + "  " + selectedCos)
 
@@ -577,7 +578,7 @@
       showData(index)
     });
 
-    if (confirm("PushToTelescope v4.19 Point scope to 270 W at 45 inclination and press OK")) {
+    if (confirm("PushToTelescope v4.21 Point scope to 270 W at 45 inclination and press OK")) {
       DeviceOrientationEvent.requestPermission()
         .then(response => {
           if (response == 'granted') {
