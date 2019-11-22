@@ -193,7 +193,7 @@ const dataText = ["47 Tucanae,0,24,-72,5,13000,,GC,30 thousand stars with a dens
   "Alpha Pegasus    Markab,23,4,15,12,139,2.49,ST,B9.5",
   "Beta Monocerotis,6,26,-7,0,700,,ST,Triple star 4.7 and 4.6 sep 7.5sec and 5.6 sep 2.8sec from 4.6.",
   "Gamma Leonis,10,17,20,6,130,,DS,Double; 2.6 and 3.8 separated by 4.3sec",
-  "Gem Cluster,10,31,-57,58,1400,,OC,Red supergiant surrounded by blue stars. 8min across."
+  "Gem Cluster,10,31,-57,58,1400,,OC,Red supergiant surrounded by blue stars. 8min across",
   "Gamma Volantis,7,9,-70,30,130,,DS,Double; 3.9 and 5.4 separated by 14 sec",
   "Gamma Velorum,8,10,-47,20,130,,DS,Double; 7.3 and 9.4  separated by 22 sec",
   "Upsilon Carinae,9,47,-65,4,130,,DS,Double; 3.0 and 6.0 separated by 5 sec"
