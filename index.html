@@ -181,7 +181,7 @@
 
     <canvas id="canvasFinder"></canvas>
 
-    <div id="textName" class="name">PushToTelescope v4.22 Point scope to 270 W at 45 inclination and click here</div>
+    <div id="textName" class="name">PushToTelescope v4.24 Point scope to 270 W at 45 inclination and click here</div>
     <canvas id="canvasAtlas"></canvas>
   </div>
 
@@ -596,7 +596,10 @@ startMotion()
       showData(index)
     });
 
-
+    document.getElementById("textName").addEventListener("click", (e) => {
+      startMotion()
+      showData(0);
+    });
   //  if (confirm("PushToTelescope v4.21 Point scope to 270 W at 45 inclination and press OK")) {
 
   //  }
