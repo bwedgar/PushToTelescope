@@ -301,14 +301,13 @@
 
 
       compassRaw = e2.webkitCompassHeading//Math.round((e2.webkitCompassHeading))
-      alert(compassRaw)
       if (offsetCompass == 0) {
         offsetCompass = 270 - compassRaw + altitude
-        alert(compassRaw+" "+offsetCompass + " " + altitude)
+        //alert(compassRaw+" "+offsetCompass + " " + altitude)
         offsetInclination = 45 - altitude
       }
       compass = Math.round((compassRaw + altitude + offsetCompass) % 360) //Math.round((compassRaw - offsetCompass) % 360)
-      //  document.getElementById("textName").innerHTML = "raw " + compassRaw + " offsetCompass " + offsetCompass + " compass " + compass +
+       document.getElementById("textName").innerHTML = "raw " + compassRaw + " offsetCompass " + offsetCompass + " compass " + compass
       //  "<br/> altitude " + Math.round(altitude) + "offsetInclination " + Math.round(offsetInclination)
 
       //  `altitude ${Math.round(altitude)} compass ${Math.round(compass)} beta ${Math.round(e2.beta)} `
