@@ -300,9 +300,10 @@
     listener2 = (e2) => {
 
 
-      compassRaw = Math.round((e2.webkitCompassHeading) % 360)
+      compassRaw = e2.webkitCompassHeading//Math.round((e2.webkitCompassHeading))
+      alert(compassRaw)
       if (offsetCompass == 0) {
-        offsetCompass = -270 + compassRaw - altitude
+        offsetCompass = 270 - compassRaw + altitude
         alert(compassRaw+" "+offsetCompass + " " + altitude)
         offsetInclination = 45 - altitude
       }
