@@ -301,7 +301,7 @@
 
 
       compassRaw = e2.webkitCompassHeading//Math.round((e2.webkitCompassHeading))
-      if (offsetCompass == 0 && compassRaw<0) {
+      if (offsetCompass == 0 && compassRaw>0) {
         offsetCompass = 270 - compassRaw + altitude
         alert("raw "+compassRaw+" offset "+offsetCompass + " altitue " + altitude)
         offsetInclination = 45 - altitude
