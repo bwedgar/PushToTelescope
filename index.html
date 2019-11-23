@@ -181,7 +181,7 @@
 
     <canvas id="canvasFinder"></canvas>
 
-    <div id="textName" class="name">PushToTelescope v4.24 Point scope to 270 W at 45 inclination and click here</div>
+    <div id="textName" class="name">PushToTelescope v4.25 Point scope to 270 W at 45 inclination and click here</div>
     <canvas id="canvasAtlas"></canvas>
   </div>
 
@@ -261,7 +261,7 @@
           if (response == 'granted') {
             window.addEventListener('devicemotion', listener)
             window.addEventListener('deviceorientation', listener2)
-              document.getElementById("textName").removeEventListener("click", (e) => startMotion())
+            //  document.getElementById("textName").removeEventListener("click", (e) => startMotion())
           }
 
         })
@@ -279,7 +279,7 @@
     ctxAtlas = canvasAtlas.getContext("2d")
     canvasAtlas.width = window.innerWidth;
     canvasAtlas.height = window.innerHeight * 50 / 100;
-//sensorsActivated=false
+    //sensorsActivated=false
     // functions for detecting and responding to telescope movement
     listener = (e) => {
       //ctxFinder.clearRect(0,0,canvasFinder.height,canvasFinder.width)
@@ -303,7 +303,7 @@
       compassRaw = Math.round((e2.webkitCompassHeading) % 360)
       if (offsetCompass == 0) {
         offsetCompass = 270 - compassRaw - altitude
-        alert(offsetCompass+" "+altitude)
+        alert(offsetCompass + " " + altitude)
         offsetInclination = 45 - altitude
       }
       compass = Math.round((compassRaw + altitude + offsetCompass) % 360) //Math.round((compassRaw - offsetCompass) % 360)
@@ -533,6 +533,9 @@
 
     document.getElementById("buttonCalibrate").addEventListener("click", (e) => {
 
+      offsetCompass = az - compassRaw - altitude //compass - az + altitude;
+      offsetInclination = altitude - alt;
+    })
 
     document.getElementById("buttonInfo").addEventListener("click", () => {
 
@@ -597,19 +600,13 @@
     document.getElementById("textName").addEventListener("click", (e) => {
       startMotion()
 
-            offsetCompass = az - compassRaw - altitude //compass - az + altitude;
-            offsetInclination = altitude - alt;
 
       showData(0);
     });
-  //  if (confirm("PushToTelescope v4.21 Point scope to 270 W at 45 inclination and press OK")) {
 
-  //  }
-//    showData(0)
 
   } //end ready()
 
-  // need to fix thus with async function perhaps **************************************
   getLocation = () => {
     if (false) { //}(navigator.geolocation) {
       navigator.geolocation.getCurrentPosition((position) => {
