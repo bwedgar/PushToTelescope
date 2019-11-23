@@ -181,7 +181,7 @@
 
     <canvas id="canvasFinder"></canvas>
 
-    <div id="textName" class="name">PushToTelescope v4.25 Point scope to 270 W at 45 inclination and click here</div>
+    <div id="textName" class="name">PushToTelescope v4.26 Point scope to 270 W at 45 inclination and click here</div>
     <canvas id="canvasAtlas"></canvas>
   </div>
 
@@ -261,7 +261,7 @@
           if (response == 'granted') {
             window.addEventListener('devicemotion', listener)
             window.addEventListener('deviceorientation', listener2)
-            //  document.getElementById("textName").removeEventListener("click", (e) => startMotion())
+          document.getElementById("textName").removeEventListener("click", (e) => startMotion())
           }
 
         })
@@ -302,8 +302,8 @@
 
       compassRaw = Math.round((e2.webkitCompassHeading) % 360)
       if (offsetCompass == 0) {
-        offsetCompass = 270 - compassRaw - altitude
-        alert(offsetCompass + " " + altitude)
+        offsetCompass = -270 + compassRaw - altitude
+        alert(compassRaw+" "+offsetCompass + " " + altitude)
         offsetInclination = 45 - altitude
       }
       compass = Math.round((compassRaw + altitude + offsetCompass) % 360) //Math.round((compassRaw - offsetCompass) % 360)
