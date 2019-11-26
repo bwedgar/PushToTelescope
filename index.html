@@ -181,7 +181,7 @@
 
     <canvas id="canvasFinder"></canvas>
 
-    <div id="textName" class="name">PushToTelescope v4.28 Point scope to 270 WEST at 45 inclination and click here</div>
+    <div id="textName" class="name">PushToTelescope v4.30 Point scope to 270 WEST at 45 inclination and click here</div>
     <canvas id="canvasAtlas"></canvas>
   </div>
 
@@ -535,6 +535,7 @@
 
       offsetCompass = az - compassRaw - altitude //compass - az + altitude;
       offsetInclination = altitude - alt;
+      alert('az #{Math.round(az)} d #{Math.round(offsetCompass)} alt #{Math.round(alt)} d #{Math.round(offsetInclination)}')
     })
 
     document.getElementById("buttonInfo").addEventListener("click", () => {
