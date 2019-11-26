@@ -535,7 +535,7 @@
 
       offsetCompass = az - compassRaw - altitude //compass - az + altitude;
       offsetInclination = altitude - alt;
-      alert('az #{Math.round(az)} d #{Math.round(offsetCompass)} alt #{Math.round(alt)} d #{Math.round(offsetInclination)}')
+      alert(`az ${Math.round(az)} d ${Math.round(offsetCompass)} alt ${Math.round(alt)} d ${Math.round(offsetInclination)}`)
     })
 
     document.getElementById("buttonInfo").addEventListener("click", () => {
