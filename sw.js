@@ -12,7 +12,7 @@ if ('serviceWorker' in navigator) {
 }
     else { console.log("service worker not available") }
 
-console.log("after service worker registration attempt");
+alert("after service worker registration attempt");
 
 let cache_name = 'mysite-v4'
 
