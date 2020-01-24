@@ -1,7 +1,7 @@
     if ('serviceWorker' in navigator) {  
   navigator.serviceWorker.register('/sw.js')
   .then(function (registration) { 
-  console.log(“ServiceWorker registration succeeded.”);       
+  console.log('ServiceWorker registration succeeded.');       
   }).catch(function (err) { 
    console.log('ServiceWorker registration failed: ', err);  
   });
@@ -20,7 +20,7 @@ const preCacheName = "pre-cache-hbp",
     '/PushToTelescope/manifest.json'
 ];
 
-self.addEventListener("install", event => {
+self.addEventListener('install', event => {
 
     caches.open(preCacheName).then(function (cache) {
 
@@ -30,7 +30,7 @@ self.addEventListener("install", event => {
 
 });
 
-self.addEventListener("fetch", event => {
+self.addEventListener('fetch', event => {
 
     event.respondWith(
 
