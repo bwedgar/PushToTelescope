@@ -12,12 +12,12 @@ if ('serviceWorker' in navigator) {
 }
     else { console.log("service worker not available") }
 
-alert("after service worker registration attempt");
+console.log("after service worker registration attempt");
 
 let cache_name = 'mysite-v4'
 
 let urls_to_cache = [
-'/PushToTelescope/',
+    '/PushToTelescope/',
     '/PushToTelescope/index.html',
     '/PushToTelescope/astromath.js',
     '/PushToTelescope/celestialobjects.js',
@@ -28,18 +28,16 @@ let urls_to_cache = [
 
 self.addEventListener('install', (e) => {
  e.waitUntil(caches.open(cache_name).then((cache) => {
-alert("caching")
+console.log("caching")
   return cache.addAll(urls_to_cache)
  }) )
 })
 
 self.addEventListener('fetch', (e) => {
     e.respondWith(caches.match(e.request).then((response) => {
-     if(response){
-alert("response")
-      return response}
-     else{
-alert("fetch")
-      return fetch(e.request)}
+     if(response)
+      return response
+     else
+      return fetch(e.request)
     }) )
 })
