@@ -28,15 +28,18 @@ let urls_to_cache = [
 
 self.addEventListener('install', (e) => {
  e.waitUntil(caches.open(cache_name).then((cache) => {
+alert("caching")
   return cache.addAll(urls_to_cache)
  }) )
 })
 
 self.addEventListener('fetch', (e) => {
     e.respondWith(caches.match(e.request).then((response) => {
-     if(response)
-      return response
-     else
-      return fetch(e.request)
+     if(response){
+alert("response")
+      return response}
+     else{
+alert("fetch")
+      return fetch(e.request)}
     }) )
 })
