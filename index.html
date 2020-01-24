@@ -252,8 +252,8 @@
         name: "remnant"
       }
     ]
-    //offsetCompass = localStorage.getItem("offsetCompass")
-    //offsetInclination = localStorage.getItem("offsetInclination")
+    offsetCompass = localStorage.getItem("offsetCompass")
+    offsetInclination = localStorage.getItem("offsetInclination")
 
     startMotion = () => {
       DeviceOrientationEvent.requestPermission()
@@ -302,9 +302,9 @@
 
       compassRaw = e2.webkitCompassHeading//Math.round((e2.webkitCompassHeading))
       if (offsetCompass == 0 && compassRaw>0) {
-        offsetCompass = 270 - compassRaw - altitude
+      //  offsetCompass = 270 - compassRaw - altitude
       //  alert("raw "+compassRaw+" offset "+offsetCompass + " altitue " + altitude)
-        offsetInclination = 45 - altitude
+      //  offsetInclination = 45 - altitude
       }
       compass = Math.round((compassRaw + altitude + offsetCompass) % 360) //Math.round((compassRaw - offsetCompass) % 360)
       // document.getElementById("textName").innerHTML = "raw " + compassRaw + " offsetCompass " + offsetCompass + " compass " + compass
@@ -397,7 +397,7 @@
       } else {
         document.getElementById("textName").innerHTML = ""
       }
-      showAtlas(index, c, scaleSelected)
+      //showAtlas(index, c, scaleSelected)
       document.getElementById("pageCO").style.display = "none";
       document.getElementById("pageContent").style.display = "block";
     }
@@ -535,6 +535,8 @@
 
       offsetCompass = az - compassRaw - altitude //compass - az + altitude;
       offsetInclination = altitude - alt;
+         offsetCompass = localStorage.setItem("offsetCompass")
+    offsetInclination = localStorage.setItem("offsetInclination")
       alert(`az ${Math.round(az)} d ${Math.round(offsetCompass)} alt ${Math.round(alt)} d ${Math.round(offsetInclination)}`)
     })
 
