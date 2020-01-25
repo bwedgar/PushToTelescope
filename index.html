@@ -383,8 +383,10 @@
 
         document.getElementById("textName").innerHTML = astromath.formatNames(c[index].name) + "<br>" +
           d + " " + astromath.formatDistance(c[index].lightYears) + "<br/>" + c[index].notes +
-          " az:  " + astromath.radiansToDegreesAndMinutes(astromath.radians(az)) + " alt " + astromath.radiansToDegreesAndMinutes(astromath.radians(alt)) //+
-        //  "<br/>compass " + compass + " altitude " + Math.round(altitude)
+          "<br/>az:  " + astromath.radiansToDegreesAndMinutes(astromath.radians(az)) + " alt " + astromath.radiansToDegreesAndMinutes(astromath.radians(alt)) +
+          "<br/>offestCompass:  " + offsetCompass + " offsetInclination " + offsetInclination //+
+
+  //  "<br/>compass " + compass + " altitude " + Math.round(altitude)
 
       } else {
         document.getElementById("textName").innerHTML = ""
