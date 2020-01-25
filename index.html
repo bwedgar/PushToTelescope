@@ -529,9 +529,9 @@
 
       offsetCompass = az - compassRaw - altitude //compass - az + altitude;
       offsetInclination = altitude - alt;
-    x=  localStorage.setItem("offsetCompass")
-    y=  localStorage.setItem("offsetInclination")
-      alert(`az ${Math.round(az)} d ${Math.round(offsetCompass)} alt ${Math.round(alt)} d ${Math.round(offsetInclination)}`)
+    localStorage.setItem("offsetCompass",offsetCompass)
+     localStorage.setItem("offsetInclination",offsetInclination)
+    //  alert(`az ${Math.round(az)} d ${Math.round(offsetCompass)} alt ${Math.round(alt)} d ${Math.round(offsetInclination)}`)
     })
 
     document.getElementById("buttonInfo").addEventListener("click", () => {
