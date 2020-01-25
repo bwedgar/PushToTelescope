@@ -527,7 +527,7 @@
 
     document.getElementById("buttonCalibrate").addEventListener("click", (e) => {
 
-      offsetCompass = az - compassRaw - altitude //compass - az + altitude;
+      offsetCompass = az - compassRaw  //compass - az + altitude;
       offsetInclination = altitude - alt;
     localStorage.setItem("offsetCompass",offsetCompass)
      localStorage.setItem("offsetInclination",offsetInclination)
