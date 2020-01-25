@@ -22,7 +22,7 @@
       background-color: black;
       color: red;
       font-family: verdana;
-  font-size: 0vw;
+      font-size: 0vw;
     }
 
     h1 {
@@ -173,8 +173,8 @@
 
     <canvas id="canvasFinder"></canvas>
 
-    <div id="textName" class="name"></div>
-   <!-- <canvas id="canvasAtlas"></canvas> -->
+    <div id="textName" class="name">Click to start</div>
+    <!-- <canvas id="canvasAtlas"></canvas> -->
   </div>
 
   <div id="pageCO">
@@ -253,7 +253,7 @@
           if (response == 'granted') {
             window.addEventListener('devicemotion', listener)
             window.addEventListener('deviceorientation', listener2)
-          document.getElementById("textName").removeEventListener("click", (e) => startMotion())
+            document.getElementById("textName").removeEventListener("click", (e) => startMotion())
           }
 
         })
@@ -267,10 +267,10 @@
     canvasFinder.width = window.innerWidth;
     canvasFinder.height = window.innerHeight * 15 / 100;
     ctxFinder = canvasFinder.getContext("2d")
-   // canvasAtlas = document.getElementById("canvasAtlas")
-  //  ctxAtlas = canvasAtlas.getContext("2d")
-  //  canvasAtlas.width = window.innerWidth;
-//canvasAtlas.height = window.innerHeight * 50 / 100;
+    // canvasAtlas = document.getElementById("canvasAtlas")
+    //  ctxAtlas = canvasAtlas.getContext("2d")
+    //  canvasAtlas.width = window.innerWidth;
+    //canvasAtlas.height = window.innerHeight * 50 / 100;
 
     // functions for detecting and responding to telescope movement
     listener = (e) => {
@@ -292,11 +292,11 @@
     listener2 = (e2) => {
 
 
-      compassRaw = e2.webkitCompassHeading//Math.round((e2.webkitCompassHeading))
-      if (offsetCompass == 0 && compassRaw>0) {
-      //  offsetCompass = 270 - compassRaw - altitude
-      // alert("raw "+compassRaw+" offset "+offsetCompass + " altitue " + altitude)
-      //  offsetInclination = 45 - altitude
+      compassRaw = e2.webkitCompassHeading //Math.round((e2.webkitCompassHeading))
+      if (offsetCompass == 0 && compassRaw > 0) {
+        //  offsetCompass = 270 - compassRaw - altitude
+        // alert("raw "+compassRaw+" offset "+offsetCompass + " altitue " + altitude)
+        //  offsetInclination = 45 - altitude
       }
       compass = Math.round((compassRaw + altitude + offsetCompass) % 360) //Math.round((compassRaw - offsetCompass) % 360)
       // document.getElementById("textName").innerHTML = "raw " + compassRaw + " offsetCompass " + offsetCompass + " compass " + compass
@@ -527,8 +527,8 @@
 
       offsetCompass = az - compassRaw - altitude //compass - az + altitude;
       offsetInclination = altitude - alt;
-         localStorage.setItem("offsetCompass")
-    localStorage.setItem("offsetInclination")
+      localStorage.setItem("offsetCompass")
+      localStorage.setItem("offsetInclination")
       alert(`az ${Math.round(az)} d ${Math.round(offsetCompass)} alt ${Math.round(alt)} d ${Math.round(offsetInclination)}`)
     })
 
@@ -592,14 +592,14 @@
       showData(index)
     });
 
-    //document.getElementById("textName").addEventListener("click", (e) => {
-  //    startMotion()
-//n="Alpha  Crucis    Acrux".slice(0, nameOfCos.length - 5)
-//  index = c.findIndex(x => x.name == n.trim());
-  showData(0);
+    document.getElementById("textName").addEventListener("click", (e) => {
+      startMotion()
+      //n="Alpha  Crucis    Acrux".slice(0, nameOfCos.length - 5)
+      //  index = c.findIndex(x => x.name == n.trim());
+      showData(0);
 
-     //showData(0);
-  //  });
+      //showData(0);
+    });
 
 
   } //end ready()
