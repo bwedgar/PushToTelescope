@@ -33,11 +33,11 @@
       background-color: black;
       color: red;
       font-family: verdana;
-      font-size: 5vw;
-      border: 1px solid red; 
+      font-size: 7vw;
+      border: 1px solid red;
       width: 100%;
       height: 400px;
-      padding: 2% 2%;
+    //  padding: 2% 2%;
       overflow: scroll;
     }
 
@@ -71,7 +71,7 @@
       font-family: verdana;
       font-size: 7vw;
       border: 1px solid red;
-      padding: 2% 2%;
+    //  padding: 2% 2%;
       width: 97%;
       text-align: left;
     }
@@ -82,38 +82,38 @@
       font-family: verdana;
       font-size: 7vw;
       border: 1px solid red;
-      width: 46%;
-      padding: 2% 2%;
+      width: 49%;
+    //  padding: 2% 2%;
     }
 
     .btngroup3 {
       background-color: black;
       color: red;
       font-family: verdana;
-      font-size: 6vw;
+      font-size: 7vw;
       border: 1px solid red;
       width: 9%;
-      padding: 2% 2%;
+    //  padding: 2% 2%;
     }
 
     .btngroup3L {
       background-color: black;
       color: red;
       font-family: verdana;
-      font-size: 6vw;
+      font-size: 7vw;
       border: 1px solid red;
-      width: 72%;
-      padding: 2% 2%;
+      width: 79%;
+    //  padding: 2% 2%;
     }
 
     .btngroup4 {
       background-color: black;
       color: red;
       font-family: verdana;
-      font-size: 6vw;
+      font-size: 7vw;
       border: 1px solid red;
-      width: 21%;
-      padding: 2% 2%;
+      width: 24%;
+    //  padding: 2% 2%;
     }
 
     .btngroup7 {
@@ -303,7 +303,7 @@
       compassRaw = e2.webkitCompassHeading//Math.round((e2.webkitCompassHeading))
       if (offsetCompass == 0 && compassRaw>0) {
       //  offsetCompass = 270 - compassRaw - altitude
-      //  alert("raw "+compassRaw+" offset "+offsetCompass + " altitue " + altitude)
+      // alert("raw "+compassRaw+" offset "+offsetCompass + " altitue " + altitude)
       //  offsetInclination = 45 - altitude
       }
       compass = Math.round((compassRaw + altitude + offsetCompass) % 360) //Math.round((compassRaw - offsetCompass) % 360)
@@ -600,12 +600,14 @@
       showData(index)
     });
 
-    document.getElementById("textName").addEventListener("click", (e) => {
-      startMotion()
+    //document.getElementById("textName").addEventListener("click", (e) => {
+  //    startMotion()
+//n="Alpha  Crucis    Acrux".slice(0, nameOfCos.length - 5)
+//  index = c.findIndex(x => x.name == n.trim());
+  showData(0);
 
-
-      showData(0);
-    });
+     //showData(0);
+  //  });
 
 
   } //end ready()
