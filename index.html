@@ -529,8 +529,8 @@
 
       offsetCompass = az - compassRaw - altitude //compass - az + altitude;
       offsetInclination = altitude - alt;
-      localStorage.setItem("offsetCompass")
-      localStorage.setItem("offsetInclination")
+    x=  localStorage.setItem("offsetCompass")
+    y=  localStorage.setItem("offsetInclination")
       alert(`az ${Math.round(az)} d ${Math.round(offsetCompass)} alt ${Math.round(alt)} d ${Math.round(offsetInclination)}`)
     })
 
