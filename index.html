@@ -298,7 +298,7 @@
         // alert("raw "+compassRaw+" offset "+offsetCompass + " altitue " + altitude)
         //  offsetInclination = 45 - altitude
       }
-      compass = Math.round((compassRaw + altitude + offsetCompass) % 360) //Math.round((compassRaw - offsetCompass) % 360)
+      compass = Math.round((compassRaw + altitude - offsetCompass) % 360) //Math.round((compassRaw - offsetCompass) % 360)
       // document.getElementById("textName").innerHTML = "raw " + compassRaw + " offsetCompass " + offsetCompass + " compass " + compass
       //  "<br/> altitude " + Math.round(altitude) + "offsetInclination " + Math.round(offsetInclination)
 
