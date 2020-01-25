@@ -1,15 +1,15 @@
-    if ('serviceWorker' in navigator) {  
+    if ('serviceWorker' in navigator) {
   //navigator.serviceWorker.register('sw.js')
         navigator.serviceWorker.register('/PushToTelescope/sw.js')
-  .then(function (registration) { 
-  console.log('ServiceWorker registration succeeded.');       
-  }).catch(function (err) { 
-   console.log('ServiceWorker registration failed: ', err);  
+  .then(function (registration) {
+  console.log('ServiceWorker registration succeeded.');
+  }).catch(function (err) {
+   console.log('ServiceWorker registration failed: ', err);
   });
  }
 
 
-const preCacheName = "pre-cache-hbp",
+const preCacheName = "pre-cache-hbp-1",
 
     preCacheFiles = [
   '/PushToTelescope/',
@@ -52,4 +52,3 @@ self.addEventListener('fetch', event => {
     )
 
 });
-
