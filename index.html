@@ -33,10 +33,10 @@
 
   <script>
     var b = Buttons
-    b.setStyle("red","black","6")
+    b.setStyle("red", "black", "6")
 
     ready = () => {
-      var b = Buttons
+    //  var b = Buttons
       console.log(astromath.radiansToDegreesAndMinutes(astromath.latitude))
       document.body.style.cssText = "color:red;background:black;font-size:4.5vw;font-family:verdana;"
       let globalLegendIndex = 0
@@ -65,8 +65,8 @@
 
 
       let cos = getCelestialObjects(data, astromath.longitude, astromath.latitude, scales) //.filter(c => c.visible == true)
-      let objectTypes = ["GX", "OC", "GC", "ST", "DS", "NB", "RN"]
-      let objectNames = ["galaxy", "open cluster", "globular cluster", "star", "double star", "bright nebula", "remnant"]
+      let objectTypes = ["PL", "GX", "OC", "GC", "ST", "DS", "NB", "RN"]
+      let objectNames = ["planet", "galaxy", "open cluster", "globular cluster", "star", "double star", "bright nebula", "remnant"]
       let types = [{
           code: "GX",
           name: "galaxy"
@@ -113,7 +113,7 @@
       changeScaleButtonText = (event) => {
         globalLegendIndex = event.target.index()
         //  console.log(globalLegendIndex)
-        scaleButton.innerHTML = legends[globalLegendIndex]
+        scaleButton.innerHTML = `** ${legends[globalLegendIndex]} **`
         objectButton.innerHTML = cos.filter(object => object.scale == globalLegendIndex)[0].name
         //console.log("b")
         b.showElementsWithGroupName("scaleButton")
@@ -124,7 +124,7 @@
       }
 
       showListOfScales = () => {
-        legends.forEach((legend, legendIndex) => Buttons.makeButton("scaleList" + legendIndex, 100, legend, (e) => changeScaleButtonText(e)))
+        legends.forEach((legend, legendIndex) => Buttons.makeButton("scaleList" + legendIndex, 100, `** ${legend} **`, (e) => changeScaleButtonText(e)))
         b.hideElementsWithGroupName("objectButton")
         b.hideElementsWithGroupName("objectList")
         b.hideElementsWithGroupName("scaleButton")
@@ -134,7 +134,7 @@
       }
       Buttons.makeButton("title", 100, "Push to Telescope", () => window.location.href = "https://bwedgar.github.io/index.html")
 
-      Buttons.makeButton("scaleButton", 100, legends[globalLegendIndex], () => showListOfScales())
+      Buttons.makeButton("scaleButton", 100, `** ${legends[globalLegendIndex]} **`, () => showListOfScales())
 
       Buttons.makeButton("objectButton", 100, cos.filter(object => object.scale == globalLegendIndex)[0].name, () => showListOfObjects())
 
@@ -151,13 +151,13 @@
         b.showElementsWithGroupName("notes")
         b.hideElementsWithGroupName("objectList")
         //run()
-        az=object.azimuth
-        alt=object.altitude
+        az = object.azimuth
+        alt = object.altitude
         notes.innerHTML =
-          astromath.formatDistance(object.lightYears) + "<br/>" + object.notes +
+          "     " + objectNames[objectTypes.indexOf(object.type)] +"  "+astromath.formatDistance(object.lightYears)  + object.notes + "<br/>" +
           "<br/>az:  " + astromath.radiansToDegreesAndMinutes(astromath.radians(object.azimuth)) + " alt " + astromath.radiansToDegreesAndMinutes(astromath.radians(object.altitude)) +
-          "<br/>Daz  " + Math.round(offsetCompass) + " Dalt " + Math.round(offsetInclination)+
-          "<br/>lat: "+astromath.radiansToDegreesAndMinutes(astromath.latitude)+"  long: "+astromath.radiansToDegreesAndMinutes(astromath.longitude)
+          "<br/>Daz  " + Math.round(offsetCompass) + " Dalt " + Math.round(offsetInclination) +
+          "<br/>lat: " + astromath.radiansToDegreesAndMinutes(astromath.latitude) + "  long: " + astromath.radiansToDegreesAndMinutes(astromath.longitude)
       }
 
       showListOfObjects = () => {
