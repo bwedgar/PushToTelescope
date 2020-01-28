@@ -23,7 +23,7 @@
   <script src="https://bwedgar.github.io/buttons/buttons.js"></script>
   <!-- <script src="../buttons/buttons.js"></script> -->
 
-  <!-- <script src="sw.js"></script> -->
+  <script src="sw.js"></script>
 
 </head>
 
@@ -37,7 +37,7 @@
 
     ready = () => {
     //  var b = Buttons
-      console.log(astromath.radiansToDegreesAndMinutes(astromath.latitude))
+      //console.log(astromath.radiansToDegreesAndMinutes(astromath.latitude))
       document.body.style.cssText = "color:red;background:black;font-size:4.5vw;font-family:verdana;"
       let globalLegendIndex = 0
       let globalObjectIndex = 0
@@ -53,8 +53,8 @@
       let azDev = 0;
       let az = 0;
       //let azimuth=0; //azimuth of object in degrees
-      let galShow = 0;
-      nameOfCos = ""
+      // let galShow = 0;
+      // nameOfCos = ""
       scaleSelected = 2;
       legends = ["Solar System", "Nearest Stars", "Neighbours", "Orion Arm", "Milky Way Galaxy", "Satellite Galaxies", "Local Group",
         "Virgo Supercluster"
@@ -64,35 +64,11 @@
       const scales = [0, 0.0002, 12.5, 250, 5000, 50000, 250000, 5000000, 100000000]
 
 
-      let cos = getCelestialObjects(data, astromath.longitude, astromath.latitude, scales) //.filter(c => c.visible == true)
+      let objects = getCelestialObjects(data, astromath.longitude, astromath.latitude, scales) .filter(c => c.visible == true)
+
       let objectTypes = ["PL", "GX", "OC", "GC", "ST", "DS", "NB", "RN"]
       let objectNames = ["planet", "galaxy", "open cluster", "globular cluster", "star", "double star", "bright nebula", "remnant"]
-      let types = [{
-          code: "GX",
-          name: "galaxy"
-        }, {
-          code: "OC",
-          name: "open cluster"
-        }, {
-          code: "GC",
-          name: "globular cluster"
-        },
-        {
-          code: "ST",
-          name: "star"
-        },
-        {
-          code: "DS",
-          name: "double star"
-        },
-        {
-          code: "NB",
-          name: "bright nebula"
-        }, {
-          code: "RN",
-          name: "remnant"
-        }
-      ]
+
       offsetCompass = localStorage.getItem("offsetCompass")
       offsetInclination = localStorage.getItem("offsetInclination")
 
@@ -113,8 +89,8 @@
       changeScaleButtonText = (event) => {
         globalLegendIndex = event.target.index()
         //  console.log(globalLegendIndex)
-        scaleButton.innerHTML = `** ${legends[globalLegendIndex]} **`
-        objectButton.innerHTML = cos.filter(object => object.scale == globalLegendIndex)[0].name
+        scaleButton.innerHTML = `${legends[globalLegendIndex]}`
+        objectButton.innerHTML = objects.filter(object => object.scale == globalLegendIndex)[0].name
         //console.log("b")
         b.showElementsWithGroupName("scaleButton")
         b.hideElementsWithGroupName("objectList")
@@ -124,7 +100,7 @@
       }
 
       showListOfScales = () => {
-        legends.forEach((legend, legendIndex) => Buttons.makeButton("scaleList" + legendIndex, 100, `** ${legend} **`, (e) => changeScaleButtonText(e)))
+        legends.forEach((legend, legendIndex) => Buttons.makeButton("scaleList" + legendIndex, 100, `${legend}`, (e) => changeScaleButtonText(e)))
         b.hideElementsWithGroupName("objectButton")
         b.hideElementsWithGroupName("objectList")
         b.hideElementsWithGroupName("scaleButton")
@@ -134,16 +110,16 @@
       }
       Buttons.makeButton("title", 100, "Push to Telescope", () => window.location.href = "https://bwedgar.github.io/index.html")
 
-      Buttons.makeButton("scaleButton", 100, `** ${legends[globalLegendIndex]} **`, () => showListOfScales())
+      Buttons.makeButton("scaleButton", 100, `${legends[globalLegendIndex]}`, () => showListOfScales())
 
-      Buttons.makeButton("objectButton", 100, cos.filter(object => object.scale == globalLegendIndex)[0].name, () => showListOfObjects())
+      Buttons.makeButton("objectButton", 100, objects.filter(object => object.scale == globalLegendIndex)[0].name, () => showListOfObjects())
 
       Buttons.makeButton("finder", 100, '<canvas id="canvasFinder"></canvas>', () => calibrate())
 
       Buttons.makeButton("notes", 100, )
 
       changeObjectButtonText = (id) => {
-        object = cos.filter(object => object.scale == globalLegendIndex)[id]
+        object = objects.filter(object => object.scale == globalLegendIndex)[id]
         objectButton.innerHTML = object.name
 
         b.showElementsWithGroupName("objectButton")
@@ -164,7 +140,7 @@
         b.hideElementsWithGroupName("objectButton")
         b.hideElementsWithGroupName("finder")
         b.hideElementsWithGroupName("notes")
-        cos.filter(object => object.scale == globalLegendIndex).forEach((object, objectIndex) =>
+        objects.filter(object => object.scale == globalLegendIndex).forEach((object, objectIndex) =>
           Buttons.makeButton("objectList" + objectIndex, 100, object.name, (e) => changeObjectButtonText(e.target.index())))
       }
 
