@@ -20,8 +20,8 @@
   <script src="astromath.js"></script>
   <script src="planets.js"></script>
   <script src="celestialobjects.js"></script>
-  <script src="https://bwedgar.github.io/buttons/buttons.js"></script>
-  <!-- <script src="../buttons/buttons.js"></script> -->
+  <!-- <script src="https://bwedgar.github.io/buttons/buttons.js"></script> -->
+  <script src="../buttons/buttons.js"></script>
 
   <script src="sw.js"></script>
 
@@ -33,6 +33,7 @@
 
   <script>
     var b = Buttons
+    b.setStyle("red","black","6")
 
     ready = () => {
       var b = Buttons
@@ -127,6 +128,8 @@
         b.hideElementsWithGroupName("objectButton")
         b.hideElementsWithGroupName("objectList")
         b.hideElementsWithGroupName("scaleButton")
+        b.hideElementsWithGroupName("finder")
+        b.hideElementsWithGroupName("notes")
 
       }
       Buttons.makeButton("title", 100, "Push to Telescope", () => window.location.href = "https://bwedgar.github.io/index.html")
@@ -142,15 +145,19 @@
       changeObjectButtonText = (id) => {
         object = cos.filter(object => object.scale == globalLegendIndex)[id]
         objectButton.innerHTML = object.name
+
         b.showElementsWithGroupName("objectButton")
         b.showElementsWithGroupName("finder")
         b.showElementsWithGroupName("notes")
         b.hideElementsWithGroupName("objectList")
         //run()
+        az=object.azimuth
+        alt=object.altitude
         notes.innerHTML =
           astromath.formatDistance(object.lightYears) + "<br/>" + object.notes +
-          "<br/>az:  " + astromath.radiansToDegreesAndMinutes(astromath.radians(az)) + " alt " + astromath.radiansToDegreesAndMinutes(astromath.radians(alt)) +
-          "<br/>Daz  " + Math.round(offsetCompass) + " Dalt " + Math.round(offsetInclination)
+          "<br/>az:  " + astromath.radiansToDegreesAndMinutes(astromath.radians(object.azimuth)) + " alt " + astromath.radiansToDegreesAndMinutes(astromath.radians(object.altitude)) +
+          "<br/>Daz  " + Math.round(offsetCompass) + " Dalt " + Math.round(offsetInclination)+
+          "<br/>lat: "+astromath.radiansToDegreesAndMinutes(astromath.latitude)+"  long: "+astromath.radiansToDegreesAndMinutes(astromath.longitude)
       }
 
       showListOfObjects = () => {
