@@ -42,7 +42,7 @@
       let globalLegendIndex = 0
       timeLastUpdated=new Date()
       objects=[]
-
+object={}
       let globalObjectIndex = 0
       let previousSensor = 0;
       let sensor = 0;
@@ -70,6 +70,8 @@
       getObjects=()=>{
          objects = getCelestialObjects(data, astromath.longitude, astromath.latitude, scales) .filter(c => c.visible == true)
          timeLastUpdated=new Date()
+         az=object.azimuth
+         alt=object.altitude
       }
       getObjects()
 
