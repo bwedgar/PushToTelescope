@@ -55,10 +55,6 @@ object={}
       let altDev = 0; //difference between alt of object and altitude of telescope in degrees
       let azDev = 0;
       let az = 0;
-      //let azimuth=0; //azimuth of object in degrees
-      // let galShow = 0;
-      // nameOfCos = ""
-      scaleSelected = 2;
       legends = ["Solar System", "Nearest Stars", "Neighbours", "Orion Arm", "Milky Way Galaxy", "Satellite Galaxies", "Local Group",
         "Virgo Supercluster"
       ]
@@ -72,6 +68,7 @@ object={}
          timeLastUpdated=new Date()
          az=object.azimuth
          alt=object.altitude
+         alert(az)
       }
       getObjects()
 
