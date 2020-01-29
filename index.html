@@ -40,6 +40,9 @@
       //console.log(astromath.radiansToDegreesAndMinutes(astromath.latitude))
       document.body.style.cssText = "color:red;background:black;font-size:4.5vw;font-family:verdana;"
       let globalLegendIndex = 0
+      timeLastUpdated=new Date()
+      objects=[]
+
       let globalObjectIndex = 0
       let previousSensor = 0;
       let sensor = 0;
@@ -64,7 +67,11 @@
       const scales = [0, 0.0002, 12.5, 250, 5000, 50000, 250000, 5000000, 100000000]
 
 
-      let objects = getCelestialObjects(data, astromath.longitude, astromath.latitude, scales) .filter(c => c.visible == true)
+      getObjects=()=>{
+         objects = getCelestialObjects(data, astromath.longitude, astromath.latitude, scales) .filter(c => c.visible == true)
+         timeLastUpdated=new Date()
+      }
+      getObjects()
 
       let objectTypes = ["PL", "GX", "OC", "GC", "ST", "DS", "NB", "RN"]
       let objectNames = ["planet", "galaxy", "open cluster", "globular cluster", "star", "double star", "bright nebula", "remnant"]
@@ -78,13 +85,10 @@
             if (response == 'granted') {
               window.addEventListener('devicemotion', listener)
               window.addEventListener('deviceorientation', listener2)
-              //  document.getElementById("textName").removeEventListener("click", (e) => startMotion())
             }
           })
           .catch(console.error)
       }
-
-
 
       changeScaleButtonText = (event) => {
         globalLegendIndex = event.target.index()
@@ -95,7 +99,6 @@
         b.showElementsWithGroupName("scaleButton")
         b.hideElementsWithGroupName("objectList")
         b.hideElementsWithGroupName("scaleList")
-
         showListOfObjects()
       }
 
@@ -179,6 +182,8 @@
       }
 
       listener2 = (e2) => {
+        now=new Date()
+        if (now.getTime()-timeLastUpdated.getTime()>1000*2*60) getobjects() //recalculate objects every 2 minutes
 
         //run = () => {
         compassRaw = e2.webkitCompassHeading
@@ -259,183 +264,7 @@
     }
     getLocation()
 
-    // changeIndex = (index, change, array) => {
-    //   if (change == "increment") index++
-    //   if (change == "decrement") index--
-    //   if (change == "zero") index = 0
-    //   index = index < 0 ? array.length - 1 : index
-    //   index = index == array.length ? 0 : index
-    //   return index
-    // }
-    //
-    // showData = (index) => {
-    //   document.getElementById("buttonScale").innerHTML = legends[scaleSelected]
-    //   d = ""
-    //   if (c.length > 0) {
-    //     types.forEach((v) => {
-    //       console.log(index, c[index])
-    //       if (v.code == [c[index].type]) d = (v.name)
-    //     })
-    //     az = c[index].azimuth
-    //     alt = c[index].altitude
-    //
-    //     document.getElementById("textName").innerHTML = astromath.formatNames(c[index].name) + "<br>" +
-    //       d + " " + astromath.formatDistance(c[index].lightYears) + "<br/>" + c[index].notes +
-    //       "<br/>az:  " + astromath.radiansToDegreesAndMinutes(astromath.radians(az)) + " alt " + astromath.radiansToDegreesAndMinutes(astromath.radians(alt)) +
-    //       "<br/>offestCompass:  " + offsetCompass + " offsetInclination " + offsetInclination //+
-    //
-    //     //  "<br/>compass " + compass + " altitude " + Math.round(altitude)
-    //
-    //   } else {
-    //     document.getElementById("textName").innerHTML = ""
-    //   }
-    //   //showAtlas(index, c, scaleSelected)
-    //   document.getElementById("pageCO").style.display = "none";
-    //   document.getElementById("pageContent").style.display = "block";
-    // }
-    //
-    // showCO = () => {
-    //   document.getElementById("listCO").innerHTML = "";
-    //   var numberOfItemsAdded = 0;
-    //   for (const co of c) {
-    //     numberOfItemsAdded++;
-    //     var node = document.createElement("BUTTON");
-    //
-    //     //  var textnode = document.createTextNode(co.name+" (\u2295 )");
-    //     var textnode = document.createTextNode(co.name + " (" + co.type + ")");
-    //
-    //     node.appendChild(textnode);
-    //     // var htmlnode = document.createElement('span');
-    //     // htmlnode.innerHTML=co.name
-    //     node.appendChild(textnode);
-    //
-    //     btn = document.getElementById("listCO").appendChild(node);
-    //     btn.classList.add("button");
-    //     selectedCos = document.getElementById("listCO").firstChild
-    //   }
-    //   if (numberOfItemsAdded > 0) {
-    //     document.getElementById("pageCO").style.display = "block";
-    //     document.getElementById("pageContent").style.display = "none";
-    //   }
-    // }
-    //
-    // let listCO = document.getElementById("listCO")
-    //
-    // listCO.addEventListener("click", (e) => {
-    //   nameOfCos = e.target.innerHTML
-    //   nameOfCos = nameOfCos.slice(0, nameOfCos.length - 5)
-    //   console.log(nameOfCos + "  " + selectedCos)
-    //   index = c.findIndex(x => x.name == nameOfCos.trim());
-    //   showData(index);
-    // });
-    //
-    // document.getElementById("buttonCalibrate").addEventListener("click", (e) => {
-    //
-    //   offsetCompass = compass - az;
-    //   offsetInclination = altitude - alt;
-    //   localStorage.setItem("offsetCompass", offsetCompass)
-    //   localStorage.setItem("offsetInclination", offsetInclination)
-    //   //  alert(`az ${Math.round(az)} d ${Math.round(offsetCompass)} alt ${Math.round(alt)} d ${Math.round(offsetInclination)}`)
-    // })
-    //
-    // document.getElementById("buttonInfo").addEventListener("click", () => {
-    //
-    //   window.location.href = "https://bwedgar.github.io/index.html";
-    // });
-    //
 
-    /*    document.getElementById("buttonScalePrevious").addEventListener("click", () => {
-          if (scaleSelected > 0) {
-            scaleSelected--
-          } else {
-            scaleSelected = 0
-          }
-          c = filterObjects(cos, visibleOnly, scaleSelected)
-          index = changeIndex(index, "zero", c)
-          showData(index)
-        });
-        */
-
-    // showListOfScales = () => {
-    //   legends.forEach((legend, legendIndex) => Buttons.makeButton("legend" + legendIndex, 100, legend))
-    //
-    // }
-    //
-    // Buttons.makeButton("scales", 100, "list of scales", () => showListOfScales())
-    //
-    // document.getElementById("buttonScale").addEventListener("click", () => {
-    //   showListOfScales()
-    // });
-
-    /*  document.getElementById("buttonScaleNext").addEventListener("click", () => {
-        if (scaleSelected < 7) {
-          scaleSelected++
-        } else {
-          scaleSelected = 7
-        }
-        c = filterObjects(cos, visibleOnly, scaleSelected)
-        index = changeIndex(index, "zero", c)
-        showData(index)
-      });
-      */
-
-    // document.getElementById("buttonPreviousObject").addEventListener("click", () => {
-    //   index = changeIndex(index, "decrement", c)
-    //   showData(index);
-    // });
-    //
-    // document.getElementById("buttonNextObject").addEventListener("click", (e) => {
-    //   index = changeIndex(index, "increment", c)
-    //   showData(index);
-    // });
-    //
-    // document.getElementById("buttonVisible").addEventListener("click", () => {
-    //   visibleOnly = true
-    //   c = filterObjects(cos, visibleOnly, scaleSelected)
-    //   index = changeIndex(index, "zero", c)
-    //   document.getElementById("buttonVisible").classList.add("clicked")
-    //   document.getElementById("buttonAll").classList.remove("clicked")
-    //   showData(index)
-    // });
-    //
-    // document.getElementById("buttonAll").addEventListener("click", () => {
-    //   visibleOnly = false
-    //   c = filterObjects(cos, visibleOnly, scaleSelected)
-    //   index = changeIndex(index, "zero", c)
-    //   document.getElementById("buttonAll").classList.add("clicked")
-    //   document.getElementById("buttonVisible").classList.remove("clicked")
-    //   showData(index)
-    // });
-    //
-    // document.getElementById("textName").addEventListener("click", (e) => {
-    //   startMotion()
-    //   //n="Alpha  Crucis    Acrux".slice(0, nameOfCos.length - 5)
-    //   //  index = c.findIndex(x => x.name == n.trim());
-    //   showData(0);
-
-    //showData(0);
-    //  }
-
-
-    //  } //end ready()
-    /*
-      getLocation = () => {
-        if (false) { //}(navigator.geolocation) {
-          navigator.geolocation.getCurrentPosition((position) => {
-            coords = position.coords;
-            astromath.longitude = astromath.radians(coords.longitude); //longitude of observer in degrees East
-            astromath.latitude = astromath.radians(coords.latitude); //latitude of observer in degrees
-            ready()
-          })
-        } else {
-          astromath.longitude = astromath.radians(174.76); //longitude of observer in Auckland in degrees East
-          astromath.latitude = astromath.radians(-36.8485); //latitude of observer  in Auckland  in degrees
-          ready()
-        }
-
-      }
-      getLocation()
-      */
   </script>
 </body>
 
