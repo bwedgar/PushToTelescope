@@ -271,7 +271,7 @@ getCelestialObjects = (data, longitude, latitide, scales) => {
         astromath.raRadians(a[1], a[2]),
         astromath.decRadians(a[3], a[4])
       ) > 5 ? true : false), //object must be 5 or more degrees above horizon
-      "scale": scales.findIndex(s => s > a[5]) - 1
+      "scale": scalesDistance.findIndex(s => s > a[5]) - 1
     })
     .sort((f, g) => (f.azimuth < g.azimuth) ? -1 : 1)
   return objects
