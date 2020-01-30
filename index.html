@@ -64,6 +64,7 @@
       getObjects()
       let globalLegendIndex = 0
       currentObjectName = objects.filter(object => object.scale == globalLegendIndex)[0].name
+      console.log("first object set as :"+currentObjectName)
 
       getCurrentObject = (objects, name) => {
         return objects.filter(object => object.name == name)[0]
@@ -150,6 +151,7 @@
 
       changeObjectButtonText = (id) => {
         object = objects.filter(object => object.scale == globalLegendIndex)[id]
+currentObjectName=object.name
         objectButton.innerHTML = object.name
 
         b.showElementsWithGroupName("objectButton")
