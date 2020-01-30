@@ -47,11 +47,11 @@
       let compassRaw = 0;
       let offsetCompass = 0;
       let offsetInclination = 0;
-       alt = 0; //altitude of object in degrees
+      alt = 0; //altitude of object in degrees
       let altitude = 0; //altitude of telescope in degrees
       let altDev = 0; //difference between alt of object and altitude of telescope in degrees
       let azDev = 0;
-       az = 0;
+      az = 0;
       scaleLegends = ["Solar System", "Nearest Stars", "Neighbours", "Orion Arm", "Milky Way Galaxy", "Satellite Galaxies", "Local Group",
         "Virgo Supercluster"
       ]
@@ -64,7 +64,7 @@
       getObjects()
       let globalLegendIndex = 0
       currentObjectName = objects.filter(object => object.scale == globalLegendIndex)[0].name
-      console.log("first object set as :"+currentObjectName)
+      console.log("first object set as :" + currentObjectName)
 
       getCurrentObject = (objects, name) => {
         return objects.filter(object => object.name == name)[0]
@@ -132,18 +132,19 @@
 
       // set up canvases
       canvasFinder = document.getElementById("canvasFinder")
-      canvasFinder.width = window.innerWidth;
-      canvasFinder.height = window.innerHeight * 15 / 100;
+      //canvasFinder.width = window.innerWidth;
+      //canvasFinder.height = window.innerHeight * 15 / 100;
       ctxFinder = canvasFinder.getContext("2d")
       ctxFinder.font = "30px Arial";
-      ctxFinder.fillText("click to start", 20, 50)
+      ctxFinder.fillText("click to start", 0, 0)
+      console.log("wrote text to canvas")
 
       Buttons.makeButton("notes", 100, )
 
       updateNotes = (object) => {
         notes.innerHTML =
           "     " + objectNames[objectTypes.indexOf(object.type)] + "  " + astromath.formatDistance(object.lightYears) + "<br/>" + object.notes + "<br/>" +
-          "<br/>az:  " + Math.round(object.azimuth*100)/100 + " alt " + Math.round(object.altitude*100)/100 +
+          "<br/>az:  " + Math.round(object.azimuth) + " alt " + Math.round(object.altitude ) +
           "<br/>Daz  " + Math.round(offsetCompass) + " Dalt " + Math.round(offsetInclination) +
           "<br/>lat: " + astromath.decDegrees(astromath.latitude) + "  long: " + astromath.decDegrees(astromath.longitude)
 
@@ -151,7 +152,7 @@
 
       changeObjectButtonText = (id) => {
         object = objects.filter(object => object.scale == globalLegendIndex)[id]
-currentObjectName=object.name
+        currentObjectName = object.name
         objectButton.innerHTML = object.name
 
         b.showElementsWithGroupName("objectButton")
@@ -162,11 +163,6 @@ currentObjectName=object.name
         az = object.azimuth
         alt = object.altitude
         updateNotes(object)
-        //   notes.innerHTML =
-        //     "     " + objectNames[objectTypes.indexOf(object.type)] + "  " + astromath.formatDistance(object.lightYears) + object.notes + "<br/>" +
-        //     "<br/>az:  " + astromath.radiansToDegreesAndMinutes(astromath.radians(object.azimuth)) + " alt " + astromath.radiansToDegreesAndMinutes(astromath.radians(object.altitude)) +
-        //     "<br/>Daz  " + Math.round(offsetCompass) + " Dalt " + Math.round(offsetInclination) +
-        //     "<br/>lat: " + astromath.radiansToDegreesAndMinutes(astromath.latitude) + "  long: " + astromath.radiansToDegreesAndMinutes(astromath.longitude)
       }
 
       showListOfObjects = () => {
@@ -181,9 +177,6 @@ currentObjectName=object.name
       changeObjectButtonText(0)
 
       calibrate = () => {
-        //console.log("LST from calibrate" + astromath.getLST())
-        //console.log("altitude from calibrate "+astromath.altitude(2,2))
-
         startMotion()
         offsetCompass = compass - az;
         offsetInclination = altitude - alt;
