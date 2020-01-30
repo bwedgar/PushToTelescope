@@ -36,13 +36,10 @@
     b.setStyle("red", "black", "6")
 
     ready = () => {
-    //  var b = Buttons
-      //console.log(astromath.radiansToDegreesAndMinutes(astromath.latitude))
       document.body.style.cssText = "color:red;background:black;font-size:4.5vw;font-family:verdana;"
-      let globalLegendIndex = 0
-      timeLastUpdated=new Date()
-      objects=[]
-object={}
+
+      timeLastUpdated = new Date()
+      objects = []
       let globalObjectIndex = 0
       let previousSensor = 0;
       let sensor = 0;
@@ -55,26 +52,39 @@ object={}
       let altDev = 0; //difference between alt of object and altitude of telescope in degrees
       let azDev = 0;
       let az = 0;
-      legends = ["Solar System", "Nearest Stars", "Neighbours", "Orion Arm", "Milky Way Galaxy", "Satellite Galaxies", "Local Group",
+      scaleLegends = ["Solar System", "Nearest Stars", "Neighbours", "Orion Arm", "Milky Way Galaxy", "Satellite Galaxies", "Local Group",
         "Virgo Supercluster"
       ]
+      scaleDistances = [0, 0.0002, 12.5, 250, 5000, 50000, 250000, 5000000, 100000000]
 
-      index = 0
-      const scales = [0, 0.0002, 12.5, 250, 5000, 50000, 250000, 5000000, 100000000]
-
-
-      getObjects=()=>{
-         objects = getCelestialObjects(data, astromath.longitude, astromath.latitude, scales) .filter(c => c.visible == true)
-         timeLastUpdated=new Date()
-         az=object.azimuth
-         alt=object.altitude
-         alert(az)
+      getObjects = () => {
+        objects = getCelestialObjects(data, astromath.longitude, astromath.latitude, scaleDistances).filter(c => c.visible == true)
+        //timeLastUpdated = new Date()
       }
       getObjects()
+      let globalLegendIndex = 0
+      currentObjectName = objects.filter(object => object.scale == globalLegendIndex)[0].name
+
+      getCurrentObject = (objects, name) => {
+        return objects.filter(object => object.name == currentObjectName)[0]
+      }
+
+      currentObject = objects.filter(object => object.scale == globalLegendIndex)[0]
+
+      updateObjects = () => {
+        let objects = getCelestialObjects(data, astromath.longitude, astromath.latitude, scaleDistances).filter(c => c.visible == true)
+        timeLastUpdated = new Date()
+        //console.log("first object altitiude "+objects[0].altitude)
+        currentObject = getCurrentObject(objects, currentObjectName)
+        az = currentObject.azimuth
+        alt = currentObject.altitude
+        updateNotes(currentObject)
+        //console.log("alt "+alt)
+        //  console.log("LST: "+astromath.getLST())
+      }
 
       let objectTypes = ["PL", "GX", "OC", "GC", "ST", "DS", "NB", "RN"]
       let objectNames = ["planet", "galaxy", "open cluster", "globular cluster", "star", "double star", "bright nebula", "remnant"]
-
       offsetCompass = localStorage.getItem("offsetCompass")
       offsetInclination = localStorage.getItem("offsetInclination")
 
@@ -102,7 +112,7 @@ object={}
       }
 
       showListOfScales = () => {
-        legends.forEach((legend, legendIndex) => Buttons.makeButton("scaleList" + legendIndex, 100, `${legend}`, (e) => changeScaleButtonText(e)))
+        scaleLegends.forEach((legend, legendIndex) => Buttons.makeButton("scaleList" + legendIndex, 100, `${legend}`, (e) => changeScaleButtonText(e)))
         b.hideElementsWithGroupName("objectButton")
         b.hideElementsWithGroupName("objectList")
         b.hideElementsWithGroupName("scaleButton")
@@ -112,13 +122,22 @@ object={}
       }
       Buttons.makeButton("title", 100, "Push to Telescope", () => window.location.href = "https://bwedgar.github.io/index.html")
 
-      Buttons.makeButton("scaleButton", 100, `${legends[globalLegendIndex]}`, () => showListOfScales())
+      Buttons.makeButton("scaleButton", 100, scaleLegends[globalLegendIndex], () => showListOfScales())
 
-      Buttons.makeButton("objectButton", 100, objects.filter(object => object.scale == globalLegendIndex)[0].name, () => showListOfObjects())
+      Buttons.makeButton("objectButton", 100, currentObjectName, () => showListOfObjects())
 
       Buttons.makeButton("finder", 100, '<canvas id="canvasFinder"></canvas>', () => calibrate())
 
       Buttons.makeButton("notes", 100, )
+
+      updateNotes = (object) => {
+        notes.innerHTML =
+          "     " + objectNames[objectTypes.indexOf(object.type)] + "  " + astromath.formatDistance(object.lightYears) + object.notes + "<br/>" +
+          "<br/>az:  " + Math.round(object.azimuth) + " alt " + Math.round(object.altitude) +
+          "<br/>Daz  " + Math.round(offsetCompass) + " Dalt " + Math.round(offsetInclination) +
+          "<br/>lat: " + astromath.decDegrees(astromath.latitude) + "  long: " + astromath.decDegrees(astromath.longitude)
+
+      }
 
       changeObjectButtonText = (id) => {
         object = objects.filter(object => object.scale == globalLegendIndex)[id]
@@ -131,11 +150,12 @@ object={}
         //run()
         az = object.azimuth
         alt = object.altitude
-        notes.innerHTML =
-          "     " + objectNames[objectTypes.indexOf(object.type)] +"  "+astromath.formatDistance(object.lightYears)  + object.notes + "<br/>" +
-          "<br/>az:  " + astromath.radiansToDegreesAndMinutes(astromath.radians(object.azimuth)) + " alt " + astromath.radiansToDegreesAndMinutes(astromath.radians(object.altitude)) +
-          "<br/>Daz  " + Math.round(offsetCompass) + " Dalt " + Math.round(offsetInclination) +
-          "<br/>lat: " + astromath.radiansToDegreesAndMinutes(astromath.latitude) + "  long: " + astromath.radiansToDegreesAndMinutes(astromath.longitude)
+        updateNotes(object)
+        //   notes.innerHTML =
+        //     "     " + objectNames[objectTypes.indexOf(object.type)] + "  " + astromath.formatDistance(object.lightYears) + object.notes + "<br/>" +
+        //     "<br/>az:  " + astromath.radiansToDegreesAndMinutes(astromath.radians(object.azimuth)) + " alt " + astromath.radiansToDegreesAndMinutes(astromath.radians(object.altitude)) +
+        //     "<br/>Daz  " + Math.round(offsetCompass) + " Dalt " + Math.round(offsetInclination) +
+        //     "<br/>lat: " + astromath.radiansToDegreesAndMinutes(astromath.latitude) + "  long: " + astromath.radiansToDegreesAndMinutes(astromath.longitude)
       }
 
       showListOfObjects = () => {
@@ -150,9 +170,10 @@ object={}
       changeObjectButtonText(0)
 
       calibrate = () => {
-        //run()
-        startMotion()
-        console.log(compass)
+        //console.log("LST from calibrate"+astromath.getLST())
+        //console.log("altitude from calibrate "+astromath.altitude(2,2))
+
+        //startMotion()
         offsetCompass = compass - az;
         offsetInclination = altitude - alt;
         localStorage.setItem("offsetCompass", offsetCompass)
@@ -181,10 +202,12 @@ object={}
       }
 
       listener2 = (e2) => {
-        now=new Date()
-        if (now.getTime()-timeLastUpdated.getTime()>1000*2*60) getobjects() //recalculate objects every 2 minutes
-
-        //run = () => {
+        //  now = new Date()
+        //  if (now.getTime() - timeLastUpdated.getTime() > 1000 * 2 * 60) updateObjects() //recalculate objects every 2 minutes
+        now = new Date()
+        if (now.getTime() - timeLastUpdated.getTime() > 1000 * 60 * 2) {
+          updateObjects()
+        }
         compassRaw = e2.webkitCompassHeading
         if (offsetCompass == 0 && compassRaw > 0) {}
         compass = Math.round((compassRaw + altitude - offsetCompass) % 360) //Math.round((compassRaw - offsetCompass) % 360)
@@ -262,8 +285,6 @@ object={}
 
     }
     getLocation()
-
-
   </script>
 </body>
 
