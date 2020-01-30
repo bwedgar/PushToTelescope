@@ -143,7 +143,7 @@
       updateNotes = (object) => {
         notes.innerHTML =
           "     " + objectNames[objectTypes.indexOf(object.type)] + "  " + astromath.formatDistance(object.lightYears) + "<br/>" + object.notes + "<br/>" +
-          "<br/>az:  " + Math.round(object.azimuth) + " alt " + Math.round(object.altitude) +
+          "<br/>az:  " + Math.round(object.azimuth*100)/100 + " alt " + Math.round(object.altitude*100)/100 +
           "<br/>Daz  " + Math.round(offsetCompass) + " Dalt " + Math.round(offsetInclination) +
           "<br/>lat: " + astromath.decDegrees(astromath.latitude) + "  long: " + astromath.decDegrees(astromath.longitude)
 
