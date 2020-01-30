@@ -74,6 +74,7 @@
       updateObjects = () => {
         let objects = getCelestialObjects(data, astromath.longitude, astromath.latitude, scaleDistances).filter(c => c.visible == true)
         timeLastUpdated = new Date()
+        //alert("updating objects")
         //console.log("first object altitiude "+objects[0].altitude)
         currentObject = getCurrentObject(objects, currentObjectName)
         az = currentObject.azimuth
@@ -178,7 +179,7 @@
       changeObjectButtonText(0)
 
       calibrate = () => {
-        console.log("LST from calibrate" + astromath.getLST())
+        //console.log("LST from calibrate" + astromath.getLST())
         //console.log("altitude from calibrate "+astromath.altitude(2,2))
 
         startMotion()
