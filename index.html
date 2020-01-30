@@ -128,6 +128,14 @@
 
       Buttons.makeButton("finder", 100, '<canvas id="canvasFinder"></canvas>', () => calibrate())
 
+      // set up canvases
+      canvasFinder = document.getElementById("canvasFinder")
+      canvasFinder.width = window.innerWidth;
+      canvasFinder.height = window.innerHeight * 15 / 100;
+      ctxFinder = canvasFinder.getContext("2d")
+      ctxFinder.font = "30px Arial";
+      ctxFinder.fillText("click to start",20,50)
+
       Buttons.makeButton("notes", 100, )
 
       updateNotes = (object) => {
@@ -173,7 +181,7 @@
         //console.log("LST from calibrate"+astromath.getLST())
         //console.log("altitude from calibrate "+astromath.altitude(2,2))
 
-        //startMotion()
+        startMotion()
         offsetCompass = compass - az;
         offsetInclination = altitude - alt;
         localStorage.setItem("offsetCompass", offsetCompass)
@@ -181,11 +189,7 @@
       }
 
 
-      // set up canvases
-      canvasFinder = document.getElementById("canvasFinder")
-      canvasFinder.width = window.innerWidth;
-      canvasFinder.height = window.innerHeight * 15 / 100;
-      ctxFinder = canvasFinder.getContext("2d")
+
 
       // functions for detecting and responding to telescope movement
       listener = (e) => {
