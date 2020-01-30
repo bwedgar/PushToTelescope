@@ -230,7 +230,10 @@ data = data.concat(dataStars)
 data = data.concat(dataPlanets)
 
 getCelestialObjects = (data, longitude, latitide, scales) => {
+  // alert("altitude from get Objexts "+astromath.altitude(2,2))
+
   o = {}
+  //objects={}
 
   toGreekSymbols = (str) => {
     return str.replace("Alpha ", "\u03b1").replace("Beta ", "\u03b2").replace("Gamma ", "\u03b3").replace("Delta ", "\u03b4").replace("Epsilon ", "\u03b5")
@@ -241,7 +244,7 @@ getCelestialObjects = (data, longitude, latitide, scales) => {
       .replace("Chi ", "\u03c7").replace("Psi ", "\u03c8").replace("Omega ", "\u03c9")
   }
 
-  objects = data.map(a => o = {
+  let objects = data.map(a => o = {
       "name": toGreekSymbols(a[0]),
       "raHours": a[1],
       "raMinutes": a[2],
@@ -271,7 +274,7 @@ getCelestialObjects = (data, longitude, latitide, scales) => {
         astromath.raRadians(a[1], a[2]),
         astromath.decRadians(a[3], a[4])
       ) > 5 ? true : false), //object must be 5 or more degrees above horizon
-      "scale": scalesDistance.findIndex(s => s > a[5]) - 1
+      "scale": scales.findIndex(s => s > a[5]) - 1
     })
     .sort((f, g) => (f.azimuth < g.azimuth) ? -1 : 1)
   return objects
