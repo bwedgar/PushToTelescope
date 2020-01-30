@@ -23,7 +23,7 @@
   <script src="https://bwedgar.github.io/buttons/buttons.js"></script>
   <!-- <script src="../buttons/buttons.js"></script> -->
 
-  <script src="sw.js"></script>
+  <!-- <script src="sw.js"></script> -->
 
 </head>
 
@@ -102,7 +102,7 @@
       changeScaleButtonText = (event) => {
         globalLegendIndex = event.target.index()
         //  console.log(globalLegendIndex)
-        scaleButton.innerHTML = `${legends[globalLegendIndex]}`
+        scaleButton.innerHTML = `${scaleLegends[globalLegendIndex]}`
         objectButton.innerHTML = objects.filter(object => object.scale == globalLegendIndex)[0].name
         //console.log("b")
         b.showElementsWithGroupName("scaleButton")
@@ -132,7 +132,7 @@
 
       updateNotes = (object) => {
         notes.innerHTML =
-          "     " + objectNames[objectTypes.indexOf(object.type)] + "  " + astromath.formatDistance(object.lightYears) + object.notes + "<br/>" +
+          "     " + objectNames[objectTypes.indexOf(object.type)] + "  " + astromath.formatDistance(object.lightYears) + "<br/>"+object.notes + "<br/>" +
           "<br/>az:  " + Math.round(object.azimuth) + " alt " + Math.round(object.altitude) +
           "<br/>Daz  " + Math.round(offsetCompass) + " Dalt " + Math.round(offsetInclination) +
           "<br/>lat: " + astromath.decDegrees(astromath.latitude) + "  long: " + astromath.decDegrees(astromath.longitude)
