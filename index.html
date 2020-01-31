@@ -43,7 +43,7 @@
       let globalObjectIndex = 0
       let previousSensor = 0;
       let sensor = 0;
-      let compass = 0;
+      let azimuth = 0;
       let compassRaw = 0;
       let offsetCompass = 0;
       let offsetInclination = 0;
@@ -178,7 +178,7 @@
 
       calibrate = () => {
         startMotion()
-        offsetCompass = compass - az;
+        offsetCompass = azimuth - az;
         offsetInclination = altitude - alt;
         localStorage.setItem("offsetCompass", offsetCompass)
         localStorage.setItem("offsetInclination", offsetInclination)
@@ -210,10 +210,10 @@
           updateObjects()
         }
         compassRaw = e2.webkitCompassHeading
-        if (offsetCompass == 0 && compassRaw > 0) {}
-        compass = Math.round((compassRaw + altitude - offsetCompass) % 360) //Math.round((compassRaw - offsetCompass) % 360)
+        //if (offsetCompass == 0 && compassRaw > 0) {}
+        azimuth = Math.round((compassRaw + altitude - offsetCompass) % 360) //Math.round((compassRaw - offsetCompass) % 360)
         az = Math.round(az * 10) / 10
-        azDev = ((compass - az) + 540) % 360 - 180
+        azDev = ((azimuth - az))// + 540) % 360 - 180
 
         //  azDev = ((compass - az + altitude) + 540) % 360 - 180 //had to add altitude 11/19 to stop compass changing
         canvasFinder = document.getElementById("canvasFinder")
