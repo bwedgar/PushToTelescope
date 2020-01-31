@@ -52,7 +52,7 @@
       let altDev = 0; //difference between alt of object and altitude of telescope in degrees
       let azDev = 0;
       az = 0;
-      currentObjectName=""
+      currentObjectName = ""
       scaleLegends = ["Solar System", "Nearest Stars", "Neighbours", "Orion Arm", "Milky Way Galaxy", "Satellite Galaxies", "Local Group",
         "Virgo Supercluster"
       ]
@@ -63,7 +63,8 @@
         //timeLastUpdated = new Date()
       }
       getObjects()
-      let globalLegendIndex = 0
+      globalLegendIndex = 2
+      console.log(objects)
       currentObjectName = objects.filter(object => object.scale == globalLegendIndex)[0].name
       console.log("first object set as :" + currentObjectName)
 
@@ -144,9 +145,9 @@
 
       updateNotes = (object) => {
         notes.innerHTML =
-        //  "     " + objectNames[objectTypes.indexOf(object.type)] + "  " + astromath.formatDistance(object.lightYears) + "<br/>" + object.notes + "<br/>" +
+          //  "     " + objectNames[objectTypes.indexOf(object.type)] + "  " + astromath.formatDistance(object.lightYears) + "<br/>" + object.notes + "<br/>" +
           "<br/>az:  " + Math.round(object.azimuth) + " alt " + Math.round(object.altitude) +
-        //  "<br/>ra:  " + object.raHours + ":" + object.raMinutes + " dec: " + object.decDegrees + "°" + object.decMinutes + "'" +
+          //  "<br/>ra:  " + object.raHours + ":" + object.raMinutes + " dec: " + object.decDegrees + "°" + object.decMinutes + "'" +
           "<br/>Daz  " + Math.round(azimuth) + " Dalt " + Math.round(altitude) +
           "<br/>Daz  " + Math.round(offsetCompass) + " Dalt " + Math.round(offsetInclination) +
 
@@ -184,7 +185,7 @@
         offsetInclination = altitude - alt;
         localStorage.setItem("offsetCompass", offsetCompass)
         localStorage.setItem("offsetInclination", offsetInclination)
-        updateNotes(getCurrentObject(objects,currentObjectName))
+        updateNotes(getCurrentObject(objects, currentObjectName))
       }
 
 
@@ -193,16 +194,16 @@
       // functions for detecting and responding to telescope movement
       listener = (e) => {
         sensor = -e.accelerationIncludingGravity.x //sensor= 0 when vertical, -6.9 when clockwise 45 degrees, +6.9 when antoclockwise. +/- 10 when horizontal
-        sensor=(sensor + 6.9) * 6.4
-  sensor = Math.round(sensor * 100) / 100;
+        sensor = (sensor + 6.9) * 6.4
+        sensor = Math.round(sensor * 100) / 100;
         alt = Math.round(alt * 10) / 10 //alt is the altitude of the object
         if (Math.abs(sensor - previousSensor) > 0.05) { //test if the sensor has changed
           previousSensor = sensor
           //when phone is 45 degrees clockwise altitude is 0, when phone is 45 anticlockwise altitude is 90 degrees
           //adjSensor = //a + b * sensor
-        //  altitude = (sensor + 6.9) * 6.4-offsetInclination;
-        altitude=sensor-offsetInclination
-          altDev = altitude - alt// - offsetInclination;
+          //  altitude = (sensor + 6.9) * 6.4-offsetInclination;
+          altitude = sensor - offsetInclination
+          altDev = altitude - alt // - offsetInclination;
         }
       }
 
@@ -217,7 +218,7 @@
         //if (offsetCompass == 0 && compassRaw > 0) {}
         azimuth = Math.round((compassRaw + altitude - offsetCompass) % 360) //Math.round((compassRaw - offsetCompass) % 360)
         az = Math.round(az * 10) / 10
-        azDev = azimuth - az//-offsetCompass))// + 540) % 360 - 180
+        azDev = azimuth - az //-offsetCompass))// + 540) % 360 - 180
 
         //  azDev = ((compass - az + altitude) + 540) % 360 - 180 //had to add altitude 11/19 to stop compass changing
         canvasFinder = document.getElementById("canvasFinder")
