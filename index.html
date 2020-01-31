@@ -52,6 +52,7 @@
       let altDev = 0; //difference between alt of object and altitude of telescope in degrees
       let azDev = 0;
       az = 0;
+      currentObjectName=""
       scaleLegends = ["Solar System", "Nearest Stars", "Neighbours", "Orion Arm", "Milky Way Galaxy", "Satellite Galaxies", "Local Group",
         "Virgo Supercluster"
       ]
@@ -144,8 +145,8 @@
       updateNotes = (object) => {
         notes.innerHTML =
           "     " + objectNames[objectTypes.indexOf(object.type)] + "  " + astromath.formatDistance(object.lightYears) + "<br/>" + object.notes + "<br/>" +
-          "<br/>az:  " + Math.round(object.azimuth) + " alt " + Math.round(object.altitude ) +
-              "<br/>ra:  " + object.raHours+":" + object.raMinutes+" dec: " +object.decDegrees+"°" +object.decMinutes +"'"+
+          "<br/>az:  " + Math.round(object.azimuth) + " alt " + Math.round(object.altitude) +
+          "<br/>ra:  " + object.raHours + ":" + object.raMinutes + " dec: " + object.decDegrees + "°" + object.decMinutes + "'" +
           "<br/>Daz  " + Math.round(offsetCompass) + " Dalt " + Math.round(offsetInclination) +
           "<br/>lat: " + astromath.decDegrees(astromath.latitude) + "  long: " + astromath.decDegrees(astromath.longitude)
 
@@ -155,12 +156,10 @@
         object = objects.filter(object => object.scale == globalLegendIndex)[id]
         currentObjectName = object.name
         objectButton.innerHTML = object.name
-
         b.showElementsWithGroupName("objectButton")
         b.showElementsWithGroupName("finder")
         b.showElementsWithGroupName("notes")
         b.hideElementsWithGroupName("objectList")
-        //run()
         az = object.azimuth
         alt = object.altitude
         updateNotes(object)
@@ -183,6 +182,7 @@
         offsetInclination = altitude - alt;
         localStorage.setItem("offsetCompass", offsetCompass)
         localStorage.setItem("offsetInclination", offsetInclination)
+        updateNotes(objects,currentObjectName)
       }
 
 
