@@ -124,7 +124,7 @@
         b.hideElementsWithGroupName("notes")
 
       }
-      Buttons.makeButton("title", 100, "Push to Telescope 7", () => window.location.href = "https://bwedgar.github.io/index.html")
+      Buttons.makeButton("title", 100, "Push to Telescope 8", () => window.location.href = "https://bwedgar.github.io/index.html")
 
       Buttons.makeButton("scaleButton", 100, scaleLegends[globalLegendIndex], () => showListOfScales())
 
@@ -219,7 +219,7 @@
         compassRaw = e2.webkitCompassHeading
         //if (offsetCompass == 0 && compassRaw > 0) {}
         //azimuth = Math.round((compassRaw + altitude - offsetCompass) % 360) //Math.round((compassRaw - offsetCompass) % 360)
-        azimuth=Math.round((compassRaw+(altitude-45)-offsetCompass))
+        azimuth=Math.round((compassRaw+(altitude-45)))
         //az = Math.round(az * 10) / 10
         azDev = azimuth - az -offsetCompass//))// + 540) % 360 - 180
         updateNotes(getCurrentObject(objects, currentObjectName))
