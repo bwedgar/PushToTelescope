@@ -197,8 +197,8 @@
           previousSensor = sensor
           //when phone is 45 degrees clockwise altitude is 0, when phone is 45 anticlockwise altitude is 90 degrees
           //adjSensor = //a + b * sensor
-          altitude = (sensor + 6.9) * 6.4;
-          altDev = altitude - alt - offsetInclination;
+          altitude = (sensor + 6.9) * 6.4-offsetInclination;
+          altDev = altitude - alt// - offsetInclination;
         }
       }
 
@@ -213,7 +213,7 @@
         //if (offsetCompass == 0 && compassRaw > 0) {}
         azimuth = Math.round((compassRaw + altitude - offsetCompass) % 360) //Math.round((compassRaw - offsetCompass) % 360)
         az = Math.round(az * 10) / 10
-        azDev = ((azimuth - az))// + 540) % 360 - 180
+        azDev = azimuth - az//-offsetCompass))// + 540) % 360 - 180
 
         //  azDev = ((compass - az + altitude) + 540) % 360 - 180 //had to add altitude 11/19 to stop compass changing
         canvasFinder = document.getElementById("canvasFinder")
