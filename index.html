@@ -182,7 +182,7 @@
         offsetInclination = altitude - alt;
         localStorage.setItem("offsetCompass", offsetCompass)
         localStorage.setItem("offsetInclination", offsetInclination)
-        updateNotes(objects,currentObjectName)
+        updateNotes(getCurrentObject(objects,currentObjectName))
       }
 
 
