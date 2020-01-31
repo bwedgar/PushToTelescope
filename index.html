@@ -213,13 +213,14 @@
         //  if (now.getTime() - timeLastUpdated.getTime() > 1000 * 2 * 60) updateObjects() //recalculate objects every 2 minutes
         now = new Date()
         if (now.getTime() - timeLastUpdated.getTime() > 1000 * 60 * 2) {
-          updateObjects()
+          updateObjects(getCurrentObject(objects, currentObjectName))
         }
         compassRaw = e2.webkitCompassHeading
         //if (offsetCompass == 0 && compassRaw > 0) {}
         azimuth = Math.round((compassRaw + altitude - offsetCompass) % 360) //Math.round((compassRaw - offsetCompass) % 360)
         az = Math.round(az * 10) / 10
         azDev = azimuth - az //-offsetCompass))// + 540) % 360 - 180
+        updateNotes()
 
         //  azDev = ((compass - az + altitude) + 540) % 360 - 180 //had to add altitude 11/19 to stop compass changing
         canvasFinder = document.getElementById("canvasFinder")
