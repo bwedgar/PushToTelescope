@@ -145,6 +145,7 @@
         notes.innerHTML =
           "     " + objectNames[objectTypes.indexOf(object.type)] + "  " + astromath.formatDistance(object.lightYears) + "<br/>" + object.notes + "<br/>" +
           "<br/>az:  " + Math.round(object.azimuth) + " alt " + Math.round(object.altitude ) +
+              "<br/>ra:  " + object.raHours+":" + object.raMinutes+" dec: " +object.decDegrees+"°" +object.decMinutes +"'"+
           "<br/>Daz  " + Math.round(offsetCompass) + " Dalt " + Math.round(offsetInclination) +
           "<br/>lat: " + astromath.decDegrees(astromath.latitude) + "  long: " + astromath.decDegrees(astromath.longitude)
 
