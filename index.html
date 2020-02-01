@@ -52,6 +52,7 @@
       let altDev = 0; //difference between alt of object and altitude of telescope in degrees
       let azDev = 0;
       az = 0;
+      timeLastUpdated=0
       currentObjectName = ""
       scaleLegends = ["Solar System", "Nearest Stars", "Neighbours", "Orion Arm", "Milky Way Galaxy", "Satellite Galaxies", "Local Group",
         "Virgo Supercluster"
@@ -146,8 +147,8 @@
       updateNotes = (object) => {
         notes.innerHTML =
           //  "     " + objectNames[objectTypes.indexOf(object.type)] + "  " + astromath.formatDistance(object.lightYears) + "<br/>" + object.notes + "<br/>" +
-          "<br/>time:  " + new Date().getMinutes() + new Date().getSeconds()+
-          "<br/>az:  " + Math.round(object.azimuth*10)/10 + " alt " + Math.round(object.altitude*10)/10 +
+          "<br/>time:  " + new Date().getMinutes() + ":" + new Date().getSeconds() +
+          "<br/>az:  " + Math.round(object.azimuth * 10) / 10 + " alt " + Math.round(object.altitude * 10) / 10 +
 
           //  "<br/>ra:  " + object.raHours + ":" + object.raMinutes + " dec: " + object.decDegrees + "°" + object.decMinutes + "'" +
           "<br/>sensors  " + Math.round(azimuth) + "   " + Math.round(altitude) +
@@ -215,15 +216,15 @@
         //  now = new Date()
         //  if (now.getTime() - timeLastUpdated.getTime() > 1000 * 2 * 60) updateObjects() //recalculate objects every 2 minutes
         now = new Date()
-        if (now.getTime() - timeLastUpdated.getTime() > 1000 * 60 * 2) {
+        if ((now.getTime() - timeLastUpdated.getTime()) > 1000 * 60 * 2) {
           updateObjects()
         }
         compassRaw = e2.webkitCompassHeading
         //if (offsetCompass == 0 && compassRaw > 0) {}
         //azimuth = Math.round((compassRaw + altitude - offsetCompass) % 360) //Math.round((compassRaw - offsetCompass) % 360)
-        azimuth = Math.round((compassRaw + (altitude - 45)  + 90 + 360) % 360)
+        azimuth = Math.round((compassRaw + (altitude - 45) + 90 + 360) % 360)
         //az = Math.round(az * 10) / 10
-        azDev = (azimuth - az -offsetCompass)
+        azDev = (azimuth - az - offsetCompass)
         updateNotes(getCurrentObject(objects, currentObjectName))
 
         //  azDev = ((compass - az + altitude) + 540) % 360 - 180 //had to add altitude 11/19 to stop compass changing
