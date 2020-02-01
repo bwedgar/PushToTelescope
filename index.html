@@ -125,7 +125,7 @@
         b.hideElementsWithGroupName("notes")
 
       }
-      Buttons.makeButton("title", 100, "Push to Telescope 18", () => window.location.href = "https://bwedgar.github.io/index.html")
+      Buttons.makeButton("title", 100, "Push to Telescope", () => window.location.href = "https://bwedgar.github.io/index.html")
 
       Buttons.makeButton("scaleButton", 100, scaleLegends[globalLegendIndex], () => showListOfScales())
 
@@ -151,9 +151,9 @@
           "<br/>az:  " + Math.round(object.azimuth) + " alt " + Math.round(object.altitude) +
 
           //  "<br/>ra:  " + object.raHours + ":" + object.raMinutes + " dec: " + object.decDegrees + "°" + object.decMinutes + "'" +
-          "<br/>sensors  " + Math.round(azimuth) + "   " + Math.round(altitude) +
+        //  "<br/>sensors  " + Math.round(azimuth) + "   " + Math.round(altitude) +
           "<br/>offsets  " + Math.round(offsetCompass) + "   " + Math.round(offsetInclination) +
-          "<br/>corrected  " + Math.round(azimuth - offsetCompass) + "   " + Math.round(altitude - offsetInclination) +
+        //  "<br/>corrected  " + Math.round(azimuth - offsetCompass) + "   " + Math.round(altitude - offsetInclination) +
           //  "<br/>lat: " + astromath.decDegrees(astromath.latitude) + "  long: " + astromath.decDegrees(astromath.longitude)+
           ""
 
