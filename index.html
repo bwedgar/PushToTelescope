@@ -147,7 +147,7 @@
       updateNotes = (object) => {
         notes.innerHTML =
           //  "     " + objectNames[objectTypes.indexOf(object.type)] + "  " + astromath.formatDistance(object.lightYears) + "<br/>" + object.notes + "<br/>" +
-          "<br/>time:  " + new Date().getMinutes() + ":" + new Date().getSeconds() +
+        //  "<br/>time:  " + new Date().getMinutes() + ":" + new Date().getSeconds() +
           "<br/>az:  " + Math.round(object.azimuth * 10) / 10 + " alt " + Math.round(object.altitude * 10) / 10 +
 
           //  "<br/>ra:  " + object.raHours + ":" + object.raMinutes + " dec: " + object.decDegrees + "°" + object.decMinutes + "'" +
@@ -193,6 +193,7 @@
       }
 
 
+      timer=setInterval(updateObjects,60000)
 
 
       // functions for detecting and responding to telescope movement
@@ -215,10 +216,10 @@
       listener2 = (e2) => {
         //  now = new Date()
         //  if (now.getTime() - timeLastUpdated.getTime() > 1000 * 2 * 60) updateObjects() //recalculate objects every 2 minutes
-        now = new Date()
-        if ((now.getTime() - timeLastUpdated.getTime()) > 1000 * 60 * 2) {
-          updateObjects()
-        }
+      //   now = new Date()
+      //   if ((now.getTime() - timeLastUpdated.getTime()) > 1000 * 60 * 2) {
+      // //    updateObjects()
+      //   }
         compassRaw = e2.webkitCompassHeading
         //if (offsetCompass == 0 && compassRaw > 0) {}
         //azimuth = Math.round((compassRaw + altitude - offsetCompass) % 360) //Math.round((compassRaw - offsetCompass) % 360)
