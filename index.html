@@ -76,7 +76,7 @@
       currentObject = objects.filter(object => object.scale == globalLegendIndex)[0]
 
       updateObjects = () => {
-        let objects = getCelestialObjects(data, astromath.longitude, astromath.latitude, scaleDistances).filter(c => c.visible == true)
+        objects = getCelestialObjects(data, astromath.longitude, astromath.latitude, scaleDistances).filter(c => c.visible == true)
         timeLastUpdated = new Date()
         //alert("updating objects")
         //console.log("first object altitiude "+objects[0].altitude)
@@ -146,9 +146,9 @@
 
       updateNotes = (object) => {
         notes.innerHTML =
-          //  "     " + objectNames[objectTypes.indexOf(object.type)] + "  " + astromath.formatDistance(object.lightYears) + "<br/>" + object.notes + "<br/>" +
+            "     " + objectNames[objectTypes.indexOf(object.type)] + "  " + astromath.formatDistance(object.lightYears) + "<br/>" + object.notes + "<br/>" +
         //  "<br/>time:  " + new Date().getMinutes() + ":" + new Date().getSeconds() +
-          "<br/>az:  " + Math.round(object.azimuth * 10) / 10 + " alt " + Math.round(object.altitude * 10) / 10 +
+          "<br/>az:  " + Math.round(object.azimuth) + " alt " + Math.round(object.altitude) +
 
           //  "<br/>ra:  " + object.raHours + ":" + object.raMinutes + " dec: " + object.decDegrees + "°" + object.decMinutes + "'" +
           "<br/>sensors  " + Math.round(azimuth) + "   " + Math.round(altitude) +
