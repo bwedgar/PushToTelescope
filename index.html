@@ -146,7 +146,7 @@
       updateNotes = (object) => {
         notes.innerHTML =
           //  "     " + objectNames[objectTypes.indexOf(object.type)] + "  " + astromath.formatDistance(object.lightYears) + "<br/>" + object.notes + "<br/>" +
-          "<br/>time:  " + new Date().getMinutes() +
+          "<br/>time:  " + new Date().getMinutes() + new Date().getSeconds()+
           "<br/>az:  " + Math.round(object.azimuth*10)/10 + " alt " + Math.round(object.altitude*10)/10 +
 
           //  "<br/>ra:  " + object.raHours + ":" + object.raMinutes + " dec: " + object.decDegrees + "°" + object.decMinutes + "'" +
