@@ -218,7 +218,7 @@
         //azimuth = Math.round((compassRaw + altitude - offsetCompass) % 360) //Math.round((compassRaw - offsetCompass) % 360)
         azimuth = Math.round((compassRaw + (altitude - 45) + 90 + 360) % 360)
         //az = Math.round(az * 10) / 10
-        azDev = (azimuth - az - offsetCompass)
+        azDev = (azimuth - az - offsetCompass+360)%360
         updateNotes(getCurrentObject(objects, currentObjectName))
 
         //  azDev = ((compass - az + altitude) + 540) % 360 - 180 //had to add altitude 11/19 to stop compass changing
