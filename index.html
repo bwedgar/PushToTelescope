@@ -109,6 +109,8 @@
         //  console.log(globalLegendIndex)
         scaleButton.innerHTML = `${scaleLegends[globalLegendIndex]}`
         objectButton.innerHTML = objects.filter(object => object.scale == globalLegendIndex)[0].name
+        currentObjectName=objectButton.innerHTML
+
         //console.log("b")
         b.showElementsWithGroupName("scaleButton")
         b.hideElementsWithGroupName("objectList")
@@ -176,9 +178,16 @@
         b.hideElementsWithGroupName("objectButton")
         b.hideElementsWithGroupName("finder")
         b.hideElementsWithGroupName("notes")
-        objects.filter(object => object.scale == globalLegendIndex).forEach((object, objectIndex) =>
+        listOfObjects=objects.filter(object => object.scale == globalLegendIndex)
+        listOfObjects.forEach((object, objectIndex) =>
           Buttons.makeButton("objectList" + objectIndex, 100, object.name, (e) => changeObjectButtonText(e.target.index())))
+//scroll to currentObject
+buttonListIndex=listOfObjects.findIndex(o=>o.name==currentObjectName)
+console.log(buttonListIndex+"  "+document.getElementById("title").height)
+window.scrollBy(0, 180*buttonListIndex);
+
       }
+
 
 
       changeObjectButtonText(0)
