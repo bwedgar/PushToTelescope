@@ -36,272 +36,270 @@
     b.setStyle("red", "black", "6")
 
     ready = () => {
-      document.body.style.cssText = "color:red;background:black;font-size:4.5vw;font-family:verdana;"
+        document.body.style.cssText = "color:red;background:black;font-size:4.5vw;font-family:verdana;"
 
-      timeLastUpdated = new Date()
-      objects = []
-      let globalObjectIndex = 0
-      let previousSensor = 0;
-      let sensor = 0;
-      let azimuth = 0;
-      let compassRaw = 0;
-      let offsetCompass = 0;
-      let offsetInclination = 0;
-      alt = 0; //altitude of object in degrees
-      let altitude = 0; //altitude of telescope in degrees
-      let altDev = 0; //difference between alt of object and altitude of telescope in degrees
-      let azDev = 0;
-      az = 0;
-      //timeLastUpdated=0
-      currentObjectName = ""
-      scaleLegends = ["Solar System", "Nearest Stars", "Neighbours", "Orion Arm", "Milky Way Galaxy", "Satellite Galaxies", "Local Group",
-        "Virgo Supercluster"
-      ]
-      scaleDistances = [0, 0.0002, 12.5, 250, 5000, 50000, 250000, 5000000, 100000000]
-
-      getObjects = () => {
-        objects = getCelestialObjects(data, astromath.longitude, astromath.latitude, scaleDistances).filter(c => c.visible == true)
-        //timeLastUpdated = new Date()
-      }
-      getObjects()
-      globalLegendIndex = 2
-      console.log(objects)
-      currentObjectName = objects.filter(object => object.scale == globalLegendIndex)[0].name
-      console.log("first object set as :" + currentObjectName)
-
-      getCurrentObject = (objects, name) => {
-        return objects.filter(object => object.name == name)[0]
-      }
-
-      currentObject = objects.filter(object => object.scale == globalLegendIndex)[0]
-
-      updateObjects = () => {
-        objects = getCelestialObjects(data, astromath.longitude, astromath.latitude, scaleDistances).filter(c => c.visible == true)
         timeLastUpdated = new Date()
-        //alert("updating objects")
-        //console.log("first object altitiude "+objects[0].altitude)
-        currentObject = getCurrentObject(objects, currentObjectName)
-        az = currentObject.azimuth
-        alt = currentObject.altitude
-        updateNotes(currentObject)
-        //console.log("alt "+alt)
-        //  console.log("LST: "+astromath.getLST())
-      }
+        objects = []
+        let globalObjectIndex = 0
+        let previousSensor = 0;
+        let sensor = 0;
+        let azimuth = 0;
+        let compassRaw = 0;
+        let offsetCompass = 0;
+        let offsetInclination = 0;
+        alt = 0; //altitude of object in degrees
+        let altitude = 0; //altitude of telescope in degrees
+        let altDev = 0; //difference between alt of object and altitude of telescope in degrees
+        let azDev = 0;
+        az = 0;
+        //timeLastUpdated=0
+        currentObjectName = ""
+        scaleLegends = ["Solar System", "Nearest Stars", "Neighbours", "Orion Arm", "Milky Way Galaxy", "Satellite Galaxies", "Local Group",
+          "Virgo Supercluster"
+        ]
+        scaleDistances = [0, 0.0002, 12.5, 250, 5000, 50000, 250000, 5000000, 100000000]
 
-      let objectTypes = ["PL", "GX", "OC", "GC", "ST", "DS", "NB", "RN"]
-      let objectNames = ["planet", "galaxy", "open cluster", "globular cluster", "star", "double star", "bright nebula", "remnant"]
-      offsetCompass = localStorage.getItem("offsetCompass")
-      offsetInclination = localStorage.getItem("offsetInclination")
-
-      startMotion = () => {
-        DeviceOrientationEvent.requestPermission()
-          .then(response => {
-            if (response == 'granted') {
-              window.addEventListener('devicemotion', listener)
-              window.addEventListener('deviceorientation', listener2)
-            }
-          })
-          .catch(console.error)
-      }
-
-      changeScaleButtonText = (event) => {
-        globalLegendIndex = event.target.index()
-        //  console.log(globalLegendIndex)
-        scaleButton.innerHTML = `${scaleLegends[globalLegendIndex]}`
-        objectButton.innerHTML = objects.filter(object => object.scale == globalLegendIndex)[0].name
-        currentObjectName=objectButton.innerHTML
-
-        //console.log("b")
-        b.showElementsWithGroupName("scaleButton")
-        b.hideElementsWithGroupName("objectList")
-        b.hideElementsWithGroupName("scaleList")
-        showListOfObjects()
-      }
-
-      showListOfScales = () => {
-        scaleLegends.forEach((legend, legendIndex) => Buttons.makeButton("scaleList" + legendIndex, 100, `${legend}`, (e) => changeScaleButtonText(e)))
-        b.hideElementsWithGroupName("objectButton")
-        b.hideElementsWithGroupName("objectList")
-        b.hideElementsWithGroupName("scaleButton")
-        b.hideElementsWithGroupName("finder")
-        b.hideElementsWithGroupName("notes")
-
-      }
-      Buttons.makeButton("title", 100, "Push to Telescope", () => window.location.href = "https://bwedgar.github.io/index.html")
-
-      Buttons.makeButton("scaleButton", 100, scaleLegends[globalLegendIndex], () => showListOfScales())
-
-      Buttons.makeButton("objectButton", 100, currentObjectName, () => showListOfObjects())
-
-      Buttons.makeButton("finder", 100, '<canvas id="canvasFinder"></canvas>', () => calibrate())
-
-      // set up canvases
-      canvasFinder = document.getElementById("canvasFinder")
-      canvasFinder.width = window.innerWidth;
-      canvasFinder.height = window.innerHeight * 15 / 100;
-      ctxFinder = canvasFinder.getContext("2d")
-      ctxFinder.font = "30px Arial";
-      ctxFinder.fillText("click to start", 0, 0)
-      console.log("wrote text to canvas")
-
-      Buttons.makeButton("notes", 100, )
-
-      updateNotes = (object) => {
-        notes.innerHTML =
-            "     " + objectNames[objectTypes.indexOf(object.type)] + "  " + astromath.formatDistance(object.lightYears) + "<br/>" + object.notes + "<br/>" +
-        //  "<br/>time:  " + new Date().getMinutes() + ":" + new Date().getSeconds() +
-          "<br/>az:  " + Math.round(object.azimuth) + " alt " + Math.round(object.altitude) +
-
-          //  "<br/>ra:  " + object.raHours + ":" + object.raMinutes + " dec: " + object.decDegrees + "°" + object.decMinutes + "'" +
-          "<br/>sensors  " + Math.round(azimuth) + "   " + Math.round(altitude) +
-          "<br/>offsets  " + Math.round(offsetCompass) + "   " + Math.round(offsetInclination) +
-          "<br/>corrected  " + Math.round(azDev) + "   " + Math.round(altDev) +
-          //  "<br/>lat: " + astromath.decDegrees(astromath.latitude) + "  long: " + astromath.decDegrees(astromath.longitude)+
-          ""
-
-      }
-
-      changeObjectButtonText = (id) => {
-        object = objects.filter(object => object.scale == globalLegendIndex)[id]
-        currentObjectName = object.name
-        objectButton.innerHTML = object.name
-        b.showElementsWithGroupName("objectButton")
-        b.showElementsWithGroupName("finder")
-        b.showElementsWithGroupName("notes")
-        b.hideElementsWithGroupName("objectList")
-        az = object.azimuth
-        alt = object.altitude
-        updateNotes(object)
-      }
-
-      showListOfObjects = () => {
-        b.hideElementsWithGroupName("objectButton")
-        b.hideElementsWithGroupName("finder")
-        b.hideElementsWithGroupName("notes")
-        listOfObjects=objects.filter(object => object.scale == globalLegendIndex)
-        listOfObjects.forEach((object, objectIndex) =>
-          Buttons.makeButton("objectList" + objectIndex, 100, object.name, (e) => changeObjectButtonText(e.target.index())))
-//scroll to currentObject
-buttonListIndex=listOfObjects.findIndex(o=>o.name==currentObjectName)
-console.log(buttonListIndex+"  "+document.getElementById("title").height)
-window.scrollBy(0, 180*buttonListIndex);
-
-      }
-
-
-
-      changeObjectButtonText(0)
-
-      calibrate = () => {
-        startMotion()
-        offsetCompass = azimuth - az;
-        offsetInclination = altitude - alt;
-        localStorage.setItem("offsetCompass", offsetCompass)
-        localStorage.setItem("offsetInclination", offsetInclination)
-        updateNotes(getCurrentObject(objects, currentObjectName))
-      }
-
-
-      timer=setInterval(updateObjects,60000)
-
-
-      // functions for detecting and responding to telescope movement
-      listener = (e) => {
-        sensor = -e.accelerationIncludingGravity.x //sensor= 0 when vertical, -6.9 when clockwise 45 degrees, +6.9 when antoclockwise. +/- 10 when horizontal
-        //sensor = (sensor + 6.9) * 6.4
-        //sensor = Math.round(sensor * 100) / 100;
-        alt = Math.round(alt * 10) / 10 //alt is the altitude of the object
-        if (Math.abs(sensor - previousSensor) > 0.05) { //test if the sensor has changed
-          previousSensor = sensor
-          //when phone is 45 degrees clockwise altitude is 0, when phone is 45 anticlockwise altitude is 90 degrees
-          //adjSensor = //a + b * sensor
-          //  altitude = (sensor + 6.9) * 6.4-offsetInclination;
-          altitude = Math.round((sensor + 6.9) * 6.4)
-          altDev = altitude - alt - offsetInclination;
+        getObjects = () => {
+          objects = getCelestialObjects(data, astromath.longitude, astromath.latitude, scaleDistances).filter(c => c.visible == true)
+          //timeLastUpdated = new Date()
         }
-      }
+        getObjects()
+        globalLegendIndex = 2
+        console.log(objects)
+        currentObjectName = objects.filter(object => object.scale == globalLegendIndex)[0].name
+        console.log("first object set as :" + currentObjectName)
 
-      listener2 = (e2) => {
-        compassRaw = e2.webkitCompassHeading
-        //if (offsetCompass == 0 && compassRaw > 0) {}
-        //azimuth = Math.round((compassRaw + altitude - offsetCompass) % 360) //Math.round((compassRaw - offsetCompass) % 360)
-        azimuth = Math.round((compassRaw + (altitude - 45) + 90 + 360) % 360)
-        //az = Math.round(az * 10) / 10
-        azDev = (azimuth - az - offsetCompass)
-        if (azDev>180) azDev=azDev-360
-        updateNotes(getCurrentObject(objects, currentObjectName))
+        getCurrentObject = (objects, name) => {
+          return objects.filter(object => object.name == name)[0]
+        }
 
-        //  azDev = ((compass - az + altitude) + 540) % 360 - 180 //had to add altitude 11/19 to stop compass changing
+        currentObject = objects.filter(object => object.scale == globalLegendIndex)[0]
+
+        updateObjects = () => {
+          objects = getCelestialObjects(data, astromath.longitude, astromath.latitude, scaleDistances).filter(c => c.visible == true)
+          timeLastUpdated = new Date()
+          //alert("updating objects")
+          //console.log("first object altitiude "+objects[0].altitude)
+          currentObject = getCurrentObject(objects, currentObjectName)
+          az = currentObject.azimuth
+          alt = currentObject.altitude
+          updateNotes(currentObject)
+          //console.log("alt "+alt)
+          //  console.log("LST: "+astromath.getLST())
+        }
+
+        let objectTypes = ["PL", "GX", "OC", "GC", "ST", "DS", "NB", "RN"]
+        let objectNames = ["planet", "galaxy", "open cluster", "globular cluster", "star", "double star", "bright nebula", "remnant"]
+        offsetCompass = localStorage.getItem("offsetCompass")
+        offsetInclination = localStorage.getItem("offsetInclination")
+
+        startMotion = () => {
+          DeviceOrientationEvent.requestPermission()
+            .then(response => {
+              if (response == 'granted') {
+                window.addEventListener('devicemotion', listener)
+                window.addEventListener('deviceorientation', listener2)
+              }
+            })
+            .catch(console.error)
+        }
+
+        changeScaleButtonText = (event) => {
+          globalLegendIndex = event.target.index()
+          //  console.log(globalLegendIndex)
+          scaleButton.innerHTML = `${scaleLegends[globalLegendIndex]}`
+          objectButton.innerHTML = objects.filter(object => object.scale == globalLegendIndex)[0].name
+          currentObjectName = objectButton.innerHTML
+
+          //console.log("b")
+          b.showElementsWithGroupName("scaleButton")
+          b.hideElementsWithGroupName("objectList")
+          b.hideElementsWithGroupName("scaleList")
+          showListOfObjects()
+        }
+
+        showListOfScales = () => {
+          scaleLegends.forEach((legend, legendIndex) => Buttons.makeButton("scaleList" + legendIndex, 100, `${legend}`, (e) => changeScaleButtonText(e)))
+          b.hideElementsWithGroupName("objectButton")
+          b.hideElementsWithGroupName("objectList")
+          b.hideElementsWithGroupName("scaleButton")
+          b.hideElementsWithGroupName("finder")
+          b.hideElementsWithGroupName("notes")
+
+        }
+        Buttons.makeButton("title", 100, "Push to Telescope", () => window.location.href = "https://bwedgar.github.io/index.html")
+
+        Buttons.makeButton("scaleButton", 100, scaleLegends[globalLegendIndex], () => showListOfScales())
+
+        Buttons.makeButton("objectButton", 100, currentObjectName, () => showListOfObjects())
+
+        Buttons.makeButton("finder", 100, '<canvas id="canvasFinder"></canvas>', () => calibrate())
+
+        // set up canvases
         canvasFinder = document.getElementById("canvasFinder")
         canvasFinder.width = window.innerWidth;
         canvasFinder.height = window.innerHeight * 15 / 100;
         ctxFinder = canvasFinder.getContext("2d")
-        //horizontal line
-        ctxFinder.beginPath()
-        ctxFinder.moveTo(50, ctxFinder.canvas.height / 3)
-        ctxFinder.lineTo(ctxFinder.canvas.width - 50, ctxFinder.canvas.height / 3)
-        ctxFinder.strokeStyle = "red"
-        ctxFinder.lineWidth = 2
-        ctxFinder.stroke()
-        //cursor 40 units high?
-        ctxFinder.beginPath()
-        ctxFinder.moveTo(ctxFinder.canvas.width / 2.2 + altDev * 10, ctxFinder.canvas.height / 3 - 20)
-        ctxFinder.lineTo(ctxFinder.canvas.width / 2.2 + altDev * 10, ctxFinder.canvas.height / 3 + 20)
-        ctxFinder.strokeStyle = "red"
-        ctxFinder.lineWidth = 2
-        ctxFinder.stroke()
-        //centre drawCircle
-        ctxFinder.beginPath()
-        ctxFinder.arc(ctxFinder.canvas.width / 2.2, ctxFinder.canvas.height / 3, 15, 0, Math.PI * 2, true)
-        ctxFinder.stroke()
-        ctxFinder.fillStyle = "red"
-        ctxFinder.font = "30px Arial"
-        //directional pointers
-        if (altDev > 0) {
-          ctxFinder.fillText('\u21D7', 5, ctxFinder.canvas.height / 3 + 10)
-        }
-        if (altDev < 0) {
-          ctxFinder.fillText('\u21D8', 5, ctxFinder.canvas.height / 3 + 10)
-        }
-        ctxFinder.beginPath()
-        ctxFinder.moveTo(50, ctxFinder.canvas.height / 3 * 2)
-        ctxFinder.lineTo(ctxFinder.canvas.width - 50, ctxFinder.canvas.height / 3 * 2)
-        ctxFinder.strokeStyle = "red"
-        ctxFinder.lineWidth = 2
-        ctxFinder.stroke()
-        ctxFinder.beginPath()
-        ctxFinder.moveTo(ctxFinder.canvas.width / 2.2 + azDev * 10, ctxFinder.canvas.height / 3 * 2 - 20)
-        ctxFinder.lineTo(ctxFinder.canvas.width / 2.2 + azDev * 10, ctxFinder.canvas.height / 3 * 2 + 20)
-        ctxFinder.strokeStyle = "red"
-        ctxFinder.lineWidth = 2
-        ctxFinder.stroke()
-        ctxFinder.beginPath()
-        ctxFinder.arc(ctxFinder.canvas.width / 2.2, ctxFinder.canvas.height / 3 * 2, 15, 0, Math.PI * 2, true)
-        ctxFinder.stroke()
-        if (azDev > 0) {
-          ctxFinder.fillText('\u21BA', 5, ctxFinder.canvas.height / 3 * 2 + 10)
-        }
-        if (azDev < 0) {
-          ctxFinder.fillText('\u21BB', 5, ctxFinder.canvas.height / 3 * 2 + 10)
-        }
-      }
-    }
-    getLocation = () => {
-      if (false) { //}(navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition((position) => {
-          coords = position.coords;
-          astromath.longitude = astromath.radians(coords.longitude); //longitude of observer in degrees East
-          astromath.latitude = astromath.radians(coords.latitude); //latitude of observer in degrees
-          ready()
-        })
-      } else {
-        astromath.longitude = astromath.radians(174.76); //longitude of observer in Auckland in degrees East
-        astromath.latitude = astromath.radians(-36.8485); //latitude of observer  in Auckland  in degrees
-        ready()
-      }
+        ctxFinder.font = "30px Arial";
+        ctxFinder.fillText("click to start", 0, 0)
+        console.log("wrote text to canvas")
 
-    }
-    getLocation()
+        Buttons.makeButton("notes", 100, )
+
+        updateNotes = (object) => {
+          notes.innerHTML =
+            "     " + objectNames[objectTypes.indexOf(object.type)] + "  " + astromath.formatDistance(object.lightYears) + "<br/>" + object.notes + "<br/>" +
+            //  "<br/>time:  " + new Date().getMinutes() + ":" + new Date().getSeconds() +
+            "<br/>az:  " + Math.round(object.azimuth) + " alt " + Math.round(object.altitude) +
+
+            //  "<br/>ra:  " + object.raHours + ":" + object.raMinutes + " dec: " + object.decDegrees + "°" + object.decMinutes + "'" +
+            "<br/>sensors  " + Math.round(azimuth) + "   " + Math.round(altitude) +
+            "<br/>offsets  " + Math.round(offsetCompass) + "   " + Math.round(offsetInclination) +
+            "<br/>corrected  " + Math.round(azDev) + "   " + Math.round(altDev) +
+            //  "<br/>lat: " + astromath.decDegrees(astromath.latitude) + "  long: " + astromath.decDegrees(astromath.longitude)+
+            ""
+
+        }
+
+        changeObjectButtonText = (id) => {
+          object = objects.filter(object => object.scale == globalLegendIndex)[id]
+          currentObjectName = object.name
+          objectButton.innerHTML = object.name
+          b.showElementsWithGroupName("objectButton")
+          b.showElementsWithGroupName("finder")
+          b.showElementsWithGroupName("notes")
+          b.hideElementsWithGroupName("objectList")
+          az = object.azimuth
+          alt = object.altitude
+          updateNotes(object)
+        }
+
+        showListOfObjects = () => {
+          b.hideElementsWithGroupName("objectButton")
+          b.hideElementsWithGroupName("finder")
+          b.hideElementsWithGroupName("notes")
+          listOfObjects = objects.filter(object => object.scale == globalLegendIndex)
+          listOfObjects.forEach((object, objectIndex) =>
+            Buttons.makeButton("objectList" + objectIndex, 100, object.name, (e) => changeObjectButtonText(e.target.index())))
+          //scroll to currentObject
+          buttonListIndex = listOfObjects.findIndex(o => o.name == currentObjectName)
+          console.log(buttonListIndex + "  " + document.getElementById("title").offsetHeight)
+          window.scrollBy(0, document.getElementById("title").offsetHeight*(buttonListIndex+2));
+        // window.scrollBy(0, document.getElementById("objectList0").offsetHeight * buttonListIndex);
+
+}
+          changeObjectButtonText(0)
+
+          calibrate = () => {
+            startMotion()
+            offsetCompass = azimuth - az;
+            offsetInclination = altitude - alt;
+            localStorage.setItem("offsetCompass", offsetCompass)
+            localStorage.setItem("offsetInclination", offsetInclination)
+            updateNotes(getCurrentObject(objects, currentObjectName))
+          }
+
+
+          timer = setInterval(updateObjects, 60000)
+
+
+          // functions for detecting and responding to telescope movement
+          listener = (e) => {
+            sensor = -e.accelerationIncludingGravity.x //sensor= 0 when vertical, -6.9 when clockwise 45 degrees, +6.9 when antoclockwise. +/- 10 when horizontal
+            //sensor = (sensor + 6.9) * 6.4
+            //sensor = Math.round(sensor * 100) / 100;
+            alt = Math.round(alt * 10) / 10 //alt is the altitude of the object
+            if (Math.abs(sensor - previousSensor) > 0.05) { //test if the sensor has changed
+              previousSensor = sensor
+              //when phone is 45 degrees clockwise altitude is 0, when phone is 45 anticlockwise altitude is 90 degrees
+              //adjSensor = //a + b * sensor
+              //  altitude = (sensor + 6.9) * 6.4-offsetInclination;
+              altitude = Math.round((sensor + 6.9) * 6.4)
+              altDev = altitude - alt - offsetInclination;
+            }
+          }
+
+          listener2 = (e2) => {
+            compassRaw = e2.webkitCompassHeading
+            //if (offsetCompass == 0 && compassRaw > 0) {}
+            //azimuth = Math.round((compassRaw + altitude - offsetCompass) % 360) //Math.round((compassRaw - offsetCompass) % 360)
+            azimuth = Math.round((compassRaw + (altitude - 45) + 90 + 360) % 360)
+            //az = Math.round(az * 10) / 10
+            azDev = (azimuth - az - offsetCompass)
+            if (azDev > 180) azDev = azDev - 360
+            updateNotes(getCurrentObject(objects, currentObjectName))
+
+            //  azDev = ((compass - az + altitude) + 540) % 360 - 180 //had to add altitude 11/19 to stop compass changing
+            canvasFinder = document.getElementById("canvasFinder")
+            canvasFinder.width = window.innerWidth;
+            canvasFinder.height = window.innerHeight * 15 / 100;
+            ctxFinder = canvasFinder.getContext("2d")
+            //horizontal line
+            ctxFinder.beginPath()
+            ctxFinder.moveTo(50, ctxFinder.canvas.height / 3)
+            ctxFinder.lineTo(ctxFinder.canvas.width - 50, ctxFinder.canvas.height / 3)
+            ctxFinder.strokeStyle = "red"
+            ctxFinder.lineWidth = 2
+            ctxFinder.stroke()
+            //cursor 40 units high?
+            ctxFinder.beginPath()
+            ctxFinder.moveTo(ctxFinder.canvas.width / 2.2 + altDev * 10, ctxFinder.canvas.height / 3 - 20)
+            ctxFinder.lineTo(ctxFinder.canvas.width / 2.2 + altDev * 10, ctxFinder.canvas.height / 3 + 20)
+            ctxFinder.strokeStyle = "red"
+            ctxFinder.lineWidth = 2
+            ctxFinder.stroke()
+            //centre drawCircle
+            ctxFinder.beginPath()
+            ctxFinder.arc(ctxFinder.canvas.width / 2.2, ctxFinder.canvas.height / 3, 15, 0, Math.PI * 2, true)
+            ctxFinder.stroke()
+            ctxFinder.fillStyle = "red"
+            ctxFinder.font = "30px Arial"
+            //directional pointers
+            if (altDev > 0) {
+              ctxFinder.fillText('\u21D7', 5, ctxFinder.canvas.height / 3 + 10)
+            }
+            if (altDev < 0) {
+              ctxFinder.fillText('\u21D8', 5, ctxFinder.canvas.height / 3 + 10)
+            }
+            ctxFinder.beginPath()
+            ctxFinder.moveTo(50, ctxFinder.canvas.height / 3 * 2)
+            ctxFinder.lineTo(ctxFinder.canvas.width - 50, ctxFinder.canvas.height / 3 * 2)
+            ctxFinder.strokeStyle = "red"
+            ctxFinder.lineWidth = 2
+            ctxFinder.stroke()
+            ctxFinder.beginPath()
+            ctxFinder.moveTo(ctxFinder.canvas.width / 2.2 + azDev * 10, ctxFinder.canvas.height / 3 * 2 - 20)
+            ctxFinder.lineTo(ctxFinder.canvas.width / 2.2 + azDev * 10, ctxFinder.canvas.height / 3 * 2 + 20)
+            ctxFinder.strokeStyle = "red"
+            ctxFinder.lineWidth = 2
+            ctxFinder.stroke()
+            ctxFinder.beginPath()
+            ctxFinder.arc(ctxFinder.canvas.width / 2.2, ctxFinder.canvas.height / 3 * 2, 15, 0, Math.PI * 2, true)
+            ctxFinder.stroke()
+            if (azDev > 0) {
+              ctxFinder.fillText('\u21BA', 5, ctxFinder.canvas.height / 3 * 2 + 10)
+            }
+            if (azDev < 0) {
+              ctxFinder.fillText('\u21BB', 5, ctxFinder.canvas.height / 3 * 2 + 10)
+            }
+          }
+        }
+        getLocation = () => {
+          if (false) { //}(navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition((position) => {
+              coords = position.coords;
+              astromath.longitude = astromath.radians(coords.longitude); //longitude of observer in degrees East
+              astromath.latitude = astromath.radians(coords.latitude); //latitude of observer in degrees
+              ready()
+            })
+          } else {
+            astromath.longitude = astromath.radians(174.76); //longitude of observer in Auckland in degrees East
+            astromath.latitude = astromath.radians(-36.8485); //latitude of observer  in Auckland  in degrees
+            ready()
+          }
+
+        }
+        getLocation()
   </script>
 </body>
 
