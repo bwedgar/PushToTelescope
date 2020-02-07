@@ -146,6 +146,18 @@
 
         Buttons.makeButton("notes", 100, )
 
+        northAngle=(object)=>{
+          x1=object.azimuth
+          y1=object.altitude
+          ra=  astromath.raRadians(object.raHours, object.raMinutes),
+          dec=astromath.decRadians(object.decDegrees, object.decMinutes)
+          x2=astromath.azimuth(ra+0.01,dec)
+          y2=astromath.altitude(ra+0.01,dec)
+          angle=Math.atan2(x1-x2,y1-y2)
+          console.log(`${x1} ${x2}  ${y1}  ${y2} `)
+          return Math.round(astromath.degrees(angle))
+        }
+
         updateNotes = (object) => {
           notes.innerHTML =
             "     " + objectNames[objectTypes.indexOf(object.type)] + "  " + astromath.formatDistance(object.lightYears) + "<br/>" + object.notes + "<br/>" +
@@ -154,7 +166,7 @@
 
               "<br/>ra:  " + object.raHours + ":" + object.raMinutes + " dec: " + object.decDegrees + "°" + object.decMinutes + "'" +
             // "<br/>sensors  " + Math.round(azimuth) + "   " + Math.round(altitude) +
-            "<br/>offsets  " + Math.round(offsetCompass) + "   " + Math.round(offsetInclination) +
+            "<br/>offsets:  " + Math.round(offsetCompass) + " , " + Math.round(offsetInclination) + " north: "+northAngle(object)+
             // "<br/>corrected  " + Math.round(azDev) + "   " + Math.round(altDev) +
             //  "<br/>lat: " + astromath.decDegrees(astromath.latitude) + "  long: " + astromath.decDegrees(astromath.longitude)+
             ""
