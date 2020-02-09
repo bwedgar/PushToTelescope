@@ -186,7 +186,7 @@ const dataText = ["47 Tucanae,0,24,-72,5,13000,,GC,30 thousand stars with a dens
   "Alpha Pavo    Peacock,20,25,-56,44,183,1.94,ST,B2",
   "Alpha Cygnus    Deneb,20,41,45,17,3229,1.25,ST,A2",
   "Epsilon Pegasus    Enif,21,44,9,53,672,2.38,ST,K2",
-  "Alpha Grus    Al,22,8,-46,58,101,1.73,ST,B7",
+  "Alpha Grus    Alnair,22,8,-46,58,101,1.73,ST,B7",
   "Beta Grus,22,42,-46,53,170,2.06,ST,M5",
   "Alpha Piscis Austrinus    Fomalhaut,22,57,-29,37,25,1.17,ST,A3",
   "Alpha Pegasus    Markab,23,4,15,12,139,2.49,ST,B9.5",
@@ -236,12 +236,12 @@ getCelestialObjects = (data, longitude, latitide, scales) => {
   //objects={}
 
   toGreekSymbols = (str) => {
-    return str.replace("Alpha ", "\u03b1").replace("Beta ", "\u03b2").replace("Gamma ", "\u03b3").replace("Delta ", "\u03b4").replace("Epsilon ", "\u03b5")
-      .replace("Zeta ", "\u03b6").replace("Eta ", "\u03b7").replace("Theta ", "\u03b8").replace("Iota ", "\u03b9")
-      .replace("Kappa ", "\u03ba").replace("Lambda ", "\u03bb").replace("Mu ", "\u03bc").replace("Nu ", "\u03bd")
-      .replace("Xi ", "\u03be").replace("Omicron ", "\u03bf").replace("Pi ", "\u03c0").replace("Rho ", "\u03c1")
-      .replace("Sigma ", "\u03c3").replace("Tau ", "\u03c4").replace("Upsilon ", "\u03c5").replace("Phi ", "\u03c6")
-      .replace("Chi ", "\u03c7").replace("Psi ", "\u03c8").replace("Omega ", "\u03c9")
+    return str.replace("Alpha", "\u03b1").replace("Beta","\u03b2").replace("Gamma","\u03b3").replace("Delta","\u03b4").replace("Epsilon","\u03b5")
+      .replace("Zeta","\u03b6").replace("Eta","\u03b7").replace("Theta","\u03b8").replace("Iota","\u03b9")
+      .replace("Kappa","\u03ba").replace("Lambda","\u03bb").replace("Mu","\u03bc").replace("Nu","\u03bd")
+      .replace("Xi","\u03be").replace("Omicron","\u03bf").replace("Pi","\u03c0").replace("Rho","\u03c1")
+      .replace("Sigma","\u03c3").replace("Tau","\u03c4").replace("Upsilon","\u03c5").replace("Phi","\u03c6")
+      .replace("Chi","\u03c7").replace("Psi","\u03c8").replace("Omega","\u03c9")
   }
 
   let objects = data.map(a => o = {
