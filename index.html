@@ -144,7 +144,11 @@
       ctxFinder.fillText("click to start", 0, 0)
       console.log("wrote text to canvas")
 
-      Buttons.makeButton("notes", 100, )
+      redLightToggle=()=>{
+        (notes.style.backgroundColor=="red")?notes.style.backgroundColor="black":notes.style.backgroundColor="red"
+      }
+
+      Buttons.makeButton("notes", 100,"",()=>redLightToggle() )
 
       northAngle = (object) => {
         x1 = object.azimuth
