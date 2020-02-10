@@ -145,7 +145,17 @@
       console.log("wrote text to canvas")
 
       redLightToggle=()=>{
-        (notes.style.backgroundColor=="red")?notes.style.backgroundColor="black":notes.style.backgroundColor="red"
+        if (notes.style.backgroundColor=="red") {
+          document.body.style.backgroundColor="black"
+          notes.style.backgroundColor="black"
+          finder.style.backgroundColor="black"
+        }
+          else{
+            document.body.style.backgroundColor="red"
+            notes.style.backgroundColor="red"
+            finder.style.backgroundColor="red"
+
+          }
       }
 
       Buttons.makeButton("notes", 100,"",()=>redLightToggle() )
