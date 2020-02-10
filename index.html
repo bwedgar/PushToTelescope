@@ -59,6 +59,12 @@
       ]
       scaleDistances = [0, 0.0002, 12.5, 250, 5000, 50000, 250000, 5000000, 100000000]
 
+      let objectTypes = ["PL", "GX", "OC", "GC", "ST", "DS", "NB", "RN"]
+      let objectNames = ["planet", "galaxy", "open cluster", "globular cluster", "star", "double star", "bright nebula", "remnant"]
+      offsetCompass = localStorage.getItem("offsetCompass")
+      offsetInclination = localStorage.getItem("offsetInclination")
+
+
       getObjects = () => {
         objects = getCelestialObjects(data, astromath.longitude, astromath.latitude, scaleDistances).filter(c => c.visible == true)
         //timeLastUpdated = new Date()
@@ -66,14 +72,14 @@
       getObjects()
       globalLegendIndex = 2
       console.log(objects)
-      currentObjectName = objects.filter(object => object.scale == globalLegendIndex)[0].name
+      currentObjectName = objects.filter(object => object.type == objectTypes[globalLegendIndex])[0].name
       console.log("first object set as :" + currentObjectName)
 
       getCurrentObject = (objects, name) => {
         return objects.filter(object => object.name == name)[0]
       }
 
-      currentObject = objects.filter(object => object.scale == globalLegendIndex)[0]
+      currentObject = objects.filter(object => object.type == objectTypes[globalLegendIndex])[0]
 
       updateObjects = () => {
         objects = getCelestialObjects(data, astromath.longitude, astromath.latitude, scaleDistances).filter(c => c.visible == true)
@@ -88,10 +94,6 @@
         //  console.log("LST: "+astromath.getLST())
       }
 
-      let objectTypes = ["PL", "GX", "OC", "GC", "ST", "DS", "NB", "RN"]
-      let objectNames = ["planet", "galaxy", "open cluster", "globular cluster", "star", "double star", "bright nebula", "remnant"]
-      offsetCompass = localStorage.getItem("offsetCompass")
-      offsetInclination = localStorage.getItem("offsetInclination")
 
       startMotion = () => {
         DeviceOrientationEvent.requestPermission()
@@ -107,11 +109,9 @@
       changeScaleButtonText = (event) => {
         globalLegendIndex = event.target.index()
         //  console.log(globalLegendIndex)
-        scaleButton.innerHTML = `${scaleLegends[globalLegendIndex]}`
-        objectButton.innerHTML = objects.filter(object => object.scale == globalLegendIndex)[0].name
+        scaleButton.innerHTML = `${objectNames[globalLegendIndex]}`
+        objectButton.innerHTML = objects.filter(object => object.type == objectTypes[globalLegendIndex])[0].name
         currentObjectName = objectButton.innerHTML
-
-        //console.log("b")
         b.showElementsWithGroupName("scaleButton")
         b.hideElementsWithGroupName("objectList")
         b.hideElementsWithGroupName("scaleList")
@@ -119,7 +119,7 @@
       }
 
       showListOfScales = () => {
-        scaleLegends.forEach((legend, legendIndex) => Buttons.makeButton("scaleList" + legendIndex, 100, `${legend}`, (e) => changeScaleButtonText(e)))
+        objectNames.forEach((legend, legendIndex) => Buttons.makeButton("scaleList" + legendIndex, 100, `${legend}`, (e) => changeScaleButtonText(e)))
         b.hideElementsWithGroupName("objectButton")
         b.hideElementsWithGroupName("objectList")
         b.hideElementsWithGroupName("scaleButton")
@@ -129,7 +129,7 @@
       }
       Buttons.makeButton("title", 100, "Push to Telescope", () => window.location.href = "https://bwedgar.github.io/index.html")
 
-      Buttons.makeButton("scaleButton", 100, scaleLegends[globalLegendIndex], () => showListOfScales())
+      Buttons.makeButton("scaleButton", 100, objectNames[globalLegendIndex], () => showListOfScales())
 
       Buttons.makeButton("objectButton", 100, currentObjectName, () => showListOfObjects())
 
@@ -190,9 +190,9 @@
         b.hideElementsWithGroupName("objectButton")
         b.hideElementsWithGroupName("finder")
         b.hideElementsWithGroupName("notes")
-        listOfObjects = objects.filter(object => object.scale == globalLegendIndex)
+        listOfObjects = objects.filter(object => object.type == objectTypes[globalLegendIndex])
         listOfObjects.forEach((object, objectIndex) =>
-          Buttons.makeButton("objectList" + objectIndex, 100, object.name, (e) => changeObjectButtonText(e.target.index())))
+          Buttons.makeListButton("objectList" + objectIndex, 100, object.name, (e) => changeObjectButtonText(e.target.index())))
         //scroll to currentObject
         buttonListIndex = listOfObjects.findIndex(o => o.name == currentObjectName)
         console.log(buttonListIndex + "  " + document.getElementById("title").offsetHeight)
