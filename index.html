@@ -174,7 +174,7 @@
       }
 
       changeObjectButtonText = (id) => {
-        object = objects.filter(object => object.scale == globalLegendIndex)[id]
+        object = objects.filter(object => object.type == objectTypes[globalLegendIndex])[id]
         currentObjectName = object.name
         objectButton.innerHTML = object.name
         b.showElementsWithGroupName("objectButton")
