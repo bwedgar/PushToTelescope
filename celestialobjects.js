@@ -31,6 +31,7 @@ const dataText = ["47 Tucanae,0,24,-72,5,13000,,GC,30 thousand stars with a dens
   "NGC2422 M47,7,37,-14,30,1600,4.4,OC,yellow and blue stars; 6th mag.",
   "NGC2437 M46,7,42,-14,49,5400,6.1,OC,several100 stars; uniformly spread",
   "NGC2447 M93,7,45,-23,52,3600,6.2,OC,",
+  "NGC2516 The Southern Beehive,7, 58,−60, 52,1300,3.8,OC",
   "NGC2548 M48,8,14,-5,48,1500,5.8,OC,",
   "NGC2632 M44 The Beehive,8,40,19,59,577,3.1,OC,One of the nearest open clusters; several multiple stars. Known to Galileo.",
   "NGC2682 M67,8,50,11,49,2700,6.9,OC,",
