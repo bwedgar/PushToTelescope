@@ -127,7 +127,7 @@
         b.hideElementsWithGroupName("notes")
 
       }
-      Buttons.makeButton("title", 100, "Push to Telescopex", () => window.location.href = "https://bwedgar.github.io/index.html")
+      Buttons.makeButton("title", 100, "Push to Telescope", () => window.location.href = "https://bwedgar.github.io/index.html")
 
       Buttons.makeButton("scaleButton", 100, objectNames[globalLegendIndex], () => showListOfScales())
 
@@ -307,6 +307,7 @@
         if (azDev < 0) {
           ctxFinder.fillText('\u21BB', 5, ctxFinder.canvas.height / 3 * 2 + 10)
         }
+        ctxFinder.fillText('angle',5,5)
       }
     }
     getLocation = () => {
