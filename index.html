@@ -309,8 +309,8 @@
         }
         az2=Math.floor(azimuth- offsetCompass); //can go over 360
         az2=(az2>360) ? az2-360 : az2
-        ctxFinder.fillText(az2 ,450,ctxFinder.canvas.height / 3 * 2 + 11)
-        ctxFinder.fillText(Math.floor(altitude - offsetInclination),450,ctxFinder.canvas.height / 3 * 2 -26)
+        ctxFinder.fillText(az2 ,450,ctxFinder.canvas.height / 3 * 2 + 9)
+        ctxFinder.fillText(Math.floor(altitude - offsetInclination),450,ctxFinder.canvas.height / 3 * 2 +20)
       }
     }
     getLocation = () => {
