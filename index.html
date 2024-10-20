@@ -307,7 +307,9 @@
         if (azDev < 0) {
           ctxFinder.fillText('\u21BB', 5, ctxFinder.canvas.height / 3 * 2 + 10)
         }
-        ctxFinder.fillText(Math.floor(azimuth- offsetCompass)+'  '+Math.floor(altitude - offsetInclination),5,25)
+        az2=Math.floor(azimuth- offsetCompass); //can go over 360
+        az2=(az2>360) ? az2-360 : az2
+        ctxFinder.fillText(+'  '+Math.floor(altitude - offsetInclination),5,25)
       }
     }
     getLocation = () => {
